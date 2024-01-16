@@ -6,10 +6,17 @@ html,
 body,
 :root {
   height: 100%;
+  -webkit-font-smoothing: antialiased; /* for Chrome, Safari */
+  -moz-osx-font-smoothing: grayscale; /* for Firefox */
+  text-rendering: optimizeLegibility; /* for general optimization */
 }
  
 @layer base {
   :root {
+    --brand-primary: 211 97% 49%;
+    /* --brand-secondary:; */
+    --brand-accent: 0 67% 100%; 
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
  
@@ -28,15 +35,18 @@ body,
     --primary: 0 0% 9%;
     --primary-foreground: 0 0% 98%;
  
-    --secondary: 0 0% 96.1%;
+    --secondary: 0 0% 96.1%; 
     --secondary-foreground: 0 0% 9%;
  
-    --accent: 0 0% 96.1%;
+    --accent: #3384f4;/*0 0% 96.1%;*/
     --accent-foreground: 0 0% 9%;
  
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
  
+    --neutral: 0 0% 9%;
+    --neutral-foreground: 0 0% 98%;
+
     --ring: 0 0% 63.9%;
  
     --radius: 0.5rem;
@@ -70,6 +80,10 @@ body,
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
  
+    --neutral: 0 0% 9%;
+    --neutral-foreground: 0 0% 98%;
+    
+    
     --ring: 0 0% 14.9%;
   }
 }
@@ -80,5 +94,23 @@ body,
   }
   body {
     @apply bg-background text-foreground;
+  }
+  h2
+  {
+    @apply text-primary text-2xl font-bold;
+  }
+  h3
+  {
+    @apply mt-4 font-semibold tracking-tight text-left text-lg mb-2
+  }
+  .btn
+  {
+    @apply bg-primary text-primary-foreground rounded-md px-4 py-2 hover:bg-primary-foreground hover:text-primary;
+  }
+
+  .user_name
+  {
+    @apply hover:underline cursor-pointer text-primary font-semibold 
+    
   }
 }

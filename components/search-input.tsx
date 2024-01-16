@@ -38,13 +38,13 @@ export const SearchInput = () => {
   }, [debouncedValue, router, categoryId])
 
   return (
-    <div className="relative">
+    <div className="relative grow max-w-2xl">
       <Search className="absolute h-4 w-4 top-3 left-4 text-muted-foreground" />
       <Input
         onChange={onChange}
         value={value}
         placeholder="Search..."
-        className="pl-10 bg-primary/10"
+        className="pl-10 bg-primary/5"
       />
     </div>
   )

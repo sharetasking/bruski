@@ -1,41 +1,183 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider     = "mongodb"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
-model Category {
-  id            String @id @default(uuid())
-  name          String
-  companions    Companion[]
+
+model Profile {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  display_name        String?
+  url         String @unique
+  bio         String?
+  img       String?
+  categoryId      String? @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  num_followers   Int         @default(0)
+  num_following   Int         @default(0)
+  num_posts       Int         @default(0)
+  comments_made             Int         @default(0)
+  comments_received         Int         @default(0)
+  comment_likes_made                Int         @default(0)
+  comment_likes_received            Int         @default(0)
+  post_likes_made                Int         @default(0)
+  post_likes_received            Int         @default(0)
+  dislikes_made             Int         @default(0)
+  dislikes_received         Int         @default(0)
+  mediaviews_made           Int         @default(0)
+  mediaviews_received       Int         @default(0)
+  reposts_made              Int         @default(0)
+  reposts_received          Int         @default(0)
+  blocks_made               Int         @default(0)
+  blocks_received           Int         @default(0)
+  reports_made              Int         @default(0)
+  reports_received          Int         @default(0)
+  profileViews_made         Int         @default(0)
+  profileViews_received     Int         @default(0)
+  bookmarks_made            Int         @default(0)
+  bookmarks_received        Int         @default(0)
+  num_notifications         Int         @default(0)
+  date_deleted    DateTime?
+  // Relations
+  userId      String?  @db.ObjectId
+  companionId String?  @db.ObjectId
+
+
+  user        User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companion   Companion?   @relation(fields: [companionId], references: [id], onDelete: Cascade)
+  category    Category?     @relation(fields: categoryId, references: [id])
+  
+  // Relations
+  listOfProfilesFollowingViewedProfile  Follower[] @relation("listOfProfilesFollowingViewedProfile")
+  listOfProfilesFollowedByViewedProfile  Follower[] @relation("listOfProfilesFollowedByViewedProfile")
+
+
+  notifications Notification[]
+
+  // Relations for messages and comments
+  messagesSent     Message[] @relation("MessageSender")
+  messagesReceived Message[] @relation("MessageReceiver")
+  commentsPosted   Comment[]
+  postsMade   Post[] @relation("PostAndOwner")
+  bookmarks    Bookmark[]
+  commentLikesMadeList       CommentLike   []
+  postLikesMadeList      PostLike   []
+
 }
 
-model Companion {
-  id            String @id @default(uuid())
-  userId        String
-  userName      String
-  src           String
-  name          String @db.Text
-  description   String
-  instructions  String @db.Text
-  seed          String @db.Text
+
+model Follower {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  followerId    String   @db.ObjectId
+  followeeId   String   @db.ObjectId
+  createdAt     DateTime @default(now())
+
+  follower      Profile  @relation("listOfProfilesFollowedByViewedProfile", fields: [followerId], references: [id])
+  followee      Profile  @relation("listOfProfilesFollowingViewedProfile", fields: [followeeId], references: [id])
+  date_deleted    DateTime?
+
+  @@unique([followeeId, followerId])
+}
+
+model CommentLike {
+
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  targetCommentId  String?    @db.ObjectId
+  likerId           String    @db.ObjectId
+  
+  createdAt     DateTime @default(now())
+
+  targetComment   Comment?   @relation(fields: [targetCommentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  liker   Profile   @relation(fields: [likerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model PostLike {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  targetPostId     String?    @db.ObjectId
+  likerId           String    @db.ObjectId
 
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  targetPost      Post?      @relation(fields: [targetPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  liker   Profile   @relation(fields: [likerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  category      Category @relation(fields: [categoryId], references: [id])
-  categoryId    String
+  
+}
 
-  messages      Message[]
+
+
+model Bookmark {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  targetPostId     String    @db.ObjectId
+  targetCommentId  String    @db.ObjectId
+  bookmarkerId      String    @db.ObjectId
+
+  createdAt     DateTime @default(now())
+
+  post        Post      @relation(fields: [targetPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  comment     Comment      @relation(fields: [targetCommentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  bookmarker  Profile      @relation(fields: [bookmarkerId], references: [id])
+
+  
+  @@unique([targetPostId, targetCommentId, bookmarkerId])
+}
+
+model Category {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  title      String?
+  companions Companion[]
+  profiles   Profile[]
+  posts       Post[]
+
+
+  createdAt     DateTime @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
+model LoginActivity {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  
+
+  createdAt     DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+
+model Companion {
+  id                   String    @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId               String
+  username             String
+  img                  String
+  name                 String
+  description          String
+  instructions         String
+  profileId            String?   @db.ObjectId
+  categoryId           String    @db.ObjectId 
+  seed                 String
+  post_frequency       Json @default("\"{number:1, frequency: 'daily'}\"")
+  comment_frequency    Json @default("\"{number:2, frequency: 'hour'}\"")
+  bookmarks_received   Int @default(0)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  date_deleted    DateTime?
+  category             Category  @relation(fields: [categoryId], references: [id])
+
+  profiles             Profile[]
+
 
   @@index([categoryId])
   @@fulltext([name])
 }
+
+
 
 enum Role {
   user
@@ -43,25 +185,127 @@ enum Role {
 }
 
 model Message {
-  id          String   @id @default(uuid())
-  role        Role   
-  content     String   @db.Text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  role      Role
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  companionId String
-  userId      String
-
-  companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+  senderId String @db.ObjectId
+  receiverId String @db.ObjectId
   
-  @@index([companionId])
+  date_deleted    DateTime?
+  
+  sender Profile @relation("MessageSender", fields: [id], references: [id], onDelete: Cascade)
+  receiver Profile @relation("MessageReceiver", fields: [id], references: [id], onDelete: Cascade)
+  
+
+  @@index([senderId])
 }
 
 model UserSubscription {
-  id                        String    @id @default(cuid())
-  userId                    String    @unique
-  stripeCustomerId          String?   @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId      String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId             String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd    DateTime? @map(name: "stripe_current_period_end")
+  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId                 String    @unique
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+  date_deleted    DateTime?
+
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
+model User {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  first_name            String?
+  last_name            String?
+  username        String?   @unique
+  bio             String?
+  email           String?   @unique
+  phone           String?
+  onboarded       DateTime?
+  preferred_categories Json?   
+  walkthruCompleted DateTime?
+  emailVerified   DateTime?
+  clerkUserId     String? @unique
+  img           String?
+  coverImg      String?
+  profileImg    String?
+  hashedPassword  String?
+  date_deleted    DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  
+  hasNotifications Boolean?
+  profiles  Profile[] //Profile?  @relation(fields: [profileId], references: [id])
+  logins LoginActivity[]
+
+  // Other relations (if any)
+}
+
+model Post {  
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  body      String
+  isARebrewOfId   String?  @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  profileId   String  @db.ObjectId
+  image     String?
+  num_comments  Int @default(0)
+  num_likes      Int @default(0)
+  num_bookmarks Int @default(0)
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId     String?   @db.ObjectId
+  date_deleted    DateTime?
+  
+  poster   Profile     @relation("PostAndOwner", fields: [profileId], references: [id], onDelete: Cascade)
+  isARebrewOf   Post?  @relation("isARebrewOf", fields: [isARebrewOfId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  commentList Comment[]
+  likeList PostLike[]
+  bookmarksReceivedList Bookmark[]
+  rebrewsReceivedList Post[] @relation("isARebrewOf")
+}
+
+model Comment {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  body        String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  date_deleted    DateTime?
+
+  senderId String   @db.ObjectId
+  originaPostId      String   @db.ObjectId
+  isAReplyToId  String  @db.ObjectId
+
+  num_likes Int @default(0)
+  num_replies Int @default(0)
+  
+
+  originalPost      Post      @relation(fields: [originaPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sender Profile @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  targetComment  Comment  @relation("TargetComment", fields: [isAReplyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  likesRecList CommentLike[]
+  repliesReceivedList Comment[] @relation("TargetComment")
+  bookmarksReceivedList Bookmark[]
+}
+
+model Notification {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  body      String
+  profileId    String @db.ObjectId
+  type      String
+  date_deleted    DateTime?
+  createdAt DateTime @default(now())
+  profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  
+  dateCleared DateTime
+
+
+  updatedAt            DateTime  @updatedAt
+
 }

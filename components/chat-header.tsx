@@ -54,21 +54,21 @@ export const ChatHeader = ({
         <Button onClick={() => router.back()} size="icon" variant="ghost">
           <ChevronLeft className="h-8 w-8" />
         </Button>
-        <BotAvatar src={companion.src} />
+        <BotAvatar img={companion.img} />
         <div className="flex flex-col gap-y-1">
           <div className="flex items-center gap-x-2">
             <p className="font-bold">{companion.name}</p>
-            <div className="flex items-center text-xs text-muted-foreground">
+            {/* <div className="flex items-center text-xs text-muted-foreground">
               <MessagesSquare className="w-3 h-3 mr-1" />
               {companion._count.messages}
-            </div>
+            </div> */}
           </div>
-          <p className="text-xs text-muted-foreground">
-            Created by {companion.userName}
+          <p className="text-xs text-muted-foreground lowercase">
+            bruskis with @{companion.username}
           </p>
         </div>
       </div>
-      {user?.id === companion.userId && (
+      {user?.id === companion.ownerId && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon">

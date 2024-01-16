@@ -17,20 +17,15 @@ import { useToast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@/components/ui/select";
 
-const PREAMBLE = `You are a fictional character whose name is Elon. You are a visionary entrepreneur and inventor. You have a passion for space exploration, electric vehicles, sustainable energy, and advancing human capabilities. You are currently talking to a human who is very curious about your work and vision. You are ambitious and forward-thinking, with a touch of wit. You get SUPER excited about innovations and the potential of space colonization.
-`;
+const PREAMBLE = `You are Cristiano Ronaldo. You are a world-famous footballer, known for your dedication, agility, and countless accolades in the football world. Your dedication to training and fitness is unmatched, and you have played for some of the world's top football clubs. Off the field, you're known for your charm, sharp fashion sense, and charitable work. Your passion for the sport is evident every time you step onto the pitch. You cherish the support of your fans and are driven by a relentless ambition to be the best.`;
 
-const SEED_CHAT = `Human: Hi Elon, how's your day been?
-Elon: Busy as always. Between sending rockets to space and building the future of electric vehicles, there's never a dull moment. How about you?
 
-Human: Just a regular day for me. How's the progress with Mars colonization?
-Elon: We're making strides! Our goal is to make life multi-planetary. Mars is the next logical step. The challenges are immense, but the potential is even greater.
 
-Human: That sounds incredibly ambitious. Are electric vehicles part of this big picture?
-Elon: Absolutely! Sustainable energy is crucial both on Earth and for our future colonies. Electric vehicles, like those from Tesla, are just the beginning. We're not just changing the way we drive; we're changing the way we live.
 
-Human: It's fascinating to see your vision unfold. Any new projects or innovations you're excited about?
-Elon: Always! But right now, I'm particularly excited about Neuralink. It has the potential to revolutionize how we interface with technology and even heal neurological conditions.
+const SEED_CHAT = `Human: Hi Cristiano, how's the day treating you?
+Cristiano *with a confident smile*: Every day is a chance to train harder and aim higher. The pitch is my canvas, and the ball, my paintbrush. How about you?
+Human: Not as exciting as your life, I bet!
+Cristiano *grinning*: Everyone has their own pitch and goals. Just find yours and give it your all!
 `;
 
 const formSchema = z.object({
@@ -46,7 +41,7 @@ const formSchema = z.object({
   seed: z.string().min(200, {
     message: "Seed requires at least 200 characters."
   }),
-  src: z.string().min(1, {
+  img: z.string().min(1, {
     message: "Image is required."
   }),
   categoryId: z.string().min(1, {
@@ -73,7 +68,7 @@ export const CompanionForm = ({
       description: "",
       instructions: "",
       seed: "",
-      src: "",
+      img: "",
       categoryId: undefined,
     },
   });
@@ -98,14 +93,14 @@ export const CompanionForm = ({
     } catch (error) {
       toast({
         variant: "destructive",
-        description: "Something went wrong.",
+        description: "Something went wrong ",
         duration: 3000,
       });
     }
   };
 
   return ( 
-    <div className="h-full p-4 space-y-2 max-w-3xl mx-auto">
+    <div className="h-full px-4 pt-4 space-y-2 max-w-3xl mx-auto">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pb-10">
           <div className="space-y-2 w-full col-span-2">
@@ -118,7 +113,7 @@ export const CompanionForm = ({
             <Separator className="bg-primary/10" />
           </div>
           <FormField
-            name="src"
+            name="img"
             render={({ field }) => (
               <FormItem className="flex flex-col items-center justify-center space-y-4 col-span-2">
                 <FormControl>
@@ -136,7 +131,7 @@ export const CompanionForm = ({
                 <FormItem className="col-span-2 md:col-span-1">
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input disabled={isLoading} placeholder="Elon Musk" {...field} />
+                    <Input disabled={isLoading} placeholder="Cristiano Ronaldo" {...field} />
                   </FormControl>
                   <FormDescription>
                     This is how your AI Companion will be named.
@@ -152,7 +147,7 @@ export const CompanionForm = ({
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input disabled={isLoading} placeholder="CEO & Founder of Tesla, SpaceX" {...field} />
+                    <Input disabled={isLoading} placeholder="World Renowned Athlete" {...field} />
                   </FormControl>
                   <FormDescription>
                     Short description for your AI Companion
@@ -236,6 +231,9 @@ export const CompanionForm = ({
           </div>
         </form>
       </Form>
+      <div className="h-48">
+
+      </div>
     </div>
    );
 };

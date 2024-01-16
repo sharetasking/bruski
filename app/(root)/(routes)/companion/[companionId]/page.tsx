@@ -17,20 +17,23 @@ const CompanionIdPage = async ({
 }: CompanionIdPageProps) => {
   const { userId } = auth();
 
-  if (!userId) {
-    return redirectToSignIn();
-  }
+  // if (!userId) {
+  //   return redirectToSignIn();
+  // }
 
-  const validSubscription = await checkSubscription();
+  // const validSubscription = await checkSubscription();
 
-  if (!validSubscription) {
-    return redirect("/");
-  }
+  // if (!validSubscription) {
+  //   return redirect("/");
+  // }
 
-  const companion = await prismadb.companion.findUnique({
+  let companion = null;
+  
+  if(params.companionId != "new")
+    companion = await prismadb.companion.findUnique({
     where: {
       id: params.companionId,
-      userId,
+      ownerId: userId ?? "",
     }
   });
 

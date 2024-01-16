@@ -1,3 +1,5 @@
+import { Toaster } from 'react-hot-toast';
+
 const AuthLayout = ({
   children
 }: {
@@ -6,6 +8,8 @@ const AuthLayout = ({
   return ( 
     <div className="flex justify-center items-center h-full">
       {children}
+
+      <Toaster />
     </div>
    );
 }
