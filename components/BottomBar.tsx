@@ -20,7 +20,7 @@ const BottomBar: React.FC<BottomBarProps> = (alert, user) => {
   const menu_items = [
     {
       icon: Home,
-      href: '/',
+      href: '/home',
       label: "Home",
       pro: false,
     },

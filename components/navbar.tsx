@@ -35,7 +35,7 @@ export const Navbar = ({
         <MobileSidebar isPro={isPro} />
         <div className="text-accent w-48 bg-gradient-to-b from-white dark:from-black via-white/70 dark:via-black/70 to-transparent dark:to-transparent hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl">
             
-        <Link href="/" prefetch className="flex items-center gap-2">
+        <Link href="/home" prefetch className="flex items-center gap-2">
           
           <h1 className={cn("hidden md:block text-xl md:text-2xl font-bold tracking-tight", font.className)} style={{color: "var(--brand-primary)"}}>
             bruski
@@ -67,7 +67,7 @@ export const Navbar = ({
         )} */}
         <ModeToggle />
         {/* <div className="h-8 w-8 rounded-full flex items-center justify-center bg-primary/10">
-          <UserButton afterSignOutUrl="/" />
+          <UserButton afterSignOutUrl="/home" />
         </div> */}
       </div>
     </div>

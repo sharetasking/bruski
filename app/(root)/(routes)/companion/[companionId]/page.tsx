@@ -24,7 +24,7 @@ const CompanionIdPage = async ({
   // const validSubscription = await checkSubscription();
 
   // if (!validSubscription) {
-  //   return redirect("/");
+  //   return redirect("/home");
   // }
 
   let companion = null;

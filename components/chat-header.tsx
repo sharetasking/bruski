@@ -39,7 +39,7 @@ export const ChatHeader = ({
         description: "Success."
       });
       router.refresh();
-      router.push("/");
+      router.push("/home");
     } catch (error) {
       toast({
         variant: "destructive",

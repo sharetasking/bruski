@@ -44,7 +44,7 @@
 
 
 //   if (!companion) {
-//     return redirect("/");
+//     return redirect("/home");
 //   }
 
 //   return (

@@ -79,7 +79,7 @@ const ProfileIdPage =  async ({
   // const validSubscription = await checkSubscription();
 
   // if (!validSubscription) {
-  //   return redirect("/");
+  //   return redirect("/home");
   // }
 
   // let targetProfile =  await prismadb.profile.findFirst({

@@ -89,7 +89,7 @@ export const CompanionForm = ({
       });
 
       router.refresh();
-      router.push("/");
+      router.push("/home");
     } catch (error) {
       toast({
         variant: "destructive",

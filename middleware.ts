@@ -80,7 +80,7 @@ export default  authMiddleware({
     //   })
     //   const data = await res.json()
     //   console.log("ressssyy",data)
-    //   return NextResponse.redirect(process.env.NEXT_PUBLIC_APP_URL+'/')
+    //   return NextResponse.redirect(process.env.NEXT_PUBLIC_APP_URL+'/home')
     //   //then proceed to next page
 
     // }

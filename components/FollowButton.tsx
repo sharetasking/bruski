@@ -31,7 +31,7 @@ const FollowButton = ({settings}: {settings: any}) => {
     toggleFollow();
 
 
-    // router.push('/')
+    // router.push('/home')
   }, [loginModal, currentUser, toggleFollow]);
 
 

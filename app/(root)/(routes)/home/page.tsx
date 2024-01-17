@@ -29,8 +29,8 @@ const RootPage = ({
 
   if(!localUser && !isLoading)
   {
-    // redirect to "/"
-    window.location.href = "/"
+    // redirect to "/home"
+    window.location.href = "/home"
   }
   else if(localUser && !isLoading)
   {

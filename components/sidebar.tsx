@@ -30,7 +30,7 @@ export const Sidebar = ({
   const routes = [
     {
       icon: Home,
-      href: '/',
+      href: '/home',
       label: "Home",
       pro: false,
     },
