@@ -44,7 +44,8 @@ export async function POST(request: Request, { params }: { params: { postId: str
     const post = await prismadb.post.create({
       data: {
         profileId: localUser.id,
-        body
+        body,
+        postType: "ORIGINAL"
       }
     });
 

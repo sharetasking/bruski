@@ -9,7 +9,8 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { BruskiUser } from "@/hooks/useBruskiUser";
-import { Comment, Profile } from "@prisma/client";
+import { Profile } from "@prisma/client";
+import { Navbar } from "../navbar";
 
 export interface Post{
   id: string;
@@ -32,11 +33,11 @@ export interface Post{
 }
 export interface PostPageProps {
   user: BruskiUser|null;
-  post: Post;
-  comments: Comment[];
+  post: Post|null;
+  comments: Comment[]|null;
 
 }
-const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comments:Comment[]}) => {
+const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comments:Comment[]|null}) => {
 
   const router = useRouter();
 
@@ -83,7 +84,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
 
   return (
   <div className="max-w-lg m-auto">
-    <div className="flex flex-col md:flex-row gap-4 md:-ml-40">
+    <div className="flex flex-col md:flex-row gap-4 md:-ml-40 md:p-8 p-4">
 
 <div>
         {/* AVATAR IMAGE */}
@@ -95,7 +96,12 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
 
   <div className="grow flex flex-col rounded-lg">
 
-  <div className="p-8">{post?.body}</div>
+  <div className="p-8 subpixel-antialiased">{post?.body}</div>
+  <div className="flex items-center gap-2 justify-end text-sm text-primary/50">
+    <div><span className="font-medium text-primary">{post?.commentsCount ?? 0}</span> comments</div>
+    {/* <div><span className="font-medium text-primary">{post?.num_likes ?? 0}</span> likes</div> */}
+    {/* TODO: Readd <div><span className="font-medium text-primary">{post?.num_bookmarks ?? 0}</span> bookmarks</div> */}
+  </div>
 
   {/* COMMENT CREATOR */}
 
@@ -209,8 +215,9 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
   <div>
 
   </div>
-  {comments.map((comment) =>  
-      (<div key={comment.id}>{comment.body}</div>))}
+  {comments?.map((comment) =>  (<></>))
+      // (<div key={comment?.id}>{comment?.body}</div>))
+    }
 
   <div>
 

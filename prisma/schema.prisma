@@ -11,65 +11,61 @@ datasource db {
 
 
 model Profile {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  display_name        String?
-  url         String @unique
-  bio         String?
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  display_name String?
+  url       String @unique
+  bio       String?
   img       String?
-  categoryId      String? @db.ObjectId
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  num_followers   Int         @default(0)
-  num_following   Int         @default(0)
-  num_posts       Int         @default(0)
-  comments_made             Int         @default(0)
-  comments_received         Int         @default(0)
-  comment_likes_made                Int         @default(0)
-  comment_likes_received            Int         @default(0)
-  post_likes_made                Int         @default(0)
-  post_likes_received            Int         @default(0)
-  dislikes_made             Int         @default(0)
-  dislikes_received         Int         @default(0)
-  mediaviews_made           Int         @default(0)
-  mediaviews_received       Int         @default(0)
-  reposts_made              Int         @default(0)
-  reposts_received          Int         @default(0)
-  blocks_made               Int         @default(0)
-  blocks_received           Int         @default(0)
-  reports_made              Int         @default(0)
-  reports_received          Int         @default(0)
-  profileViews_made         Int         @default(0)
-  profileViews_received     Int         @default(0)
-  bookmarks_made            Int         @default(0)
-  bookmarks_received        Int         @default(0)
-  num_notifications         Int         @default(0)
-  date_deleted    DateTime?
+  categoryId String? @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  num_followers   Int @default(0)
+  num_following   Int @default(0)
+  num_posts       Int @default(0)
+  post_likes_made Int @default(0)
+  post_likes_received Int @default(0)
+  dislikes_made Int @default(0)
+  dislikes_received Int @default(0)
+  mediaviews_made Int @default(0)
+  mediaviews_received Int @default(0)
+  rebrews_made Int @default(0)
+  rebrews_received Int @default(0)
+  blocks_made Int @default(0)
+  blocks_received Int @default(0)
+  reports_made Int @default(0)
+  reports_received Int @default(0)
+  profileViews_made Int @default(0)
+  profileViews_received Int @default(0)
+  bookmarks_made Int @default(0)
+  bookmarks_received Int @default(0)
+  num_notifications Int @default(0)
+  date_deleted DateTime?
+
   // Relations
-  userId      String?  @db.ObjectId
-  companionId String?  @db.ObjectId
+  userId String? @db.ObjectId
+  companionId String? @db.ObjectId
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companion Companion? @relation(fields: [companionId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id])
 
-
-  user        User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  companion   Companion?   @relation(fields: [companionId], references: [id], onDelete: Cascade)
-  category    Category?     @relation(fields: categoryId, references: [id])
-  
-  // Relations
-  listOfProfilesFollowingViewedProfile  Follower[] @relation("listOfProfilesFollowingViewedProfile")
-  listOfProfilesFollowedByViewedProfile  Follower[] @relation("listOfProfilesFollowedByViewedProfile")
-
+  // Followers relations
+  listOfProfilesFollowingViewedProfile Follower[] @relation("listOfProfilesFollowingViewedProfile")
+  listOfProfilesFollowedByViewedProfile Follower[] @relation("listOfProfilesFollowedByViewedProfile")
 
   notifications Notification[]
 
-  // Relations for messages and comments
-  messagesSent     Message[] @relation("MessageSender")
+  // Messages and posts relations
+  messagesSent Message[] @relation("MessageSender")
   messagesReceived Message[] @relation("MessageReceiver")
-  commentsPosted   Comment[]
-  postsMade   Post[] @relation("PostAndOwner")
-  bookmarks    Bookmark[]
-  commentLikesMadeList       CommentLike   []
-  postLikesMadeList      PostLike   []
+  postsMade Post[] @relation("PostAndOwner")
+  bookmarks Bookmark[]
+  postLikesMadeList PostLike []
 
+  // New fields for tracking rebrews
+  rebrewsMadeList     Post[] @relation("RebrewsMadeByProfile")
+  rebrewsReceivedList Post[] @relation("RebrewsReceivedByProfile")
 }
+
 
 
 model Follower {
@@ -85,17 +81,7 @@ model Follower {
   @@unique([followeeId, followerId])
 }
 
-model CommentLike {
 
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  targetCommentId  String?    @db.ObjectId
-  likerId           String    @db.ObjectId
-  
-  createdAt     DateTime @default(now())
-
-  targetComment   Comment?   @relation(fields: [targetCommentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  liker   Profile   @relation(fields: [likerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
 
 model PostLike {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -120,7 +106,6 @@ model Bookmark {
   createdAt     DateTime @default(now())
 
   post        Post      @relation(fields: [targetPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  comment     Comment      @relation(fields: [targetCommentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   bookmarker  Profile      @relation(fields: [bookmarkerId], references: [id])
 
   
@@ -245,54 +230,52 @@ model User {
   // Other relations (if any)
 }
 
-model Post {  
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  body      String
-  isARebrewOfId   String?  @db.ObjectId
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  profileId   String  @db.ObjectId
-  image     String?
-  num_comments  Int @default(0)
-  num_likes      Int @default(0)
-  num_bookmarks Int @default(0)
-  category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId     String?   @db.ObjectId
-  date_deleted    DateTime?
-  
-  poster   Profile     @relation("PostAndOwner", fields: [profileId], references: [id], onDelete: Cascade)
-  isARebrewOf   Post?  @relation("isARebrewOf", fields: [isARebrewOfId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  commentList Comment[]
-  likeList PostLike[]
+model Post {
+  id                    String    @id @default(auto()) @map("_id") @db.ObjectId
+  body                  String
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  profileId             String    @db.ObjectId
+  image                 String?
+  num_comments          Int       @default(0)
+  num_likes             Int       @default(0)
+  num_bookmarks         Int       @default(0)
+  categoryId            String?   @db.ObjectId
+  date_deleted          DateTime?
+  
+  // Relations
+  poster                Profile   @relation("PostAndOwner", fields: [profileId], references: [id], onDelete: Cascade)
+  category              Category? @relation(fields: [categoryId], references: [id])
+
+  // Original Post, Comment, or Rebrew
+  postType              PostType
+
+  // Reference to the original post (for comments and rebrews)
+  originalPostId        String?   @db.ObjectId
+  originalPost          Post?     @relation("OriginalPostRelations", fields: [originalPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  // Lists
+  likeList              PostLike[]
   bookmarksReceivedList Bookmark[]
-  rebrewsReceivedList Post[] @relation("isARebrewOf")
+  relatedPosts          Post[]    @relation("OriginalPostRelations")
+
+  // Relations for rebrews
+  rebrewedByProfile     Profile?  @relation("RebrewsMadeByProfile", fields: [rebrewedById], references: [id])
+  rebrewedById          String?   @db.ObjectId
+
+  originalPostByProfile Profile?  @relation("RebrewsReceivedByProfile", fields: [originalPostById], references: [id])
+  originalPostById      String?   @db.ObjectId
 }
 
-model Comment {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  body        String
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  date_deleted    DateTime?
-
-  senderId String   @db.ObjectId
-  originaPostId      String   @db.ObjectId
-  isAReplyToId  String  @db.ObjectId
-
-  num_likes Int @default(0)
-  num_replies Int @default(0)
-  
-
-  originalPost      Post      @relation(fields: [originaPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  sender Profile @relation(fields: [senderId], references: [id], onDelete: Cascade)
-  targetComment  Comment  @relation("TargetComment", fields: [isAReplyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  likesRecList CommentLike[]
-  repliesReceivedList Comment[] @relation("TargetComment")
-  bookmarksReceivedList Bookmark[]
+enum PostType {
+  ORIGINAL
+  COMMENT
+  REBREW
 }
+
+
 
 model Notification {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId

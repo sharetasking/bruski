@@ -1,6 +1,28 @@
+import { Companion, Category, Profile } from "@prisma/client";
+
 const { PrismaClient } = require('@prisma/client');
 
 const db = new PrismaClient();
+
+// interface Category {
+//   id: string;
+//   name: string;
+//   // ... any other fields that a category might have
+// }
+
+
+// interface Companion {
+//   id: string;
+//   name: string;
+//   username: string;
+//   // ... any other fields that a category might have
+// }
+
+// interface Profile {
+//   id: string;
+//   url: string;
+//   // ... any other fields that a category might have
+// }
 
 async function main() {
   try {
@@ -33,13 +55,16 @@ async function main() {
 
       const categories = await db.category.findMany();
 
-      const sportsId = categories.find((o: { name: string; })=>o.name==='Sports').id;
-      const educationId = categories.find((o: { name: string; })=>o.name==='School').id;
-      const medicineId = categories.find((o: { name: string; })=>o.name==='Medicine').id;
-      const animalsId = categories.find((o: { name: string; })=>o.name==='Animals').id;
-      const travelId = categories.find((o: { name: string; })=>o.name==='Travel').id;
-
-
+      const findCategoryByName = (name:string) => {
+        const category = categories.find((c:Category) => c.name === name);
+        return category ? category.id : null;
+      };
+  
+      const sportsId = findCategoryByName('Sports');
+      const educationId = findCategoryByName('School');
+      const medicineId = findCategoryByName('Medicine');
+      const animalsId = findCategoryByName('Animals');
+      const travelId = findCategoryByName('Travel');
 
 
     await db.companion.createMany({
@@ -284,10 +309,10 @@ async function main() {
 
       const companions = await db.companion.findMany();
 
-      const ben = companions.find((o: { name: string; })=>o.name==='Benster');
-      const kayla = companions.find((o: { name: string; })=>o.name==='Kayla');
-      const trent = companions.find((o: { name: string; })=>o.name==='Trent');
-      const ivy = companions.find((o: { name: string; })=>o.name==='Ivy');
+      const ben = companions.find((o:Companion)=>o.name==='Benster');
+      const kayla = companions.find((o:Companion)=>o.name==='Kayla');
+      const trent = companions.find((o:Companion)=>o.name==='Trent');
+      const ivy = companions.find((o:Companion)=>o.name==='Ivy');
 
       // comments_made             Int
       // comments_received         Int
@@ -322,33 +347,22 @@ async function main() {
 
       const profiles = await db.profile.findMany();
 
-      const benProfile = profiles.find((o: { url: string; })=>o.url==='BenBeAddin').id;
-      const kaylaProfile = profiles.find((o: { url: string; })=>o.url==='KaylaTheKat').id;
-      const trentProfile = profiles.find((o: { url: string; })=>o.url==='TrentDoesTravel').id;
-      const ivyProfile = profiles.find((o: { url: string; })=>o.url==='ICUIvy').id;
-
-
-
-
-      await db.companion.update({
-        where: { id: ben.id },
-        data: { profileId: benProfile }
-      });
-      
-      await db.companion.update({
-        where: { id: kayla.id },
-        data: { profileId: kaylaProfile }
-      });
-      
-      await db.companion.update({
-        where: { id: trent.id },
-        data: { profileId: trentProfile }
-      });
-      
-      await db.companion.update({
-        where: { id: ivy.id },
-        data: { profileId: ivyProfile }
-      });
+      const updateCompanionProfileId = async (companionName:string, profileUrl:string) => {
+        const companion = companions.find((c:Companion) => c.username === companionName);
+        const profile = profiles.find((p:Profile) => p.url === profileUrl);
+  
+        if (companion && profile) {
+          await db.companion.update({
+            where: { id: companion.id },
+            data: { profileId: profile.id }
+          });
+        }
+      };
+  
+      await updateCompanionProfileId('BenBeAddin', 'Benster');
+      await updateCompanionProfileId('KaylaTheKat', 'Kayla The Kat');
+      await updateCompanionProfileId('TrentDoesTravel', 'Trent Does Travel');
+      await updateCompanionProfileId('ICUIvy', 'ICU Ivy');
 
 
 

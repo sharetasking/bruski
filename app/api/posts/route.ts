@@ -53,7 +53,8 @@ let post;
         post = await prismadb.post.create({
       data: {
         profileId: profileId,
-        body: body.substring(0, process.env.POST_MAX_CHARACTERS) ?? 350
+        body: body.substring(0, process.env.POST_MAX_CHARACTERS) ?? 350,
+        postType: "ORIGINAL"
       }
     });
     }
@@ -130,7 +131,6 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
         },
         include: {
           poster: true,
-          commentList: true
         },
         orderBy: {
           createdAt: 'desc'
@@ -148,7 +148,6 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
         include: {
           // include the poster and their followers
           poster: true,
-          commentList: true,
           likeList: true
         },
         orderBy: {
@@ -165,9 +164,6 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
   // GET POSTS TO SHOW TO SOMEONE WHO IS LOGGED IN
   async function fetchPostsForUser(followee:string, follower:string, page:number, offset:number, size:number)
   {
-
-    console.log("fetching")
-
 
     let posts = null;
 
@@ -194,7 +190,7 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
               // }
             },
           },
-          commentList: true,
+          // commentList: true,
           likeList: true
         },
         where: {
@@ -232,7 +228,6 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
               // }
             },
           },
-          commentList: true,
           likeList: true
         },
         orderBy: {
@@ -320,7 +315,6 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
     //     },
     //     include: {
     //       poster: true,
-    //       commentList: true
     //     },
     //     orderBy: {
     //       createdAt: 'desc'
@@ -353,7 +347,6 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
     //               },
     //             },
     //           },
-    //           commentList: true,
     //           likeList: true
     //         },
     //         orderBy: {

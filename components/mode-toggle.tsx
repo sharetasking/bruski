@@ -18,7 +18,7 @@ export const ModeToggle = () => {
   const themes = ["light", "dark", "system"];
 
   function toggleTheme() {
-    const index = themes.indexOf(theme ?? "") ?? 0;
+    const index = themes.indexOf(theme ?? "system") ?? 0;
     const next = themes[(index + 1) % themes.length];
     setTheme(next);
   }

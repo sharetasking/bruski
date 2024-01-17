@@ -101,10 +101,11 @@ const post = await prismadb.post.findFirst({
     id: params.postId
 }});
 
-const comments = await prismadb.comment.findMany({
-  where: {
-    isAReplyToId: params.postId
-}});
+const comments = null;
+// await prismadb.post.findMany({
+//   where: {
+//     isAReplyToId: params.postId
+// }});
 
 
 if(!post) {

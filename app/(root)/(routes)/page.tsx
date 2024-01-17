@@ -6,10 +6,23 @@ import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { useRouter } from "next/router";
 import useBruskiUser from "@/hooks/useBruskiUser";
 
+import { useClerk } from '@clerk/clerk-react';
+
+
 
 const SignInPage = () => {
   
   const { data: currentUser, isLoading } = useBruskiUser();
+
+  const { signOut } = useClerk();
+
+  const handleLogout = async () => {
+    await signOut();
+    // Redirect or perform other actions after logout
+  };
+
+  handleLogout();
+
 
   if(!currentUser && !isLoading)
   {

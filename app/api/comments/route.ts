@@ -1,64 +1,67 @@
-// import { auth, currentUser } from "@clerk/nextjs";
-// import { NextResponse, NextRequest } from "next/server";
-// import { NextApiRequest, NextApiResponse } from "next";
+import { auth, currentUser } from "@clerk/nextjs";
+import { NextResponse, NextRequest } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
 
 
-// import prismadb from "@/lib/prismadb";
-// import { checkSubscription } from "@/lib/subscription";
-// import { log } from "console";
+import prismadb from "@/lib/prismadb";
+import { checkSubscription } from "@/lib/subscription";
+import { log } from "console";
 
-// export async function POST(request: NextRequest, { params }: { params: { postId: string, body:string } }) {
+export async function POST(request: NextRequest, { params }: { params: { postId: string, body:string } }) {
   
-//   const { body } = await request.json();
-//   const postId = await request.nextUrl.searchParams.get('postId');
+  const { body } = await request.json();
+  const postId = await request.nextUrl.searchParams.get('postId');
+  
+  try {
+    const user = await currentUser();
 
-//   try {
-//     const user = await currentUser();
 
+    if (!user || !user.id || !user.firstName) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
-//     if (!user || !user.id || !user.firstName) {
-//       return new NextResponse("Unauthorized", { status: 401 });
-//     }
+    if (!body) {
+      return new NextResponse("Missing required fields", { status: 400 });
+    };
 
-//     if (!body) {
-//       return new NextResponse("Missing required fields", { status: 400 });
-//     };
+    // const isPro = await checkSubscription();
 
-//     // const isPro = await checkSubscription();
+    // if (!isPro) {
+    //   return new NextResponse("Pro subscription required", { status: 403 });
+    // }
 
-//     // if (!isPro) {
-//     //   return new NextResponse("Pro subscription required", { status: 403 });
-//     // }
+    //find corresponding db user
+    const localUser = await prismadb.user.findFirst({
+      where: {
+        clerkUserId: user.id
+      }
+    });
 
-//     //find corresponding db user
-//     const localUser = await prismadb.user.findFirst({
-//       where: {
-//         clerkUserId: user.id
-//       }
-//     });
+    // if not found
+    if (!localUser) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
-//     // if not found
-//     if (!localUser) {
-//       return new NextResponse("Unauthorized", { status: 401 });
-//     }
+    console.log("localUser", localUser)
     
-//     //create the comment
-//     const comment = await prismadb.comment.create({
-//       data: {
-//         postId: params.postId,
-//         senderId: localUser.profiles[0].id,
-//         body
-//       }
-//     });
+    //create the comment
+    const comment = null;
+    // await prismadb.comment.create({
+    //   data: {
+    //     postId: params.postId,
+    //     senderId: localUser.profiles[0].id,
+    //     body
+    //   }
+    // });
 
     
 
-//     return NextResponse.json(comment);
-//   } catch (error) {
+    return NextResponse.json(comment);
+  } catch (error) {
 
-//     return new NextResponse("Internal Error", { status: 500 });
-//   }
-// };
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+};
 
 
 // // export async function GET() {
