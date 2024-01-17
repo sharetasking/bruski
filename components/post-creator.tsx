@@ -89,7 +89,7 @@ const onSubmit2 = useCallback(async (ev: any) => {
       <div className="">
     <div className="p-4 rounded-md flex flex-col max-w-2xl grow bg-primary/1">
 
-      <h1>Posts</h1>
+      <h3>Posts</h3>
       {currentUser && (
         <form onSubmit={onSubmit}>
           <textarea

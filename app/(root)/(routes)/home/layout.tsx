@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { useUser } from "@clerk/clerk-react"
 import { currentUser } from "@clerk/nextjs"
 import { Toaster } from "react-hot-toast"
+import BottomBar from "@/components/BottomBar";
+import PixiWidget from "@/components/PixiWidget";
 
 const RootLayout =  async ({
   children
@@ -25,7 +27,10 @@ const RootLayout =  async ({
       <main className="md:px-8 pt-16 h-full w-full grow">
         {children}
       </main>
-
+ 
+            {/* <CoinsWidget /> */}
+            <PixiWidget/>
+            <BottomBar user={user} />
       <Toaster />
 
 

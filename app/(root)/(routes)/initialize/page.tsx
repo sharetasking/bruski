@@ -21,12 +21,10 @@ const InitPage = async () => {
     clerkUserId:id,
     img:imageUrl,
     first_name: firstName,
-    username:id,
     last_name: lastName,
+    username:id,
     email: emailAddresses[0].emailAddress,
     phone: phoneNumbers[0].phoneNumber,
-    name: "", // Add the missing properties
-    image: "",
     createdAt: new Date(),
     updatedAt: new Date(),
   }
@@ -44,7 +42,6 @@ const InitPage = async () => {
 
     if(!updatedUser) 
       return;
-
 
 
 
@@ -83,7 +80,6 @@ const InitPage = async () => {
           profiles: true,
         },
       });
-      console.log(updatedUser, "updatedUser");
       
   }
   catch(err)

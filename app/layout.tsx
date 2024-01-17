@@ -51,9 +51,6 @@ export default async function RootLayout({
             {children}
             <Toaster />
 
-            {/* <CoinsWidget /> */}
-            <PixiWidget/>
-            <BottomBar user={user} />
           </ThemeProvider>
         </body>
       </html>

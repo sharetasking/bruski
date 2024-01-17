@@ -95,9 +95,14 @@ body,
   body {
     @apply bg-background text-foreground;
   }
+  h1
+  {
+    @apply text-7xl font-bold tracking-tighter leading-tight;
+    line-height: .8;
+  }
   h2
   {
-    @apply text-primary text-2xl font-bold;
+    @apply text-2xl font-bold;
   }
   h3
   {
