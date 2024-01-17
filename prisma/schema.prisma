@@ -237,7 +237,7 @@ model Post {
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
   profileId             String    @db.ObjectId
-  media                 String[]?
+  media                 String[]
   mediaType             MediaType
   num_comments          Int       @default(0)
   num_likes             Int       @default(0)
