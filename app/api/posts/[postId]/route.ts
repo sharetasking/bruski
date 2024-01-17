@@ -45,7 +45,8 @@ export async function POST(request: Request, { params }: { params: { postId: str
       data: {
         profileId: localUser.id,
         body,
-        postType: "ORIGINAL"
+        postType: "ORIGINAL",
+        
       }
     });
 
