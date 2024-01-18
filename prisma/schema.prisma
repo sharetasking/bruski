@@ -16,6 +16,7 @@ model Profile {
   url       String @unique
   bio       String?
   img       String?
+  type       ProfileType?
   categoryId String? @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -162,6 +163,10 @@ model Companion {
   @@fulltext([name])
 }
 
+enum ProfileType {
+  human
+  companion
+}
 
 
 enum Role {
@@ -277,9 +282,11 @@ enum PostType {
 }
 
 enum MediaType {
+  TEXT
   IMAGE
   VIDEO
   POLL
+  CHALLENGE
   LINK
   TEXT_TO_IMG
 }

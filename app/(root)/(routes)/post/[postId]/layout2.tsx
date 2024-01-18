@@ -14,7 +14,7 @@ import CoinsWidget from "@/components/CoinsWidget";
 import { useUser,  } from '@clerk/clerk-react';
 import { currentUser } from '@clerk/nextjs';
 
-import './globals.css'
+import '@/app/globals.css'
 import prismadb from '@/lib/prismadb';
 
 const inter = Inter({ subsets: ['latin'] })
@@ -41,19 +41,12 @@ export default async function RootLayout({
   });
 
   return (
-    // reintroduce suppressHydrationWarning in html tag ?
-    <ClerkProvider>
-      <html lang="en">
-        <body className={cn("bg-secondary/10 h-full antialiased relative", inter.className)}>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            
-            <ProModal />
-            {children}
-            <Toaster />
+    
+      <>
+      <ProModal />
+      {children}
+      <Toaster />
+      </>
 
-          </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
   )
 }

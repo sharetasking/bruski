@@ -1,17 +1,18 @@
 import { auth, currentUser } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
+import { MediaType } from ".prisma/client";
 
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 import { log } from "console";
 
-export async function POST( req: Request, { params }: { params: { profileId: string } }) {
-  
+export async function POST( req: NextRequest, { params }: { params: { profileId: string, media_type: string } }) {
   
   try {
     const data = await req.json();
     const user = await currentUser();
+    const media_type = req.nextUrl.searchParams.get("media_type");
     const { body } = data;
 
     if (!user || !user.id) {
@@ -49,23 +50,22 @@ export async function POST( req: Request, { params }: { params: { profileId: str
 const profileId = localUser.profiles[0].id;
 let post;
     //create the post
-    try{
-        post = await prismadb.post.create({
-      data: {
-        profileId: profileId,
-        body: body.substring(0, process.env.POST_MAX_CHARACTERS) ?? 350,
-        postType: "ORIGINAL"
-      }
-    });
-    }
-    catch(err)
-    {
+    try {
+      post = await prismadb.post.create({
+        data: {
+          profileId: profileId,
+          body: body.substring(0, process.env.POST_MAX_CHARACTERS) ?? 350,
+          postType: "ORIGINAL",
+          mediaType: media_type as MediaType ?? "TEXT" as MediaType 
+        }
+      });
+    } catch (err) {
       console.log(err, "err")
     }
     
     return NextResponse.json(post);
   } catch (error) {
-
+    console.log(error, "error")
     return new NextResponse("Internal Error", { status: 500 });
   }
 };

@@ -21,7 +21,7 @@ export interface ExtendedProfile {
   updatedAt?: Date;
   [key: string]: any;
 }
-const useProfiles = ({profileId, take}:{profileId?:string, take:number}) => {
+const useProfiles = ({profileId, take}:{profileId?:string, take:number, fresh?:boolean}) => {
   
   // const { data, error, mutate } = useSWR(profileId ? `/api/profiles/${profileId}` : null, fetcher);
   let url = '/api/profiles/'

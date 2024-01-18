@@ -333,10 +333,10 @@ async function main() {
 
       await db.profile.createMany({
         data: [
-          {display_name: "Benster", url:'BenBeAddin', companionId: ben.id, bio: "I'm a math wizard. I send out daily math challenges to help you get better!", img: "https://picsum.photos/id/180/200/300", },
-          {display_name: "Kayla The Kat", url:'KaylaTheKat', companionId: kayla.id, bio: "Animal facts that are better than puppy snacks ;)", img: "https://picsum.photos/id/237/200/300", },
-          {display_name: "Trent Does Travel", url:'TrentDoesTravel', companionId: trent.id, bio: "Go on a global journey with me. I'll give you facts about the world.", img: "https://picsum.photos/id/177/200/300", },
-          {display_name: "ICU Ivy", url:'ICUIvy', companionId: ivy.id, bio: "Are you smarter than a medical practitioner? Let's find out :)", img: "https://picsum.photos/id/64/200/300", },
+          {display_name: "Benster", url:'BenBeAddin', companionId: ben.id, bio: "I'm a math wizard. I send out daily math challenges to help you get better!", img: "https://picsum.photos/id/180/200/300", type:"companion"},
+          {display_name: "Kayla The Kat", url:'KaylaTheKat', companionId: kayla.id, bio: "Animal facts that are better than puppy snacks ;)", img: "https://picsum.photos/id/237/200/300", type:"companion"},
+          {display_name: "Trent Does Travel", url:'TrentDoesTravel', companionId: trent.id, bio: "Go on a global journey with me. I'll give you facts about the world.", img: "https://picsum.photos/id/177/200/300", type:"companion"},
+          {display_name: "ICU Ivy", url:'ICUIvy', companionId: ivy.id, bio: "Are you smarter than a medical practitioner? Let's find out :)", img: "https://picsum.photos/id/64/200/300", type:"companion" },
           ]
 
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { map } from "zod";
-import { useCallback } from "react";
+import { useCallback, FormEvent } from "react";
 import { useRouter } from "next/navigation"
 import Avatar from "@/components/Avatar"
 import Button from "@/components/Button"
@@ -41,7 +41,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
   // }, [router, data.id]);
 
 
-  const onSubmit = useCallback(async () => {
+  const onSubmit = useCallback(async (event: FormEvent) => {
     try {
       
       setIsLoading(true);
@@ -79,8 +79,11 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
 </div>
 
   <div className="grow flex flex-col rounded-lg">
-
-  <div className="p-8 subpixel-antialiased">{post?.body}</div>
+  { post.mediaType == "CHALLENGE" && <div className="flex flex-col subpixel-antialiased bg-primary/90 text-primary-foreground rounded-lg min-h-90 p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
+            {post.body}
+          </div>
+}
+  { post.mediaType != "CHALLENGE" && <div className="p-8 subpixel-antialiased">{post?.body}</div> }
   <div className="flex items-center gap-2 justify-end text-sm text-primary/50">
     <div><span className="font-medium text-primary">{post?.num_comments ?? 0}</span> comments</div>
     {/* <div><span className="font-medium text-primary">{post?.num_likes ?? 0}</span> likes</div> */}
@@ -102,6 +105,11 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
              <textarea
               disabled={isLoading}
               onChange={(event) => setBody(event.target.value)}
+              onKeyDown={(e) => {
+              if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+                onSubmit(e);
+              }
+            }}
               value={body}
               className="
                 disabled:opacity-80

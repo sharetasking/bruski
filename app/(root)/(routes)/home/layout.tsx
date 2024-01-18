@@ -22,15 +22,14 @@ const RootLayout =  async ({
   return ( 
     <div className="h-full">
       {process.env.ADMIN_EMAIL == user?.emailAddresses?.[0].emailAddress && <div className="text-primary-foreground/60 p-2 bg-primary font-semibold text-xs text-center">ADMIN MODE (Log into another account to test user mode)</div>}
-      <Navbar isPro={isPro} />
+      
       {/* <Sidebar isPro={isPro} /> */}
-      <main className="md:px-8 pt-16 h-full w-full grow">
+      <main className="flex lg:px-8 grow justify-center">
         {children}
       </main>
  
             {/* <CoinsWidget /> */}
-            <PixiWidget/>
-            <BottomBar user={user} />
+            {/* TODO: <PixiWidget/> */}
       <Toaster />
 
 

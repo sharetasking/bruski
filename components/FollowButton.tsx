@@ -6,13 +6,22 @@ import { toast } from "react-hot-toast";
 import { useCallback, useMemo } from 'react';
 import useLoginModal from '@/hooks/useLoginModal';
 import useBruskiUser from '@/hooks/useBruskiUser';
+import { cn } from "@/lib/utils";
+
+interface FollowButtonType
+{
+  profileId: string;
+  follows: boolean;
+  followersCount?: number;
+}
 
 // TODO properly define all the type definitions marked as "any" in the app
-const FollowButton = ({settings}: {settings: any}) => {
+const FollowButton = ({settings}: {settings: FollowButtonType}) => {
 
     
+  
   const { profileId, follows, followersCount } = settings;
-  console.log(settings, "settings")
+
   const { isFollowing, toggleFollow } = useFollow({ profileId, following: follows ?? false, followersCount});
 
   
@@ -36,14 +45,12 @@ const FollowButton = ({settings}: {settings: any}) => {
 
 
   const router = useRouter();
-  return ( <>
+  return ( <div>
 
-    <Button onClick={handleFollow} className="h-8 mt-2 mr-auto bg-transparent
-    border-primary/20 hover:text-primary/80 active:ring-2 active:scale-95 ring-offset-0
-    ring-primary hover:border-primary" variant="outline">{isFollowing ? "Unfollow": "Follow"}</Button>
+    <Button onClick={handleFollow} className={cn("h-8 mt-2 mr-auto  border-primary/20 hover:text-primary/80 active:ring-2 active:scale-95 ring-offset-0 ring-primary hover:border-primary", !isFollowing ? "bg-primary text-primary-foreground" : "bg-transparent text-primary")} variant="outline">{isFollowing ? "Unfollow": "Follow"}</Button>
     
     
-  </> );
+  </div> );
 }
  
 export default FollowButton;

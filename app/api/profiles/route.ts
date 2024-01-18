@@ -67,7 +67,6 @@ export async function GET(req: NextRequest) {
   
   try {
     
-    console.log("getting profiles")
     const profileId = req.nextUrl.searchParams.get("profileId");
     let count = req.nextUrl.searchParams.get("take") ? parseInt(req.nextUrl.searchParams.get("take") ?? "10") : 10;
 
@@ -126,6 +125,7 @@ export async function GET(req: NextRequest) {
         },
         take: count
       });
+
 
       // mark if is following
       interface ExtendedProfile extends Profile {

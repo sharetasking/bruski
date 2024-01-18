@@ -62,11 +62,12 @@ export const Sidebar = ({
 
   return (
 
-    <aside className="hidden md:flex mt-16 h-full w-20 left-4 flex-col fixed inset-y-0">
+    <aside className=" md:flex mt-16 h-full w-20 left-4 flex-col fixed inset-y-0">
       <div className="space-y-4 flex flex-col h-full text-primary">
         <div className="p-3 flex-1 flex justify-center">
           <div className="space-y-2">
             {routes.map((route) => (
+              
               <Link
                 href={route.href}
                 onClick={() => checkIfPro("", route.pro)}
@@ -79,7 +80,7 @@ export const Sidebar = ({
                 <div className={cn("flex flex-col gap-y-2 justify-center items-center flex-1")}>
                     <route.icon className="h-5 w-5" />
                     {/* {route.label == "Companion" && <Image src="/pixi.png" width={40} height={40} alt="Pixi" />} */}
-                  {/* {route.label} */}
+                  {route.label}
                 </div>
               </Link>
             ))}

@@ -6,8 +6,8 @@ import { useCallback } from "react";
 
 
 interface AvatarProps {
-  img: String,
-  url?: String,
+  img: string,
+  url?: string,
   hasBorder?: boolean;
   size?: number|undefined;
   className?: string;

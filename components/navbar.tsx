@@ -27,7 +27,7 @@ export const Navbar = ({
   const proModal = useProModal();
   const user = useUser();
   return ( 
-    <div className="fixed w-full z-50 flex justify-between items-center py-2 px-4 h-16 bg-gradient-to-b from-white dark:from-black via-white/60 dark:via-black/60 to-transparent dark:to-transparent">
+    <div className="fixed inset-x-0 z-50 flex justify-between items-center py-2 px-4 h-16 bg-gradient-to-b from-white dark:from-black via-white/60 dark:via-black/60 to-transparent dark:to-transparent">
       
       {/* <div className="bg-primary"></div> */}
       <div className="flex items-center relative">
@@ -51,7 +51,7 @@ export const Navbar = ({
 
       {/* <SearchInput /> */}
 
-      {(!user || !user.isSignedIn) && user.isLoaded && <Link href="/register" className="text-sm text-red-500">Create an account / login</Link>}
+      {/* {(!user || !user.isSignedIn) && user.isLoaded && <Link href="/register" className="text-sm text-red-500">Create an account / login</Link>} */}
         
       {/* <Button onClick={proModal.onOpen} size="lg">
             + Create Post

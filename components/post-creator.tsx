@@ -10,6 +10,7 @@ import { usePosts } from "@/hooks/usePosts";
 import useRegisterModal from "@/hooks/useRegisterModal";
 import { usePost } from "@/hooks/usePost";
 import { toast } from "react-hot-toast";
+import PostTypeToggles from "@/components/PostTypeToggles";
 
 interface FormProps {
   placeholder: string;
@@ -36,18 +37,22 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
   const [posts, setPosts] = useState([]);
 
 
+  const [activePostType, setActivePostType] = useState("text");
 
 // OLD SUBMIT POST
   const onSubmit = useCallback(async (event: FormEvent) => {
 
-    onCommentSubmit(body);
-
     event.preventDefault();
     event.stopPropagation();
+
+
+    onCommentSubmit(body);
+
     try {
       // setIsLoading(true);
 
-      const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts';
+
+      const url = isComment ? `/api/comments?postId=${postId}` : `/api/posts?media_type=${activePostType}`;
 
       const result = await axios.post(url, { body });
       if(!result) 
@@ -73,10 +78,10 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
     <div className=" w-full bg-secondary rounded-md shadow-sm p-4 left-auto right-auto max-w-xl">
       <div className="">
     <div className="p-4 rounded-md flex flex-col max-w-2xl grow bg-primary/1">
-
-      <h3>Posts</h3>
+      <h3>Create a post</h3>
+      {/* {activePostType} */}
       {currentUser && (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} className='flex flex-col items-end'>
           <textarea
             onChange={(e) => setBody(e.target.value)}
             placeholder="What's happening in your world today?"
@@ -90,6 +95,7 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
             required
             className="bg-transparent w-full resize-none outline-none border-none p-0"
           ></textarea>
+          <div  className="w-full"><PostTypeToggles onTypeChange={setActivePostType}/></div>
           <button type="submit" className="bg-primary text-primary-foreground btn text-sm font-semibold hover:border-primary/70 active:bg-primary/80 border-2 hover:text-primary">Post</button>
         </form>
       )}

@@ -28,6 +28,10 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
   
   const profileId = data?.profileId;
 
+  const plurify = (word: string, count: number|string) => {
+    return parseInt(count+"") == 1 ? word : word + "s";
+  }
+
   // ROUTER AND MODAL
   const router = useRouter();
   const loginModal = useLoginModal();
@@ -36,6 +40,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
   // CURRENT USER AND LIKE HOOKS
   const { data: currentUser } = useBruskiUser();
   const { hasLiked, numLikes, toggleLike } = useLike({ postId: data.id, profileId, liked: !!data.isLiked, likesCount: data.num_likes});
+  // const { hasLiked, numLikes, toggleLike } = useEcho({ postId: data.id, profileId, liked: !!data.isLiked, likesCount: data.num_likes});
   const { isFollowing, toggleFollow, } = useFollow({ profileId, following: data.poster?.isFollowed ?? false, followersCount: data.num_follows});
 
   const goToLink = useCallback((ev: any, link: string) =>
@@ -73,6 +78,19 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
     toggleLike();
   }, [loginModal, currentUser, toggleLike]);
 
+  
+
+  // ECHO POST
+  const onEcho = useCallback(async (ev: any) => {
+    
+    ev.stopPropagation();
+
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+
+    // toggleEcho();
+  }, [loginModal, currentUser]); //, toggleEcho
 
   const onFollow = useCallback(async (ev: any) => {
     
@@ -187,20 +205,49 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           {/* {data.originalPostId && <span className="text-xs py-1 font-medium rounded-full w-fit px-4 bg-primary/10">Comment</span>} */}
 
           {/* POST CONTENTS */}
+          {
+            data.mediaType == "CHALLENGE"
+            && 
+          <div className="flex flex-col bg-primary/90 text-primary-foreground rounded-lg min-h-90 p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
+            <div>{data.body}</div>
+            <div className="text-xs mt-1 bg-primary py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.num_comments}</span> <span className="opacity-70">{plurify("response", data.num_comments)}</span></div>
+            <button className='mt-8 btn'>Answer</button>
+          </div>
+          }
+
+          {
+            data.mediaType != "CHALLENGE"
+            &&
           <div className="text-primary text-[#262f3f] py-4 text-[15px] leading-[21px] mt-1 block grow-0 whitespace-pre-line">
             {data.body}
           </div>
-
-          {data.originalPostId && <span className="text-sm py-2 font-medium px-4 rounded-2xl hover:bg-primary/5 active:bg-primary/10 active:border-primary/10 hover:border-primary/5 border border-primary/10">
+          }
+          {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId && <span className="flex flex-col subpixel-antialiased bg-primary/90 hover:bg-primary/95 active:bg-primary text-primary-foreground rounded-2xl min-h-90 px-4 py-4 leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               {/* {JSON.stringify(data.originalPost)} */}
               <div className="flex gap-2 items-center ">
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className=''>
                   <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
                 </div>
-                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline'>{data.originalPost?.poster?.display_name} </div>
+                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline text-base'>{data.originalPost?.poster?.display_name} </div>
               </div>
-              <div className='ml-8 font-normal line-clamp-6'>{data.originalPost?.body}</div>
+              <div className='ml-8 font-normal text-sm line-clamp-6 opacity-70'>{data.originalPost?.body}</div>
+              <div className="ml-8 text-xs mt-1 bg-primary py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.originalPost?.num_comments}</span> <span className="opacity-70">{plurify("response", data.originalPost?.num_comments)}</span></div>
+            </div>
+            
+          </span>}
+
+
+          {data.originalPost?.mediaType != "CHALLENGE" && data.originalPostId && <span className="text-sm py-4 font-medium px-4 rounded-2xl hover:bg-primary/5 active:bg-primary/10 active:border-primary/10 hover:border-primary/5 border border-primary/10">
+            <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
+              {/* {JSON.stringify(data.originalPost)} */}
+              <div className="flex gap-2 items-center ">
+                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className=''>
+                  <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
+                </div>
+                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline text-base'>{data.originalPost?.poster?.display_name} </div>
+              </div>
+              <div className='ml-8 font-normal text-sm line-clamp-6 opacity-70'>{data.originalPost?.body}</div>
             </div>
             
           </span>}
@@ -213,7 +260,8 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           {/* BOTTOM BUTTONS */}
           <div className="flex flex-row justify-between items-center mt-3 gap-10">
             {/* LEFT BUTTONS (BOTTOM) */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              {/* Message */}
               <div 
                 className="
                   flex 
@@ -222,6 +270,11 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                   text-neutral-500 
                   gap-1 
                   cursor-pointer 
+                  hover:bg-primary/5
+                  active:bg-primary/10
+                  rounded-full
+                  h-14 w-14
+                  justify-center
                   transition 
                   hover:text-sky-500
                   text-xs
@@ -231,6 +284,8 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                   {data.comments?.length || 0}
                 </p>
               </div>
+
+              {/* Like */}
               <div
                 onClick={onLike}
                 className="
@@ -240,6 +295,11 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                   text-neutral-500 
                   gap-1 
                   cursor-pointer 
+                  hover:bg-primary/5
+                  active:bg-primary/10
+                  rounded-full
+                  h-14 w-14
+                  justify-center
                   transition 
                   hover:text-red-500
               ">
@@ -248,8 +308,10 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                   {numLikes }
                 </p>
               </div>
+
               {/* Num Echos */}
-              {/* <div 
+              <div 
+                onClick={onEcho}
                 className="
                   flex 
                   flex-row 
@@ -257,6 +319,11 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                   text-neutral-500 
                   gap-1 
                   cursor-pointer 
+                  hover:bg-primary/5
+                  active:bg-primary/10
+                  rounded-full
+                  h-14 w-14
+                  justify-center
                   transition 
                   hover:text-sky-500
                   text-xs
@@ -265,7 +332,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                 <p>
                   {data.comments?.length || 0}
                 </p>
-              </div> */}
+              </div>
               
               </div>
 

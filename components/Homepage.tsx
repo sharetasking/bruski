@@ -25,7 +25,7 @@ import { useState } from "react";
 
 export const Homepage = ({user}: {user: any}) => {
   
-  const { data: profiles } = useProfiles({ take: 4 });
+  const { data: profiles } = useProfiles({ take: 4, fresh: true });
   const [comments, setComments] = useState<Comment[]>([]);
   const addComment = (newComment:string) => {
     let comment = new Comment(newComment);//, user?.profiles?.[0]?.id, user?.profiles?.[0]?.display_name, user?.profiles?.[0]?.img);
@@ -36,13 +36,18 @@ export const Homepage = ({user}: {user: any}) => {
     <div className="min-h-full w-full p-4 space-y-2 flex grow-0 lg:flex-row flex-col justify-between gap-4">
       
       {/* Left Column */}
-        <div className="flex-1 gap-4 pt-4 sticky">
-          <h2 className="mt-4 font-semibold tracking-tight text-left text-lg mb-2">Even more to explore</h2>
+        <div className="flex-1 gap-4 sticky">
+          <h2 className="font-semibold tracking-tight text-left text-lg mb-2">Even more to explore</h2>
           <Categories />
+
+          <div className="mt-12 bg-primary/5 rounded-2xl p-8 min-h-96">
+            &nbsp;
+          </div>
+
         </div>
 
         {/* Center column */}
-        <div className="md:w-[640px] flex flex-col items-center mx-auto grow-0">
+        <div className="md:w-[640px] sm:w-[640px] w-full flex flex-col items-center mx-auto grow-0">
           {/* <div className="rounded-lg bg-[#237ecd] text-white grow-0 flex flex-col gap-2 px-4 py-8 items-center w-[600px]">
             <div className="flex items-center justify-center grow">
               <Image src="/pixi.png" width={120} height={120} alt="Pixi" className="grayscale" />
@@ -57,15 +62,15 @@ export const Homepage = ({user}: {user: any}) => {
         </div>
 
         {/* Right column */}
-        <div className="flex-1 flex flex-col p-4 gap-4 sticky">
+        <div className="flex-1 flex flex-col pb-4 px-4 gap-4 sticky">
           {/* FEATURED PROFILES */}
           <h3>Get updates from</h3>
-          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-1 xl:grid-cols-2 items-start justify-start text-left">
+          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-1 xl:grid-cols-1 items-start justify-start text-left">
             {
               profiles && profiles.length && profiles.map((profile: ExtendedProfile) => (
                 // {JSON.stringify(profile?.display_name)}
                 
-                <div key={profile.id} className="text-sm font-semibold min-h-20 flex flex-col items-start">
+                <div key={profile.id} className="text-sm bg-primary/5 rounded-xl p-4 font-semibold min-h-20 flex flex-col items-start">
                   <div className="flex items-center gap-2">
                     <Avatar url={profile?.id} img={profile.img ?? "/images/placeholder.png"} size={8} hasBorder={true} />
                     <Link className="line-clamp-1 text-medium text-sm text-left " href={"/"+profile.id}>{profile?.display_name}</Link>
