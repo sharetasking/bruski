@@ -200,7 +200,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                 </div>
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline'>{data.originalPost?.poster?.display_name} </div>
               </div>
-              <div className='ml-8 font-normal'>{data.originalPost?.body}</div>
+              <div className='ml-8 font-normal line-clamp-6'>{data.originalPost?.body}</div>
             </div>
             
           </span>}

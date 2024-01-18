@@ -26,9 +26,10 @@ import { useState } from "react";
 export const Homepage = ({user}: {user: any}) => {
   
   const { data: profiles } = useProfiles({ take: 4 });
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const addComment = (newComment:string) => {
-    setComments(prevComments => [...prevComments, newComment]);
+    let comment = new Comment(newComment);//, user?.profiles?.[0]?.id, user?.profiles?.[0]?.display_name, user?.profiles?.[0]?.img);
+    setComments(prevComments => [...prevComments, comment]);
   };
 
   return (

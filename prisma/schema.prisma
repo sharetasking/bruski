@@ -280,6 +280,8 @@ enum MediaType {
   IMAGE
   VIDEO
   POLL
+  LINK
+  TEXT_TO_IMG
 }
 
 
