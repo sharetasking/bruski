@@ -20,7 +20,6 @@ import { Post } from "@prisma/client";
 interface PostFeedProps {
   user?: BruskiUser|null,
   profileId?: string
-  posts?: Post[]
 }
 
 export const PostFeed:React.FC<PostFeedProps> = ({user, profileId}) => {

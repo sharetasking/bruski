@@ -14,13 +14,16 @@ import useLoginModal from '@/hooks/useLoginModal';
 import useBruskiUser, { BruskiUser } from '@/hooks/useBruskiUser';
 import useLike from '@/hooks/useLike';
 import useFollow from '@/hooks/useFollow';
+import Link from 'next/link';
 
 interface PostItemProps {
   data: Record<string, any>;
   user: BruskiUser|null;
+  isComment?: boolean;
 }
 
-const PostItem: React.FC<PostItemProps> = ({ data = {}, user }) => {
+const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }) => {
+
   const signedInUserProfileId = user?.profiles?.[0]?.id;
   
   const profileId = data?.profileId;
@@ -35,16 +38,26 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user }) => {
   const { hasLiked, numLikes, toggleLike } = useLike({ postId: data.id, profileId, liked: !!data.isLiked, likesCount: data.num_likes});
   const { isFollowing, toggleFollow, } = useFollow({ profileId, following: data.poster?.isFollowed ?? false, followersCount: data.num_follows});
 
-  
+  const goToLink = useCallback((ev: any, link: string) =>
+  {
+    ev.stopPropagation();
+    ev.preventDefault();
+    router.push(link)
+    return;
+    
+  }, [router]);
 
   // CLICKING USER
   const goToUser = useCallback((ev: any) => {
     ev.stopPropagation();
+    ev.preventDefault();
     router.push(`/${data?.poster?.id}`)
   }, [router, data?.poster?.id]);
 
   // CLICKING POST
-  const goToPost = useCallback(() => {
+  const goToPost = useCallback((ev: any) => {
+    ev.stopPropagation();
+    ev.preventDefault();
     router.push(`/post/${data.id}`);
   }, [router, data.id]);
 
@@ -104,10 +117,10 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user }) => {
       <div className="flex flex-row items-start gap-3 flex-1">
         {/* <Avatar profileId={data.poster?.id} /> */}
           <div className="flex flex-col gap-1 items-center rounded-full">
-        <div className='w-12 h-12 flex-0 shrink-0 grow-0 flex relative rounded-full'>
+        <div className='w-10 h-10 flex-0 shrink-0 grow-0 flex relative rounded-full'>
 
         {/* AVATAR IMAGE */}
-        <Avatar img={data.poster?.img} url={data.poster.id ?? ""} size={12} hasBorder={false} />
+        <Avatar img={data.poster?.img} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} />
        
         </div>
 
@@ -170,11 +183,31 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user }) => {
               {data.poster?.username && `@${data.poster?.username}`}
             </span>
           </div>
+          
+          {/* {data.originalPostId && <span className="text-xs py-1 font-medium rounded-full w-fit px-4 bg-primary/10">Comment</span>} */}
 
           {/* POST CONTENTS */}
-          <div className="text-primary text-[#262f3f] text-[15px] leading-[21px] mt-1 block grow-0 whitespace-pre-line">
+          <div className="text-primary text-[#262f3f] py-4 text-[15px] leading-[21px] mt-1 block grow-0 whitespace-pre-line">
             {data.body}
           </div>
+
+          {data.originalPostId && <span className="text-sm py-2 font-medium px-4 rounded-2xl hover:bg-primary/5 active:bg-primary/10 active:border-primary/10 hover:border-primary/5 border border-primary/10">
+            <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
+              {/* {JSON.stringify(data.originalPost)} */}
+              <div className="flex gap-2 items-center ">
+                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className=''>
+                  <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
+                </div>
+                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline'>{data.originalPost?.poster?.display_name} </div>
+              </div>
+              <div className='ml-8 font-normal'>{data.originalPost?.body}</div>
+            </div>
+            
+          </span>}
+{/* 
+          <div>
+            {JSON.stringify(data)}
+          </div> */}
 
 
           {/* BOTTOM BUTTONS */}
@@ -215,8 +248,8 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user }) => {
                   {numLikes }
                 </p>
               </div>
-
-              <div 
+              {/* Num Echos */}
+              {/* <div 
                 className="
                   flex 
                   flex-row 
@@ -228,12 +261,11 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user }) => {
                   hover:text-sky-500
                   text-xs
               ">
-                {/* Echos */}
                 <AiOutlineRetweet size={20} />
                 <p>
                   {data.comments?.length || 0}
                 </p>
-              </div>
+              </div> */}
               
               </div>
 

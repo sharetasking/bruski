@@ -52,7 +52,8 @@ const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className }) 
         }}
         fill
         className="rounded-full flex inset-0 m-auto"
-        sizes={size ? ''+size+'px' : '96px'}
+        sizes="96px"
+        // sizes={size ? ''+size+'px' : '96px'}
         alt="Avatar"
         onClick={onClick}
         src={_img ?? '/images/placeholder.png'}

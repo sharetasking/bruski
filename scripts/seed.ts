@@ -1,28 +1,28 @@
-import { Companion, Category, Profile } from "@prisma/client";
+// import { Companion, Category, Profile } from "@prisma/client";
 
 const { PrismaClient } = require('@prisma/client');
 
 const db = new PrismaClient();
 
-// interface Category {
-//   id: string;
-//   name: string;
-//   // ... any other fields that a category might have
-// }
+interface Category {
+  id: string;
+  name: string;
+  // ... any other fields that a category might have
+}
 
 
-// interface Companion {
-//   id: string;
-//   name: string;
-//   username: string;
-//   // ... any other fields that a category might have
-// }
+interface Companion {
+  id: string;
+  name: string;
+  username: string;
+  // ... any other fields that a category might have
+}
 
-// interface Profile {
-//   id: string;
-//   url: string;
-//   // ... any other fields that a category might have
-// }
+interface Profile {
+  id: string;
+  url: string;
+  // ... any other fields that a category might have
+}
 
 async function main() {
   try {

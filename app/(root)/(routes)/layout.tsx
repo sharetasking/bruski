@@ -4,7 +4,7 @@ const LandingPageLayout = async ({
   children: React.ReactNode;
 }) => {
   return ( 
-    <main className="h-full w-full grow">
+    <main className="h-full flex w-full grow">
       {children}
     </main>
    );

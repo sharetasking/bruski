@@ -95,13 +95,36 @@ const user = await prismadb.user.findFirst({
 // get post
 const post = await prismadb.post.findFirst({
   include: {
-    poster: true
+    poster: true,
+    originalPost: {
+      include: {
+        poster: true,
+      }
+    },
   },
   where: {
     id: params.postId
 }});
 
-const comments = null;
+const comments = await prismadb.post.findMany({
+  where: {
+    postType: 'COMMENT',
+    originalPostId: params.postId
+  },
+  include: {
+    poster: true,
+    // comments: true,
+    originalPost: {
+      include: {
+        poster: true,
+      }
+    },
+  }
+});
+
+
+console.log(comments)
+
 // await prismadb.post.findMany({
 //   where: {
 //     isAReplyToId: params.postId

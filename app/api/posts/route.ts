@@ -105,7 +105,7 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
     if(!localUser || !localUser.id) results = await fetchPostsForGuest(profileId??"", page, offset, size)
     else results = await fetchPostsForUser(profileId ?? "", localUser?.profiles[0].id, page, offset, size);
 
-    console.log(results)
+    // console.log(results)
 
     return NextResponse.json(results);
 
@@ -131,6 +131,12 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
         },
         include: {
           poster: true,
+          comments: true,
+          originalPost: {
+            include: {
+              poster: true,
+            }
+          },
         },
         orderBy: {
           createdAt: 'desc'
@@ -190,7 +196,12 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
               // }
             },
           },
-          // commentList: true,
+          comments: true,
+          originalPost: {
+            include: {
+              poster: true,
+            }
+          },
           likeList: true
         },
         where: {
@@ -228,7 +239,13 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
               // }
             },
           },
-          likeList: true
+          likeList: true,
+          comments: true,
+          originalPost: {
+            include: {
+              poster: true,
+            }
+          },
         },
         orderBy: {
           createdAt: 'desc'

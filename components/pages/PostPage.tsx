@@ -9,35 +9,17 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { BruskiUser } from "@/hooks/useBruskiUser";
-import { Profile } from "@prisma/client";
+import { Profile, Post } from "@prisma/client";
 import { Navbar } from "../navbar";
+import PostItem from "../posts/PostItem";
 
-export interface Post{
-  id: string;
-  body: string;
-  createdAt: Date;
-  updatedAt: Date;
-  likes?: string;
-  dislikes?: string;
-  likesCount?: string;
-  dislikesCount?: string;
-  commentsCount?: string;
-  comments?: Comment[];
-  isLiked?: boolean;
-  isDisliked?: boolean;
-  isMine?: boolean;
-  isEdited?: boolean;
-  isDeleted?: boolean;
-  poster: Profile;
-
-}
 export interface PostPageProps {
   user: BruskiUser|null;
   post: Post|null;
   comments: Comment[]|null;
 
 }
-const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comments:Comment[]|null}) => {
+const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comments:Post[]|null}) => {
 
   const router = useRouter();
 
@@ -61,14 +43,16 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
 
   const onSubmit = useCallback(async () => {
     try {
-      toast.success('Submitting');
+      
       setIsLoading(true);
       setBody('');
 
       const isComment = true;
       const url = isComment ? `/api/comments?postId=${post?.id}` : '/api/posts';
 
-      await axios.post(url, { body });
+      const results = await axios.post(url, { body });
+      if(results.data) { toast.success('Success');}
+      // console.log(results)
 
       // mutatePosts();
       // mutatePost();
@@ -83,7 +67,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
 
 
   return (
-  <div className="max-w-lg m-auto">
+  <div className="lg:max-w-lg w-full m-auto">
     <div className="flex flex-col md:flex-row gap-4 md:-ml-40 md:p-8 p-4">
 
 <div>
@@ -98,7 +82,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
 
   <div className="p-8 subpixel-antialiased">{post?.body}</div>
   <div className="flex items-center gap-2 justify-end text-sm text-primary/50">
-    <div><span className="font-medium text-primary">{post?.commentsCount ?? 0}</span> comments</div>
+    <div><span className="font-medium text-primary">{post?.num_comments ?? 0}</span> comments</div>
     {/* <div><span className="font-medium text-primary">{post?.num_likes ?? 0}</span> likes</div> */}
     {/* TODO: Readd <div><span className="font-medium text-primary">{post?.num_bookmarks ?? 0}</span> bookmarks</div> */}
   </div>
@@ -148,7 +132,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
                 transition"
             /> */}
             <div className="mt-4 flex flex-row justify-end">
-              <Button disabled={isLoading || !body} onClick={onSubmit} label="Comment" />
+              <button className="btn" disabled={isLoading || !body} onClick={onSubmit}>Comment</button>
             </div>
           </div>
         </div>
@@ -160,63 +144,65 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comme
           Not logged in
         </div>)
     }
-      {/* {currentUser ? ( */}{
-      //   <div className="flex flex-row gap-4">
-      //     <div>
-      //       <Avatar userId={currentUser?.id} />
-      //     </div>
-      //     <div className="w-full">
-      //       <textarea
-      //         disabled={isLoading}
-      //         onChange={(event) => setBody(event.target.value)}
-      //         value={body}
-      //         className="
-      //           disabled:opacity-80
-      //           peer
-      //           resize-none 
-      //           mt-3 
-      //           w-full 
-      //           bg-black 
-      //           ring-0 
-      //           outline-none 
-      //           text-[20px] 
-      //           placeholder-neutral-500 
-      //           text-white
-      //         "
-      //         placeholder={placeholder}>
-      //       </textarea>
-      //       <hr 
-      //         className="
-      //           opacity-0 
-      //           peer-focus:opacity-100 
-      //           h-[1px] 
-      //           w-full 
-      //           border-neutral-800 
-      //           transition"
-      //       />
-      //       <div className="mt-4 flex flex-row justify-end">
-      //         <Button disabled={isLoading || !body} onClick={onSubmit} label="Tweet" />
-      //       </div>
-      //     </div>
-      //   </div>
-      // ) : (
-      //   <div className="py-8">
-      //     <h1 className="text-white text-2xl text-center mb-4 font-bold">Welcome to Bruski</h1>
-      //     <div className="flex flex-row items-center justify-center gap-4">
-      //       <Button label="Login" onClick={loginModal.onOpen} />
-      //       <Button label="Register" onClick={registerModal.onOpen} secondary />
-      //     </div>
-      //   </div>
-      // )
-    } 
+      {/* {currentUser ? ( 
+        <div className="flex flex-row gap-4">
+          <div>
+            <Avatar userId={currentUser?.id} />
+          </div>
+          <div className="w-full">
+            <textarea
+              disabled={isLoading}
+              onChange={(event) => setBody(event.target.value)}
+              value={body}
+              className="
+                disabled:opacity-80
+                peer
+                resize-none 
+                mt-3 
+                w-full 
+                bg-black 
+                ring-0 
+                outline-none 
+                text-[20px] 
+                placeholder-neutral-500 
+                text-white
+              "
+              placeholder={placeholder}>
+            </textarea>
+            <hr 
+              className="
+                opacity-0 
+                peer-focus:opacity-100 
+                h-[1px] 
+                w-full 
+                border-neutral-800 
+                transition"
+            />
+            <div className="mt-4 flex flex-row justify-end">
+              <Button disabled={isLoading || !body} onClick={onSubmit} label="Tweet" />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="py-8">
+          <h1 className="text-white text-2xl text-center mb-4 font-bold">Welcome to Bruski</h1>
+          <div className="flex flex-row items-center justify-center gap-4"> */}
+            {/* TODO: <Button label="Login" onClick={loginModal.onOpen} />
+             TODO: <Button label="Register" onClick={registerModal.onOpen} secondary /> */}
+          {/* </div>
+        </div>
+      )
+    }  */}
     </div>
 
 
   <div>
 
   </div>
-  {comments?.map((comment) =>  (<></>))
-      // (<div key={comment?.id}>{comment?.body}</div>))
+  {comments?.map((comment) =>  
+      (<div key={comment?.id}>
+        <PostItem data={comment} user={user} />
+        </div>))
     }
 
   <div>

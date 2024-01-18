@@ -15,50 +15,35 @@ interface FormProps {
   placeholder: string;
   isComment?: boolean;
   postId?: string;
+  onCommentSubmit: (comment: string) => void;
 
 }
 
-export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId} ) => {
+export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId, onCommentSubmit} ) => {
 
+
+  const [body, setBody] = useState<string>("");
 
 
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const { data: currentUser } = useBruskiUser();
   const { mutate: mutatePosts } = usePosts();
-
-  
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
   // Initialize posts state with data or an empty array to ensure it's always an array
   const [posts, setPosts] = useState([]);
-  const [body, setBody] = useState<string>("");
-
-// SUBMIT POST
-const onSubmit2 = useCallback(async (ev: any) => {
-    
-  ev.preventDefault();
-  ev.stopPropagation();
-
-
-  //add to posts
-  console.log(posts)
-
-  toast.success(body)
-//   if (!currentUser) {
-//     return loginModal.onOpen();
-//   }
-
-//   ();
-}, [loginModal, currentUser, body, posts ]);
 
 
 
 // OLD SUBMIT POST
   const onSubmit = useCallback(async (event: FormEvent) => {
 
+    onCommentSubmit(body);
+
     event.preventDefault();
+    event.stopPropagation();
     try {
       // setIsLoading(true);
 

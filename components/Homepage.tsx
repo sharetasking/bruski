@@ -20,13 +20,16 @@ import useProfiles, {ExtendedProfile} from "@/hooks/useProfiles";
 import Link from "next/link";
 import Avatar from "@/components/Avatar"
 import FollowButton from "@/components/FollowButton"
+import { useState } from "react";
 
 
 export const Homepage = ({user}: {user: any}) => {
   
   const { data: profiles } = useProfiles({ take: 4 });
-
-  
+  const [comments, setComments] = useState([]);
+  const addComment = (newComment:string) => {
+    setComments(prevComments => [...prevComments, newComment]);
+  };
 
   return (
     <div className="min-h-full w-full p-4 space-y-2 flex grow-0 lg:flex-row flex-col justify-between gap-4">
@@ -47,7 +50,7 @@ export const Homepage = ({user}: {user: any}) => {
               
               <div className="text-2xl animate-bounce"><div className="rotate-90">&raquo;</div></div>
           </div> */}
-          <PostCreator placeholder="Enter your post..." />
+          <PostCreator onCommentSubmit={addComment} placeholder="Enter your post..." />
           <PostFeed user={user} />
           {/* <Categories /> */}
         </div>
