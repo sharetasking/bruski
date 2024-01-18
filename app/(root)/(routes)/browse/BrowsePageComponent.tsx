@@ -17,9 +17,8 @@ const BrowsePageComponent = ({profiles, user}:{profiles:ExtendedProfile[]|null, 
     router.push('/'+url)
   }
 
-  if(!profiles && profiles?.length)
+  if(!profiles)
     return <></>
-
   else
     return (<>
 
