@@ -70,7 +70,7 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
     }
 
 
-  }, [body, mutatePosts, isComment, postId]); //, isComment, postId, mutatePost
+  }, [body, mutatePosts, isComment, postId, activePostType, onCommentSubmit]); //, isComment, postId, mutatePost
 
 
 

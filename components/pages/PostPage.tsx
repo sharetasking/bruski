@@ -62,7 +62,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
     } finally {
       setIsLoading(false);
     }
-  }, [body]);
+  }, [body, post?.id]);
 
 
 
