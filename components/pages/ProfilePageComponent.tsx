@@ -14,7 +14,7 @@ import { BruskiUser } from "@/hooks/useBruskiUser";
 import useProfiles, {ExtendedProfile} from "@/hooks/useProfiles";
 
 interface ProfilePageProps {
-    profile: ExtendedProfile;
+    profile: ExtendedProfile|null;
     user?: BruskiUser|null;
 }
 

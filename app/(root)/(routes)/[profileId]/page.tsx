@@ -85,8 +85,8 @@ const ProfileIdPage =  async ({
     });
   }
 
-  let profile:ExtendedProfile;
-  
+  let profile:ExtendedProfile|null = null;
+
   if(_profile)
   {
     profile = {
