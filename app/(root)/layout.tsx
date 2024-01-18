@@ -33,14 +33,20 @@ export default async function RootLayout({
 
   const clerkUser = await currentUser();
   const isPro = false;//TODO: clerkUser?.subscriptionStatus === "active";
-  const user = prismadb.user.findUnique({
-    where: {
-      clerkUserId: clerkUser?.id,
-    },
-    include: {
-      profiles: true,
-    },
-  });
+  let user;
+  if(clerkUser)
+  {
+
+    user = await prismadb.user.findUnique({
+      where: {
+        clerkUserId: clerkUser?.id,
+      },
+      include: {
+        profiles: true,
+      },
+    });
+  }
+  console.log(user)
 
   return (
     // reintroduce suppressHydrationWarning in html tag ?
@@ -55,7 +61,7 @@ export default async function RootLayout({
             </div>
             <Toaster />
 
-            <BottomBar user={user} />
+            {user?.id && <BottomBar user={user} />}
           </ThemeProvider>
         </body>
       </html>

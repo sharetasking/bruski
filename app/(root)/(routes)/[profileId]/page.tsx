@@ -67,7 +67,7 @@ const ProfileIdPage =  async ({
     });
   }
   catch(err) {}
-  
+
   if(!_profile)
   {
     console.log('not found')
@@ -85,10 +85,16 @@ const ProfileIdPage =  async ({
     });
   }
 
-  const profile: ExtendedProfile = {
-    ..._profile,
-    isFollowing: _profile?.listOfProfilesFollowingViewedProfile.length > 0,
-  };
+  let profile:ExtendedProfile;
+  
+  if(_profile)
+  {
+    profile = {
+      ..._profile,
+      isFollowing: _profile?.listOfProfilesFollowingViewedProfile.length > 0 ?? false,
+    };
+  }
+  
 
   //get the user's profile
   // const followerProfile = await prismadb.profile.findFirst({
