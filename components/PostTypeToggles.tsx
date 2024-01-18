@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const PostTypeToggles = ({onTypeChange}) => {
+const PostTypeToggles = ({onTypeChange}: {onTypeChange: (type: string) => void}) => {
   const [activePostType, setActivePostType] = useState('TEXT');
 
   onTypeChange(activePostType);

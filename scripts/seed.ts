@@ -21,6 +21,8 @@ interface Companion {
 interface Profile {
   id: string;
   url: string;
+  img: string|null;
+  display_name: string;
   // ... any other fields that a category might have
 }
 

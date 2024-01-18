@@ -9,13 +9,15 @@ import useBruskiUser from './useBruskiUser';
 import useLoginModal from '@/hooks/useLoginModal';
 import { string } from 'zod';
 
-const useFollow = ({profileId, following, followersCount}:{profileId: string, following: boolean, followersCount: number,}) => {
+const useFollow = ({profileId, following, followersCount}:{profileId: string, following: boolean, followersCount?: number,}) => {
   
 
+  followersCount = followersCount || 0;
   // // const { user: currentUser, isSignedIn } = useUser();
   // const loginModal = useLoginModal();
   const [isFollowing, setIsFollowing] = useState(following);
   const [numFollowers, setNumFollowers] = useState(followersCount);
+
 
 
   // BEGIN TOGGLE FOLLOW

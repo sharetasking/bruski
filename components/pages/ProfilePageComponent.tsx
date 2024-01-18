@@ -29,7 +29,7 @@ const ProfilePageComponent = ({profile, user}: ProfilePageProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>();
 
-//   const profile = useProfile(profile.id);
+//   const profile = useProfile(profile?.id);
   
   return ( <>
   
@@ -48,21 +48,21 @@ const ProfilePageComponent = ({profile, user}: ProfilePageProps) => {
                         <div className="w-32 h-32 mb-4 relative shrink-0 grow-0 rounded-full flex items-center justify-center ">
                             
                             {/* {JSON.stringify(profile)} */}
-                            { profile.img && <Avatar img={profile?.img} size={64} hasBorder={false} className="w-full h-full inset-0 bg-primary/50 rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold"/>}
-                            { !profile.img && <div className="w-full h-full bg-primary/50  rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold">{profile?.display_name?.charAt(0)?.toUpperCase()}</div> }
+                            { profile?.img && <Avatar img={profile?.img} size={64} hasBorder={false} className="w-full h-full inset-0 bg-primary/50 rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold"/>}
+                            { !profile?.img && <div className="w-full h-full bg-primary/50  rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold">{profile?.display_name?.charAt(0)?.toUpperCase()}</div> }
 
                           </div>
 
 {/* 
                         {JSON.stringify(profile)} */}
 
-                        <h1 className="text-xl font-bold">{ profile.display_name }</h1>
-                        <p className="text-primary/70 break-words text-sm w-48 text-center ">{profile.id}</p>
-                        <p className="text-primary/70 break-words text-sm w-48 text-center">{profile.bio}</p>
+                        <h1 className="text-xl font-bold">{ profile?.display_name }</h1>
+                        <p className="text-primary/70 break-words text-sm w-48 text-center ">{profile?.id}</p>
+                        <p className="text-primary/70 break-words text-sm w-48 text-center">{profile?.bio}</p>
                         <div className="mt-6 flex flex-wrap gap-4 justify-center">
                             {/* <a href="#" className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a> */}
                             
-                            {profile.id != user?.profiles?.[0].id && <FollowButton settings={{profileId: profile.id, follows:!!profile.listOfProfilesFollowingViewedProfile?.length, followersCount:profile.num_followers}} /> }
+                            {(profile && profile?.id != user?.profiles?.[0].id) && <FollowButton settings={{profileId: profile?.id, follows:!!profile?.listOfProfilesFollowingViewedProfile?.length, followersCount:profile?.num_followers}} /> }
                             
                         </div>
                     </div>

@@ -40,8 +40,8 @@ const BrowsePage = async () => {
   const _profiles: ExtendedProfile[] = profiles.map(profile => {
     const _profile: ExtendedProfile = {
       ...profile,
-      isFollowedByUser: profile.listOfProfilesFollowingViewedProfile.some((follow: any) => follow.followerId === localUser.profiles[0]?.id) ? true : false,
-      isFollowingUser: profile.listOfProfilesFollowedByViewedProfile.some((follow: any) => follow.followeeId === localUser.profiles[0]?.id) ? true : false
+      isFollowedByUser: profile.listOfProfilesFollowingViewedProfile.some((follow: any) => follow.followerId === localUser?.profiles[0]?.id) ? true : false,
+      isFollowingUser: profile.listOfProfilesFollowedByViewedProfile.some((follow: any) => follow.followeeId === localUser?.profiles[0]?.id) ? true : false
     };
     return _profile;
   });

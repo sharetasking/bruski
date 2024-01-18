@@ -12,6 +12,7 @@ import { BruskiUser } from "@/hooks/useBruskiUser";
 import { Profile, Post } from "@prisma/client";
 import { Navbar } from "../navbar";
 import PostItem from "../posts/PostItem";
+import { BruskiPost } from "@/hooks/usePost";
 
 export interface PostPageProps {
   user: BruskiUser|null;
@@ -19,7 +20,7 @@ export interface PostPageProps {
   comments: Comment[]|null;
 
 }
-const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:Post, comments:Post[]|null}) => {
+const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost, comments:Post[]|null}) => {
 
   const router = useRouter();
 

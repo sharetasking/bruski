@@ -78,7 +78,7 @@ export const Homepage = ({user}: {user: any}) => {
                   
                   <div className="font-normal text-sm text-primary/50 line-clamp-3 text-left">{profile.bio}</div>
                   {profile.id != user?.profiles?.[0]?.id && !profile.isFollowedByUser &&
-                    <FollowButton settings={{profileId:profile.id, follows:profile.isFollowedByUser, followersCount:Math.max(profile.numFollowers, 0)}}  />
+                    <FollowButton settings={{profileId:profile.id, follows:profile.isFollowedByUser??false, followersCount:Math.max(profile.numFollowers, 0)}}  />
                   }
                 </div>
               ))

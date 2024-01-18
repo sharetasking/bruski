@@ -7,9 +7,10 @@ import { useRouter } from 'next/navigation';
 import { ExtendedProfile } from '@/hooks/useProfiles';
 
 import { User } from '@prisma/client';
+import { BruskiUser } from '@/hooks/useBruskiUser';
 
 
-const BrowsePageComponent = ({profiles, user}:{profiles:ExtendedProfile[]|null, user:User|null}) => {
+const BrowsePageComponent = ({profiles, user}:{profiles:ExtendedProfile[]|null, user:BruskiUser|null}) => {
 
   const router = useRouter();
 
@@ -40,7 +41,7 @@ const BrowsePageComponent = ({profiles, user}:{profiles:ExtendedProfile[]|null, 
             <p className="py-4 line-clamp-3">{profile.bio}</p>
             <div className="mt-10 bottom-5 absolute">
             
-            {(profile.id != user.profiles?.[0]?.id) && <FollowButton settings={{profileId:profile.id, follows:profile.isFollowedByUser}} /> }
+            {(profile.id != user?.profiles?.[0]?.id) && <FollowButton settings={{profileId:profile.id, follows:profile.isFollowedByUser ?? false}} /> }
             </div>
           </div>
         

@@ -23,6 +23,7 @@ const BottomBar: React.FC<BottomBarProps> = (alert, user) => {
       href: '/home',
       label: "Home",
       pro: false,
+      notification: false
     },
     {
       icon: User,
