@@ -61,7 +61,7 @@ const SignInPage = async () => {
   if(!localUser)
   {
     return (
-      <LandingPageComponent profiles={profiles}/>
+      <LandingPageComponent profiles={profiles ?? []}/>
     )
 
   }

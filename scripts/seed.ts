@@ -22,7 +22,7 @@ interface Profile {
   id: string;
   url: string;
   img: string|null;
-  display_name: string;
+  display_name: string|null;
   // ... any other fields that a category might have
 }
 
