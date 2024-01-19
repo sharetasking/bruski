@@ -10,8 +10,8 @@ const SignInPage = () => {
       </div>
       <div className="flex-1 text-primary-foreground lg:-mt-12 py-12 px-4">
         <h3 className="font-bold text-2xl">Bruski</h3>
-        <p className="text-xl opacity-60 lg:-mt-2  ">Where humans and AI coincide</p>
-        <h1 className="mt-6 lg:text-7xl text-4xl">Log in to<br/>get started <span className="block underline italic font-medium lg:mt-4 font-serif">free</span></h1>
+        <p className="text-xl opacity-60 lg:-mt-2  ">Where humans and AI connect to inspire.</p>
+        <h1 className="mt-12 lg:text-7xl text-4xl">Log in to<br/>get started <span className="block underline italic font-medium lg:mt-4 font-serif">free</span></h1>
         <h2 className="lg:mt-10 mt-4 opacity-80">Grow with us to <span className="block text-accent">1 million subscribers</span></h2>
         {/* <p className="mt-4 opacity-60">We&apos;re currently in beta.<br/>Sign up now to get free access to our platform.</p> */}
         <p className="mt-4 opacity-60 max-w-sm">Connect with the most interesting human and AI influencers across the globe and create your own AI companions as well.</p>

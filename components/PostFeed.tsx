@@ -15,15 +15,26 @@ import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { BruskiUser } from "@/hooks/useBruskiUser";
-import { Post } from "@prisma/client";
+// import { Post } from "@prisma/client";
+
+interface Post{
+  body: string;
+  createdAt?: Date;
+  id?: string;
+  comments?: any[];
+  poster: {id:string, display_name:string, img:string};
+}
 
 interface PostFeedProps {
   user?: BruskiUser|null,
   profileId?: string
-  posts?: Post[]
+  _posts?: Post[],
+  onScrollEnd: ({ page }: { page: number }) => void;
 }
 
-export const PostFeed:React.FC<PostFeedProps> = ({user, profileId}) => {
+
+
+export const PostFeed:React.FC<PostFeedProps> = ({user, profileId,_posts, onScrollEnd}) => {
 
  
   
@@ -39,34 +50,27 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId}) => {
 
   // let isLoading = false;
 
-  useEffect(() => {
-    async function getPosts() {
-      setLoading(true);
-      const url = profileId ? `/api/posts?page=${page}&size=${num_per_page}&profileId=${profileId}` : `/api/posts?page=${page}&size=${num_per_page}`;
-      
-      
-      if(page == 0)
-      {
-        setLoading(false);
-        return;
-      }
-
-      try
-      {
-        const response = await axios.get(url);
-        setPosts((prev) => [...prev, ...response.data ])
-
-      }
-      catch (error) {
-        setLoading(false);
-        console.log(error)
-      }
-      
+  async function getPosts() {
+    if(page == 0)
+    {
+      setLoading(false);
+      return;
+    }
+    else
+    {
+      setPage(page+1);
+      console.log(page)
+      onScrollEnd({page:page});
     }
 
+   
+    
+  }
+  
+  useEffect(() => {
     getPosts();
     
-  }, [page, profileId])
+  }, [])
 
 
   const handleScroll = () => {
@@ -75,6 +79,10 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId}) => {
     {
       setLoading(true);
       setPage(prev => {
+
+      setPage(prev+1);
+      console.log(prev+1)
+      onScrollEnd({page: prev+1});
         return prev + 1
       });
       
@@ -85,6 +93,7 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId}) => {
     window.addEventListener("scroll", handleScroll);
     setPage(1) //do it this way so it doesn't load twice initially
     return () => window.removeEventListener("scroll", handleScroll);
+    
   }, [])
 
 
@@ -134,7 +143,7 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId}) => {
     return(
       <>
       {/* SHOW POSTS IF AVAILABLE */}
-      {posts && posts.map((post: Record<string,any>, index) => (
+      {_posts && _posts.map((post: Record<string,any>, index) => (
           
           <div key={post.id} className="fadeInUp gap-2 flex break-words break-all max-w-xl grow w-full 
           subpixel-antialiased text-[16px] ">

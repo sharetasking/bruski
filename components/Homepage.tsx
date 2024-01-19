@@ -4,7 +4,8 @@ import { PostCreator } from "./post-creator";
 import { PostFeed } from "@/components/PostFeed";
 import { Test } from "@/components/test";
 import { Categories } from "@/components/categories";
-import { Profile } from "@prisma/client";
+import { MediaType, Profile } from "@prisma/client";
+import { useEffect } from "react";
 import { Companions } from "@/components/companions";
 import Image from "next/image";
 // import { useRouter } from "next/navigation"
@@ -21,16 +22,125 @@ import Link from "next/link";
 import Avatar from "@/components/Avatar"
 import FollowButton from "@/components/FollowButton"
 import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { usePosts } from "@/hooks/usePosts";
+import { profile } from "console";
+import ProfileIdPage from "@/app/(root)/(routes)/[profileId]/page";
+
+interface Post{
+  body: string;
+  createdAt?: Date;
+  id?: string;
+  comments?: any[];
+  poster: {id:string, display_name:string, img:string};
+}
 
 
+// CLASS
 export const Homepage = ({user}: {user: any}) => {
   
   const { data: profiles } = useProfiles({ take: 4, fresh: true });
-  const [comments, setComments] = useState<Comment[]>([]);
-  const addComment = (newComment:string) => {
-    let comment = new Comment(newComment);//, user?.profiles?.[0]?.id, user?.profiles?.[0]?.display_name, user?.profiles?.[0]?.img);
-    setComments(prevComments => [...prevComments, comment]);
+  const [comments, setComments] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  
+
+  // FUNCTION: ADD COMMENT 
+  const addPost = async (newComment:string, mediaType:MediaType) => {
+    const tempId = new Date().getTime().toString();
+
+    let comment = {
+        id: tempId,
+        body: newComment,
+        mediaType: mediaType,
+        poster: user?.profiles?.[0], //TODO: fix this
+        saving: true,
+      };
+    
+    if(comment.poster)
+      comment.poster.isFollowed = false;
+
+
+    setPosts(prevComments => [comment, ...prevComments]);
+
+
+    try {
+      // Replace this with your actual API call logic to submit the comment
+      const response = await fetch(`/api/posts?media_type=${mediaType}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ body: newComment, poster: user?.profiles?.[0] }),
+      });
+
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+
+      // Update the state with the permanent ID received from the server
+      setPosts(prevComments => prevComments.map(comment => 
+          comment.id === tempId ? { ...comment, id: data.id, saving:false } : comment
+      ));
+  } catch (error) {
+      console.error('Failed to submit comment:', error);
+      toast.error('Failed to submit comment');
+      // Optionally remove the temporary comment from the state
+      setPosts(prevComments => prevComments.filter(comment => comment.id !== tempId));
+  }
+    
   };
+
+
+  // FUNCTION: LOAD MORE POSTS
+  const loadMorePosts = ({page}:{page:number}) => {
+    fetchPosts({ take: 4, page:page }).then((res) => {
+      try{
+        setPosts((prev) => [...prev, ...res ])
+      }
+      catch(error){
+        console.error(error);
+      }
+      console.log(posts)
+    }
+    ).catch((error) => {
+      console.error('Failed to fetch posts:', error);
+    });
+  }
+
+  
+// function: fetch posts
+const fetchPosts = async ({ take, page=1 }:{ take:number, page?:number }) => {
+  const profileId = null;
+
+  setLoading(true);
+  page = page <= 0 ? 1 : page;
+
+  const url = profileId ? `/api/posts?page=${page}&size=${4}&profileId=${profileId}` : `/api/posts?page=${page}&size=${4}`;
+  console.log(url)
+  const response = await fetch(url);
+  const data = await response.json();
+  setLoading(false);
+  return data;
+};
+
+
+// INITIAL FETCH
+useEffect(() => {
+  fetchPosts({ take: 4 }).then((res) => {
+    try{
+      setPosts(res);
+    }
+    catch(error){
+      console.error(error);
+    }
+  }).catch((error) => {
+    console.error('Failed to fetch posts:', error);
+  });
+}, []); 
+
 
   return (
     <>
@@ -58,8 +168,9 @@ export const Homepage = ({user}: {user: any}) => {
 
         {/* Center column */}
         <div className="lg:col-span-2 w-full flex flex-col items-center mx-auto grow-0">
-          <PostCreator onCommentSubmit={addComment} placeholder="Enter your post..." />
-          <PostFeed user={user} />
+          <PostCreator onPostSubmit={addPost} placeholder="Enter your post..." />
+          
+          <PostFeed user={user} _posts={posts} onScrollEnd={loadMorePosts} />
         </div>
 
 

@@ -42,7 +42,7 @@ export const Navbar = ({
           <h1 className={cn("hidden md:block text-xl md:text-2xl font-bold tracking-tight text-primary", font.className)}>
             bruski
           </h1>
-          <span className="text-primary/50">/ˈbrooːski/</span>
+          {/* <span className="text-primary/50">/ˈbrooːski/</span> */}
         </Link>
 
         </div>

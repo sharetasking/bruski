@@ -11,16 +11,17 @@ import useRegisterModal from "@/hooks/useRegisterModal";
 import { usePost } from "@/hooks/usePost";
 import { toast } from "react-hot-toast";
 import PostTypeToggles from "@/components/PostTypeToggles";
+import { MediaType } from '@prisma/client';
 
 interface FormProps {
   placeholder: string;
   isComment?: boolean;
   postId?: string;
-  onCommentSubmit: (comment: string) => void;
+  onPostSubmit: (comment: string, mediaType: MediaType) => void;
 
 }
 
-export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId, onCommentSubmit} ) => {
+export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId, onPostSubmit} ) => {
 
 
   const [body, setBody] = useState<string>("");
@@ -37,7 +38,7 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
   const [posts, setPosts] = useState([]);
 
 
-  const [activePostType, setActivePostType] = useState("text");
+  const [activePostType, setActivePostType] = useState<MediaType>("TEXT");
 
 // OLD SUBMIT POST
   const onSubmit = useCallback(async (event: FormEvent) => {
@@ -46,36 +47,33 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
     event.stopPropagation();
 
 
-    onCommentSubmit(body);
+    onPostSubmit(body, activePostType);
 
-    try {
-      // setIsLoading(true);
-
-
-      const url = isComment ? `/api/comments?postId=${postId}` : `/api/posts?media_type=${activePostType}`;
-
-      const result = await axios.post(url, { body });
-      if(!result) 
-        return;
-
-        
-      toast.success('Post created');
-      setBody('');
-      mutatePosts();
-      // mutatePost();
-    } catch (error) {
-      toast.error('Something went wrong');
-    } finally {
-      // setIsLoading(false);
-    }
+    setBody('');
+    // try {
+    //   // setIsLoading(true);
 
 
-  }, [body, mutatePosts, isComment, postId, activePostType, onCommentSubmit]); //, isComment, postId, mutatePost
+    //   // const url = isComment ? `/api/comments?postId=${postId}` : `/api/posts?media_type=${activePostType}`;
+
+    //   // const result = await axios.post(url, { body });
+    //   // if(!result) 
+    //   //   return;
+
+      
+    // } catch (error) {
+    //   toast.error('Something went wrong');
+    // } finally {
+    //   // setIsLoading(false);
+    // }
+
+
+  }, [body, activePostType, onPostSubmit]); 
 
 
 
   return (
-    <div className=" w-full bg-secondary mx-2 rounded-3xl px-4 py-1 shadow-sm mb-4 left-auto right-auto max-w-xl">
+    <div className=" w-full bg-primary/10 mx-2 rounded-3xl px-4 py-1 shadow-sm mb-4 left-auto right-auto max-w-xl">
       <div className="">
     <div className="p-4 rounded-md flex flex-col max-w-2xl grow bg-primary/1">
       <h3>Create a post</h3>

@@ -6,6 +6,7 @@ import { Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 export const SubscriptionButton = ({
   isPro = false
@@ -35,7 +36,7 @@ export const SubscriptionButton = ({
   return (
     <Button size="sm" variant={isPro ? "default" : "premium"} disabled={loading} onClick={onClick} >
       {isPro ? "Manage Subscription" : "Upgrade"}
-      {!isPro && <Sparkles className="w-4 h-4 ml-2 fill-white" />}
+      <Sparkles className={cn("w-4 h-4 ml-2 fill-white", isPro && "hidden")} />
     </Button>
   )
 };

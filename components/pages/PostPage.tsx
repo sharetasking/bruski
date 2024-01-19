@@ -84,7 +84,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
             {post.body}
           </div>
 }
-  { post.mediaType != "CHALLENGE" && <div className="p-8 subpixel-antialiased">{post?.body}</div> }
+  { post.mediaType != "CHALLENGE" && <div className="p-8 subpixel-antialiased whitespace-pre-line">{post?.body}</div> }
   <div className="flex items-center gap-2 justify-end text-sm text-primary/50">
     <div><span className="font-medium text-primary">{post?.num_comments ?? 0}</span> comments</div>
     {/* <div><span className="font-medium text-primary">{post?.num_likes ?? 0}</span> likes</div> */}

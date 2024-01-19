@@ -63,8 +63,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
   const goToPost = useCallback((ev: any) => {
     ev.stopPropagation();
     ev.preventDefault();
-    router.push(`/post/${data.id}`);
-  }, [router, data.id]);
+    if(!data.saving)
+      router.push(`/post/${data.id}`);
+  }, [router, data.id, data.saving]);
 
   // LIKE POST
   const onLike = useCallback(async (ev: any) => {
@@ -121,7 +122,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
   return (
     <div 
       onClick={goToPost}
-      className="
+      className={cn(`
         p-5 
         cursor-pointer 
         rounded-2xl
@@ -131,7 +132,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
         duration-200
         grow
         flex
-      ">
+      `, data?.saving ? "border-2 border-dashed opacity-80": "")}>
       <div className="flex flex-row items-start gap-3 flex-1">
         {/* <Avatar profileId={data.poster?.id} /> */}
           <div className="flex flex-col gap-1 items-center rounded-full">
@@ -141,11 +142,10 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
         <Avatar img={data.poster?.img} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} />
        
         </div>
-
-
         {/* FOLLOW BUTTON */}
         {/* Confirm user isn't the one being viewed */}
-        {(data.profileId != signedInUserProfileId) && <button 
+        
+        {(data.poster.id != signedInUserProfileId) && <button 
              onClick={onFollow}
                 className={cn(`
                   flex 
@@ -210,8 +210,8 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
             && 
           <div className="flex flex-col bg-primary/90 text-primary-foreground rounded-lg min-h-90 p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div>{data.body}</div>
-            <div className="text-xs mt-1 bg-primary py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.num_comments}</span> <span className="opacity-70">{plurify("response", data.num_comments)}</span></div>
-            <button className='mt-8 btn'>Answer</button>
+            <div className="text-xs mt-2 bg-secondary/10 py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.num_comments}</span> <span className="opacity-70">{plurify("response", data.num_comments)}</span></div>
+            <button className='mt-4 btn active:bg-opacity-90'>Answer</button>
           </div>
           }
 

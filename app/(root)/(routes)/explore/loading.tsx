@@ -1,6 +1,6 @@
-import { HashLoader } from "react-spinners"
+import PageLoader from "@/components/page-loader"
 
 export default function Loading()
 {
-  return (<HashLoader color="#63636366" />)
+  return (<PageLoader />)
 }

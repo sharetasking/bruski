@@ -69,6 +69,7 @@ export async function GET(req: NextRequest) {
     
     const profileId = req.nextUrl.searchParams.get("profileId");
     let count = req.nextUrl.searchParams.get("take") ? parseInt(req.nextUrl.searchParams.get("take") ?? "10") : 10;
+    
 
     const clerkUser = await currentUser();
 
@@ -125,6 +126,8 @@ export async function GET(req: NextRequest) {
         },
         take: count
       });
+
+      console.log(profiles?.length);
 
 
       // mark if is following

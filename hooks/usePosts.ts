@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import fetcher from '@/lib/fetcher';
-export function usePosts (profileId?: string) {
+export function usePosts (profileId?: string, take?: number, skip?: number, orderBy?: string, fresh?: boolean) {
 
   
   

@@ -100,7 +100,7 @@ export const CompanionForm = ({
   };
 
   return ( 
-    <div className="h-full px-4 pt-4 space-y-2 max-w-3xl mx-auto">
+    <div className="h-full fadeInUp px-4 pt-4 space-y-2 max-w-3xl mx-auto">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pb-10">
           <div className="space-y-2 w-full col-span-2">
