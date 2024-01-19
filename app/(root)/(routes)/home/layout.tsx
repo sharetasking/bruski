@@ -30,7 +30,7 @@ const RootLayout =  async ({
  
             {/* <CoinsWidget /> */}
             {/* TODO: <PixiWidget/> */}
-      <Toaster />
+      {/* <Toaster /> */}
 
 
     </div>

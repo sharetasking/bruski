@@ -23,7 +23,7 @@ const BrowsePageComponent = ({profiles, user}:{profiles:ExtendedProfile[]|null, 
   else
     return (<>
 
-<div>
+<div className='max-w-5xl fadeInUp'>
     <h1 className='px-8 mt-8 text-5xl'>Profiles</h1>
     <div className="p-8 pb-48">
       {/* <h2>Search</h2>

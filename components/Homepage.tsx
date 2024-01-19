@@ -33,42 +33,49 @@ export const Homepage = ({user}: {user: any}) => {
   };
 
   return (
-    <div className="min-h-full w-full p-4 space-y-2 flex grow-0 lg:flex-row flex-col justify-between gap-4">
-      
+    <>
+
+    <div className="fadeInUp grid lg:grid-cols-4 grid-cols-1 w-7xl gap-2">
+
       {/* Left Column */}
-        <div className="flex-1 gap-4 sticky">
-          <h2 className="font-semibold tracking-tight text-left text-lg mb-2">Even more to explore</h2>
-          <Categories />
+      <div className="hidden flex-1 gap-4 grow sm:flex flex-col w-full inset-0">
+        <h2 className="font-semibold tracking-tight text-left text-lg mb-2">Even more to explore</h2>
+        <Categories />
 
-          <div className="mt-12 bg-primary/5 rounded-2xl p-8 min-h-96">
-            &nbsp;
-          </div>
-
+        <div className="mt-12 bg-primary/5 rounded-2xl p-8 min-h-96">
+          &nbsp;
         </div>
+
+      </div>
+
+
+
+
+
+
+
+
 
         {/* Center column */}
-        <div className="md:w-[640px] sm:w-[640px] w-full flex flex-col items-center mx-auto grow-0">
-          {/* <div className="rounded-lg bg-[#237ecd] text-white grow-0 flex flex-col gap-2 px-4 py-8 items-center w-[600px]">
-            <div className="flex items-center justify-center grow">
-              <Image src="/pixi.png" width={120} height={120} alt="Pixi" className="grayscale" />
-              <h2 className="text-white">Scroll through to<br/>see what&apos;s been brewin'</h2>
-            </div>
-              
-              <div className="text-2xl animate-bounce"><div className="rotate-90">&raquo;</div></div>
-          </div> */}
+        <div className="lg:col-span-2 w-full flex flex-col items-center mx-auto grow-0">
           <PostCreator onCommentSubmit={addComment} placeholder="Enter your post..." />
           <PostFeed user={user} />
-          {/* <Categories /> */}
         </div>
 
+
+
+
+
+
+
+
         {/* Right column */}
-        <div className="flex-1 flex flex-col pb-4 px-4 gap-4 sticky">
+        <div className="flex-1 flex flex-col pb-72 px-4 gap-4 sticky">
           {/* FEATURED PROFILES */}
           <h3>Get updates from</h3>
           <div className="flex flex-col gap-4 lg:grid lg:grid-cols-1 xl:grid-cols-1 items-start justify-start text-left">
             {
               profiles && profiles.length && profiles.map((profile: ExtendedProfile) => (
-                // {JSON.stringify(profile?.display_name)}
                 
                 <div key={profile.id} className="text-sm bg-primary/5 rounded-xl p-4 font-semibold min-h-20 flex flex-col items-start">
                   <div className="flex items-center gap-2">
@@ -125,13 +132,19 @@ export const Homepage = ({user}: {user: any}) => {
               </div> */}
 
         </div>
-        {/* TODO: <PostCreator /> */}
-      {/* TODO: <Companions /> */}
-
-      {/* <button className="btn text-white btn-primary px-4 py-2 hover:bg-opacity-80 w-fit font-medium text-sm rounded-md bg-[#ff5454]">Test</button> */}
-        </div>
+      </div>
         
+
+
+
     </div>
+
+
+
+
+
+    </>
+    
   )
 };
 

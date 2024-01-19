@@ -7,6 +7,7 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { useProModal } from "@/hooks/use-pro-modal";
+import { menu_items } from "@/components/menu-items";
 
 interface SidebarProps {
   isPro: boolean;
@@ -27,38 +28,38 @@ export const Sidebar = ({
     return router.push(url);
   }
 
-  const routes = [
-    {
-      icon: Home,
-      href: '/home',
-      label: "Home",
-      pro: false,
-    },
-    {
-      icon: User,
-      href: '/companion',
-      label: "Companion",
-      pro: false,
-    },
-    {
-      icon: Navigation,
-      href: '/explore',
-      label: "Explore",
-      pro: false,
-    },
-    {
-      icon: Plus,
-      href: '/companion/new',
-      label: "Create",
-      pro: false,
-    },
-    {
-      icon: Settings,
-      href: '/settings',
-      label: "Settings",
-      pro: false,
-    },
-  ];
+  // const routes = [
+  //   {
+  //     icon: Home,
+  //     href: '/home',
+  //     label: "Home",
+  //     pro: false,
+  //   },
+  //   {
+  //     icon: User,
+  //     href: '/companion',
+  //     label: "Companion",
+  //     pro: false,
+  //   },
+  //   {
+  //     icon: Navigation,
+  //     href: '/explore',
+  //     label: "Explore",
+  //     pro: false,
+  //   },
+  //   {
+  //     icon: Plus,
+  //     href: '/companion/new',
+  //     label: "Create",
+  //     pro: false,
+  //   },
+  //   {
+  //     icon: Settings,
+  //     href: '/settings',
+  //     label: "Settings",
+  //     pro: false,
+  //   },
+  // ];
 
   return (
 
@@ -66,7 +67,7 @@ export const Sidebar = ({
       <div className="space-y-4 flex flex-col h-full text-primary">
         <div className="p-3 flex-1 flex justify-center">
           <div className="space-y-2">
-            {routes.map((route) => (
+            {menu_items.map((route) => (
               
               <Link
                 href={route.href}

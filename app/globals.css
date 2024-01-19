@@ -110,7 +110,7 @@ body,
   }
   .btn
   {
-    @apply bg-primary font-medium text-sm text-primary-foreground rounded-md px-4 py-2 hover:bg-primary/80 active:bg-primary/90 ;
+    @apply bg-primary font-medium text-sm text-primary-foreground active:text-primary-foreground/70 rounded-md px-4 py-2 hover:bg-primary/80 active:bg-primary/90 ;
   }
 
   .user_name
@@ -118,4 +118,41 @@ body,
     @apply hover:underline cursor-pointer text-primary font-semibold 
     
   }
+
+
+
+  .likeButton {
+    transition: transform 0.3s ease;
+  }
+  
+  .liked {
+    animation: likeAnimation 0.5s ease;
+  }
+  
+  @keyframes likeAnimation {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2); /* Grows the button to 120% its size */
+    }
+  }
+
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .fadeInUp {
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+  
+  
 }

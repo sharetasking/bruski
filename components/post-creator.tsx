@@ -75,7 +75,7 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
 
 
   return (
-    <div className=" w-full bg-secondary rounded-md shadow-sm p-4 left-auto right-auto max-w-xl">
+    <div className=" w-full bg-secondary mx-2 rounded-3xl px-4 py-1 shadow-sm mb-4 left-auto right-auto max-w-xl">
       <div className="">
     <div className="p-4 rounded-md flex flex-col max-w-2xl grow bg-primary/1">
       <h3>Create a post</h3>
@@ -95,8 +95,11 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
             required
             className="bg-transparent w-full resize-none outline-none border-none p-0"
           ></textarea>
-          <div  className="w-full"><PostTypeToggles onTypeChange={setActivePostType}/></div>
-          <button type="submit" className="bg-primary text-primary-foreground btn text-sm font-semibold hover:border-primary/70 active:bg-primary/80 border-2 hover:text-primary">Post</button>
+          <div className="flex flex-col md:flex-row md:gap-4 gap-2 w-full items-center">
+            <div  className="w-full grow-0"><PostTypeToggles onTypeChange={setActivePostType}/></div>
+            <button type="submit" className="bg-primary w-36 h-12 text-primary-foreground btn text-sm rounded-2xl font-semibold hover:border-primary/70 active:bg-primary/80 border-2 hover:text-primary">Post</button>
+          </div>
+          
         </form>
       )}
     </div>

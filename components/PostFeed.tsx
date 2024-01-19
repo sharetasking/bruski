@@ -45,13 +45,17 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId}) => {
       const url = profileId ? `/api/posts?page=${page}&size=${num_per_page}&profileId=${profileId}` : `/api/posts?page=${page}&size=${num_per_page}`;
       
       
-      if(page == 0) return;
+      if(page == 0)
+      {
+        setLoading(false);
+        return;
+      }
 
       try
       {
         const response = await axios.get(url);
         setPosts((prev) => [...prev, ...response.data ])
-        setLoading(false);
+
       }
       catch (error) {
         setLoading(false);
@@ -132,7 +136,7 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId}) => {
       {/* SHOW POSTS IF AVAILABLE */}
       {posts && posts.map((post: Record<string,any>, index) => (
           
-          <div key={post.id} className="gap-2 flex break-words break-all max-w-xl grow w-full 
+          <div key={post.id} className="fadeInUp gap-2 flex break-words break-all max-w-xl grow w-full 
           subpixel-antialiased text-[16px] ">
             
               <PostItem

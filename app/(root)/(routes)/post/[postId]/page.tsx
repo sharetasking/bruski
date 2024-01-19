@@ -119,11 +119,14 @@ const comments = await prismadb.post.findMany({
         poster: true,
       }
     },
+  },
+  orderBy: {
+    createdAt: 'desc'
   }
 });
 
 
-console.log(comments)
+
 
 // await prismadb.post.findMany({
 //   where: {

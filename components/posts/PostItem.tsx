@@ -129,7 +129,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
         active:bg-[#66666617]
         transition
         duration-200
-        w-full
+        grow
         flex
       ">
       <div className="flex flex-row items-start gap-3 flex-1">
@@ -169,7 +169,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           
         </div>
         {/* USER NAME */}
-        <div className="flex flex-col w-full flex-1 grow">
+        <div className="flex flex-col flex-1 grow">
           <div className="flex flex-row justify-between grow items-center gap-2">
             <div className="flex gap-2 items-center">
             <p 
@@ -182,7 +182,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
 
 
             {/* TIME AGO */}
-            <span className="text-primary/40 text-xs">
+            <span className="text-primary/60 text-xs">
             {createdAt}
           </span>
               </div>
@@ -221,7 +221,10 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           <div className="text-primary text-[#262f3f] py-4 text-[15px] leading-[21px] mt-1 block grow-0 whitespace-pre-line">
             {data.body}
           </div>
+          
           }
+
+          
           {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId && <span className="flex flex-col subpixel-antialiased bg-primary/90 hover:bg-primary/95 active:bg-primary text-primary-foreground rounded-2xl min-h-90 px-4 py-4 leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               {/* {JSON.stringify(data.originalPost)} */}
@@ -310,7 +313,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
               </div>
 
               {/* Num Echos */}
-              <div 
+              {/* <div 
                 onClick={onEcho}
                 className="
                   flex 
@@ -333,7 +336,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                   {data.comments?.length || 0}
                 </p>
               </div>
-              
+               */}
               </div>
 
               {/* RIGHT BUTTONS (BOTTOM) */}

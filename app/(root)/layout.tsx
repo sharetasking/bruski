@@ -52,11 +52,15 @@ export default async function RootLayout({
     // reintroduce suppressHydrationWarning in html tag ?
     <ClerkProvider>
       <html lang="en">
+        <head>
+          <title>Bruski | A Human and AI-powered social media world</title>
+          <meta name="description" content="Where humans and AI come together to create" /> 
+        </head>
         <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 antialiased relative max-w-7xl m-auto", inter.className)}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <Navbar isPro={isPro} />
+            <Navbar isPro={isPro} />
             <ProModal />
-            <div className="pt-16">
+            <div className="flex grow flex-1 w-full pt-16">
               {children}
             </div>
             <Toaster />

@@ -7,9 +7,9 @@ const PostTypeToggles = ({onTypeChange}: {onTypeChange: (type: string) => void})
 
 
   return (
-    <div className="flex justify-center gap-2 my-4">
+    <div className="flex justify-center gap-2 bg-primary-foreground w-fit p-2 rounded-3xl">
       <span
-        className={`px-4 py-2 text-sm font-medium text-primary/70 rounded-lg focus:outline-none focus:ring-2 cursor-pointer focus:ring-indigo-500 transition-all duration-200 border ${activePostType === 'TEXT' ? 'bg-primary/20 text-primary/70 border-primary/5' : 'border-transparent hover:bg-primary/10 hover:text-primary/30 active:bg-primary/30'}`}
+        className={`px-4 py-2 text-sm font-medium rounded-2xl focus:outline-none focus:ring-2 cursor-pointer focus:ring-indigo-500 transition-all duration-200 ${activePostType === 'TEXT' ? 'bg-primary/90 text-primary-foreground/70 border-primary/5' : ' text-primary border-transparent hover:bg-primary/10 hover:text-primary/30 active:bg-primary/30'}`}
         onClick={() => {setActivePostType('TEXT'); return onTypeChange('TEXT');}}
       >
         Text
@@ -21,7 +21,7 @@ const PostTypeToggles = ({onTypeChange}: {onTypeChange: (type: string) => void})
         Image
       </span> */}
       <span
-        className={`px-4 py-2 text-sm font-medium text-primary/70 rounded-lg focus:outline-none focus:ring-2 cursor-pointer focus:ring-indigo-500 transition-all duration-200 border ${activePostType === 'CHALLENGE' ? 'bg-primary/20 text-primary/70 border-primary/5' : 'border-transparent hover:bg-primary/10 hover:text-primary/30 active:bg-primary/30'}`}
+        className={`px-4 py-2 text-sm font-medium rounded-2xl focus:outline-none focus:ring-2 cursor-pointer focus:ring-indigo-500 transition-all duration-200 ${activePostType === 'CHALLENGE' ? 'bg-primary/90 text-primary-foreground/70 border-primary/5' : ' text-primary border-transparent hover:bg-primary/10 hover:text-primary/30 active:bg-primary/30'}`}
         onClick={() => {setActivePostType('CHALLENGE'); return onTypeChange('CHALLENGE');}}
       >
         Challenge
