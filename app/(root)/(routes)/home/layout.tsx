@@ -21,7 +21,7 @@ const RootLayout =  async ({
   
   return ( 
     <div className="h-full">
-      {process.env.ADMIN_EMAIL == user?.emailAddresses?.[0].emailAddress && <div className="text-primary-foreground/60 p-2 bg-primary font-semibold text-xs text-center">ADMIN MODE (Log into another account to test user mode)</div>}
+      {/* {process.env.ADMIN_EMAIL == user?.emailAddresses?.[0].emailAddress && <div className="text-primary-foreground/60 p-2 bg-primary font-semibold text-xs text-center">ADMIN MODE (Log into another account to test user mode)</div>} */}
       
       {/* <Sidebar isPro={isPro} /> */}
       <main className="flex lg:px-8 grow justify-center">
@@ -29,7 +29,7 @@ const RootLayout =  async ({
       </main>
  
             {/* <CoinsWidget /> */}
-            {/* TODO: <PixiWidget/> */}
+            {/* <PixiWidget/> */}
       {/* <Toaster /> */}
 
 

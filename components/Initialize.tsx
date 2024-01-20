@@ -48,7 +48,7 @@ const InitializeComponentPage = ({ user }: { user: BruskiUser }) => {
       </div>
       {/* h1 welcome */}
       {/* {TODO: Reactivate categories} */}
-      {/* <div className="text-left lg:w-[640px] flex gap-x-4 gap-y-1 items-start justify-start break-words flex-wrap py-8 px-12 rounded-2xl bg-primary/5">
+      {/* <div className="text-left lg:w-[640px] flex gap-x-4 gap-y-1 items-start justify-start break-words flex-wrap py-8 px-12 rounded-2xl bg-secondary">
         {
           categories && categories.length && categories.map((item: Category) => (
             <div key={item.id}>
@@ -67,7 +67,7 @@ const InitializeComponentPage = ({ user }: { user: BruskiUser }) => {
           {
             profiles && profiles.length && profiles.map((item) => (
               <Link href={`/${item.url}`} key={item.id}>
-              <div className="bg-primary/5 rounded-md shadow-sm p-4 h-full flex gap-2">
+              <div className="bg-secondary rounded-md shadow-sm p-4 h-full flex gap-2">
 
                 {/* <Avatar />? */}
                 {/* <Image className="rounded-full h-12 w-12 shrink-0 grow-0" alt="avatar" fill src={item.img} /> */}

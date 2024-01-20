@@ -68,12 +68,12 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
 
 
   return (
-  <div className="lg:max-w-lg w-full m-auto">
+  <div className="lg:max-w-lg w-full m-auto pb-48">
     <div className="flex flex-col md:flex-row gap-4 md:-ml-40 md:p-8 p-4">
 
 <div>
         {/* AVATAR IMAGE */}
-        <Avatar img={post.poster?.img ?? "/images/placeholder.png"} url={post.poster.id ?? ""} size={12} hasBorder={false}/>
+        <Avatar img={post.poster?.img ?? "/images/placeholder.png"} url={"/"+post.poster.id ?? ""} size={12} hasBorder={false}/>
        
       <h2 className="user_name text-base" onClick={goToUser}>{post.poster?.display_name}</h2>
   
@@ -100,7 +100,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
           
           <div className="flex flex-row gap-4">
            <div>
-              <Avatar img={user.profiles?.[0]?.img} url={user.profiles?.[0]?.id ?? ""} size={12} hasBorder={false}/>
+              <Avatar img={user.profiles?.[0]?.img} url={"/"+user.profiles?.[0]?.id ?? ""} size={12} hasBorder={false}/>
            </div>
            <div className="w-full">
              <textarea
@@ -118,7 +118,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
                 resize-none 
                 mt-3 
                 w-full 
-                bg-primary/5
+                bg-secondary
                 p-4
                 text-base
                 rounded-lg 

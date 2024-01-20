@@ -12,16 +12,53 @@ import Avatar from "@/components/Avatar"
 import FollowButton from "@/components/FollowButton";
 import { BruskiUser } from "@/hooks/useBruskiUser";
 import useProfiles, {ExtendedProfile} from "@/hooks/useProfiles";
+import { usePosts } from "@/hooks/usePosts";
+import { Post } from "@prisma/client";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 interface ProfilePageProps {
     profile: ExtendedProfile|null;
     user?: BruskiUser|null;
+    page?: number;
 }
 
-const ProfilePageComponent = ({profile, user}: ProfilePageProps) => {
+const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
 
+    const [posts, setPosts] = useState<Post[]>([]);
     
+    const {data} = usePosts({ take: 4, page:page });
+
+    const generatePost = () =>
+    {
+        axios.post('/api/posts/generate', {profileId: profile?.id})
+        .then((res) => {
+           toast.success("Post generated") 
+        }).catch((error) => {
+            console.error('Failed to generate post:', error);
+          });
+    }
     
+  // FUNCTION: LOAD MORE POSTS
+  const loadMorePosts = async ({page}:{page:number}) => {
+
+    setPosts((prev) => [...prev, ...data ])
+//     fetchPosts({ take: 4, page:page }).then((res) => {
+//       try{
+//         setPosts((prev) => [...prev, ...res ])
+//       }
+//       catch(error){
+//         console.error(error);
+//       }
+//       console.log(posts)
+//     }
+//     ).catch((error) => {
+//       console.error('Failed to fetch posts:', error);
+//     });
+  }
+
+
+
 
     //   const [user, setUser] = useState<User>();
 //   const [profile, setProfile] = useState<Profile>();
@@ -42,27 +79,31 @@ const ProfilePageComponent = ({profile, user}: ProfilePageProps) => {
     <div className="container mx-auto py-8">
         <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
             <div className="col-span-4 sm:col-span-3">
-                <div className="dark:bg-primary/5 rounded-2xl p-6">
-                    <div className="flex flex-col items-center">
+                <div className="bg-secondary rounded-2xl p-6">
+                    <div className="flex flex-col items-center justify-center">
 
-                        <div className="w-32 h-32 mb-4 relative shrink-0 grow-0 rounded-full flex items-center justify-center ">
+                        <div className="w-32 h-32 mb-4 relative shrink-0 grow-0 rounded-full flex items-center justify-center z-10">
                             
                             {/* {JSON.stringify(profile)} */}
-                            { profile?.img && <Avatar img={profile?.img} size={64} hasBorder={false} className="w-full h-full inset-0 bg-primary/50 rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold"/>}
-                            { !profile?.img && <div className="w-full h-full bg-primary/50  rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold">{profile?.display_name?.charAt(0)?.toUpperCase()}</div> }
+                            { profile?.img && <Avatar img={profile?.img} size={64} hasBorder={false} className="w-full h-full inset-0 bg-secondary0 rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold"/>}
+                            { !profile?.img && <div className="w-full h-full bg-secondary0  rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold">{profile?.display_name?.charAt(0)?.toUpperCase()}</div> }
+
 
                           </div>
 
+                          {profile?.companion && <span className="bg-gray-500 rounded-2xl px-4 py-1 text-xs font-medium -mt-7 mb-4 z-50">PIXI</span> }
 {/* 
                         {JSON.stringify(profile)} */}
 
                         <h1 className="text-xl font-bold">{ profile?.display_name }</h1>
-                        <p className="text-primary/70 break-words text-sm w-48 text-center ">{profile?.id}</p>
+                        {/* TODO: <p className="text-primary/70 break-words text-sm w-48 text-center ">{profile?.id}</p> */}
                         <p className="text-primary/70 break-words text-sm w-48 text-center">{profile?.bio}</p>
-                        <div className="mt-6 flex flex-wrap gap-4 justify-center">
+                        <div className="mt-6 flex flex-col gap-2 items-center justify-center">
                             {/* <a href="#" className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a> */}
                             
                             {(profile && profile?.id != user?.profiles?.[0].id) && <FollowButton settings={{profileId: profile?.id, follows:!!profile?.listOfProfilesFollowingViewedProfile?.length, followersCount:profile?.num_followers}} /> }
+                            
+                            {(profile?.companion?.ownerId == user?.id ) && <button className="btn-beautified" onClick={generatePost}>Generate Post</button>}
                             
                         </div>
                     </div>
@@ -84,7 +125,7 @@ const ProfilePageComponent = ({profile, user}: ProfilePageProps) => {
                 
                 {/* {JSON.stringify(user)}
                 {JSON.stringify(profileId)} */}
-                <PostFeed profileId={profile?.id} user={user} />
+                <PostFeed profileId={profile?.id} user={user} onScrollEnd={loadMorePosts} />
 
                 {/* <div className="bg-primary shadow rounded-lg p-6">
                     <h2 className="text-xl font-bold mb-4">About Me</h2>

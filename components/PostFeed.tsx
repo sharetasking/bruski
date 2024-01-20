@@ -81,7 +81,6 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId,_posts, onScro
       setPage(prev => {
 
       setPage(prev+1);
-      console.log(prev+1)
       onScrollEnd({page: prev+1});
         return prev + 1
       });
@@ -227,8 +226,8 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId,_posts, onScro
   //                   <div className="flex flex-col items-center mr-4 gap-4">
   //                       <Link href={item.userId}>
   //                         <div className="w-12 h-12 relative shrink-0 grow-0 rounded-full">
-  //                           { item.user.img && <Image fill src={item.user.img} alt="User avatar" className="w-full h-full bg-primary/50 rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold"/>}
-  //                           { !item.user.img && <div className="w-full h-full bg-primary/50 rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold">{item.userId[0].toUpperCase()}</div> }
+  //                           { item.user.img && <Image fill src={item.user.img} alt="User avatar" className="w-full h-full bg-secondary0 rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold"/>}
+  //                           { !item.user.img && <div className="w-full h-full bg-secondary0 rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/80 text-2xl font-bold">{item.userId[0].toUpperCase()}</div> }
 
   //                         </div>
   //                       </Link>

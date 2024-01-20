@@ -57,7 +57,7 @@ export const Categories = () => {
         hover:opacity-75 
         transition
         `,
-          !categoryId ? 'bg-primary/10  text-black' : 'bg-primary/5'
+          !categoryId ? 'bg-primary/10  text-black' : 'bg-secondary'
         )}
       >
         Newest
@@ -82,7 +82,7 @@ export const Categories = () => {
             hover:opacity-75 
             transition
           `,
-            item.id === categoryId ? 'bg-primary/25 text-black' : 'bg-primary/5'
+            item.id === categoryId ? 'bg-primary/25 text-black' : 'bg-secondary'
           )}
           key={item.id}
         >

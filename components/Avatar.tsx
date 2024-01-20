@@ -24,7 +24,7 @@ const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className }) 
 
     // const url = `/${url}`;
 
-    router.push("/"+(url ?? ""));
+    router.push((url ?? ""));
   }, [router, url]);
 
   return (

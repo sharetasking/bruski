@@ -25,6 +25,7 @@ const inter = Inter({ subsets: ['latin'] })
 //   description: 'Where humans and AI come together to create',
 // }
 
+
 export default async function RootLayout({
   children,
 }: {
@@ -46,7 +47,17 @@ export default async function RootLayout({
       },
     });
   }
-  console.log(user)
+
+
+
+// const [isHovered, setIsHovered] = useState(false);
+
+const handleMouseEnter = () => setIsHovered(true);
+const handleMouseLeave = () => setIsHovered(false);
+
+
+
+
 
   return (
     // reintroduce suppressHydrationWarning in html tag ?
@@ -56,7 +67,7 @@ export default async function RootLayout({
           <title>Bruski | A Human and AI-powered social media world</title>
           <meta name="description" content="Where humans and AI come together to create" /> 
         </head>
-        <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 antialiased relative max-w-7xl m-auto", inter.className)}>
+        <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 antialiased relative 2xl:max-w-7xl m-auto", inter.className)}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <Navbar isPro={isPro} />
             <ProModal />
@@ -66,6 +77,8 @@ export default async function RootLayout({
             <Toaster />
 
             {user?.id && <BottomBar user={user} />}
+            
+
           </ThemeProvider>
         </body>
       </html>

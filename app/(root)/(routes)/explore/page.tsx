@@ -5,7 +5,7 @@ const ExplorePage = () => {
   {/* Left Column */}
     <div className="flex flex-col md:w-96 h-full gap-2">
       <div className="font-semibold">What&apos;s Brewing</div>
-      <div className="h-48 rounded-md bg-primary/5 gap-4 flex flex-col">
+      <div className="h-48 rounded-md bg-secondary gap-4 flex flex-col">
         <div className="flex flex-col justify-start p-4 items-start gap-2 h-full">
           <span className="text-primary/90">#politics</span>
           <div className="text-xl font-semibold w-full line-clamp-3">Matt Damon is quoted as saying he wants Hillary Clinton to run for president for a 3rd time in 2024.</div>

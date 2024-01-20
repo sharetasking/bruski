@@ -125,10 +125,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
       className={cn(`
         p-5 
         cursor-pointer 
-        rounded-2xl
-        hover:bg-[#66666607]
-        active:bg-[#66666617]
         transition
+        border-b
+        border-primary/5
         duration-200
         grow
         flex
@@ -163,7 +162,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                 {/* TODO: Code */}
                { !isFollowing && <AiOutlineUserAdd size={16} /> }
                 
-              {isFollowing && <AiOutlineUserDelete size={16} />}
+              {/* {isFollowing && <AiOutlineUserDelete size={16} />} */}
               </button>}
 
           
@@ -208,9 +207,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           {
             data.mediaType == "CHALLENGE"
             && 
-          <div className="flex flex-col bg-primary/90 text-primary-foreground rounded-lg min-h-90 p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
-            <div>{data.body}</div>
-            <div className="text-xs mt-2 bg-secondary/10 py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.num_comments}</span> <span className="opacity-70">{plurify("response", data.num_comments)}</span></div>
+          <div className="flex flex-col bg-secondary text-primary rounded-lg min-h-[260px] p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
+            <div className=" min-h-[240px] items-center text-center justify-center flex whitespace-pre-wrap">{data.body}</div>
+            <div className="text-xs mt-2 border border-primary/20 text-primary  py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.num_comments)}</span></div>
             <button className='mt-4 btn active:bg-opacity-90'>Answer</button>
           </div>
           }
@@ -218,24 +217,26 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           {
             data.mediaType != "CHALLENGE"
             &&
-          <div className="text-primary text-[#262f3f] py-4 text-[15px] leading-[21px] mt-1 block grow-0 whitespace-pre-line">
+          <div className="text-primary text-[#262f3f] py-4 text-[15px] leading-[21px] mt-1 block grow-0 whitespace-pre-wrap">
             {data.body}
           </div>
           
           }
 
           
-          {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId && <span className="flex flex-col subpixel-antialiased bg-primary/90 hover:bg-primary/95 active:bg-primary text-primary-foreground rounded-2xl min-h-90 px-4 py-4 leading-[21px] mt-1 grow-0 whitespace-pre-line">
+          {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId && <span className="flex flex-col bg-secondary hover:bg-primary/10 active:bg-primary/20 text-primary rounded-2xl min-h-[260px] p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               {/* {JSON.stringify(data.originalPost)} */}
               <div className="flex gap-2 items-center ">
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className=''>
                   <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
                 </div>
-                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline text-base'>{data.originalPost?.poster?.display_name} </div>
+                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline text-base font-medium '>{data.originalPost?.poster?.display_name} </div>
               </div>
-              <div className='ml-8 font-normal text-sm line-clamp-6 opacity-70'>{data.originalPost?.body}</div>
-              <div className="ml-8 text-xs mt-1 bg-primary py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.originalPost?.num_comments}</span> <span className="opacity-70">{plurify("response", data.originalPost?.num_comments)}</span></div>
+              <div className='font-normal text-2xl line-clamp-6 text-center items-center justify-center px-4 flex h-full w-full min-h-[240px] whitespace-pre-wrap'>{data.originalPost?.body}</div>
+              <div className="ml-8 text-xs mt-1 border border-primary/10 text-primary/80 py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.originalPost?.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.originalPost?.num_comments)}</span></div>
+
+              <button className='mt-4 btn active:bg-opacity-90'>Answer</button>
             </div>
             
           </span>}
@@ -250,7 +251,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                 </div>
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline text-base'>{data.originalPost?.poster?.display_name} </div>
               </div>
-              <div className='ml-8 font-normal text-sm line-clamp-6 opacity-70'>{data.originalPost?.body}</div>
+              <div className='ml-8 font-normal text-sm line-clamp-6 opacity-70 whitespace-pre-wrap'>{data.originalPost?.body}</div>
             </div>
             
           </span>}
@@ -379,7 +380,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                   text-neutral-500 
                   cursor-pointer 
                   transition 
-                  bg-primary/5
+                  bg-secondary
                   rounded-full
                   mb-auto
                   h-12 w-12

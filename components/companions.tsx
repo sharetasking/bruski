@@ -43,7 +43,7 @@ export const Companions = () => {
     
     <div className="flex flex-row gap-2 pb-10 overflow-x-scroll overflow-y-visible w-full">
       {data && data.length && data.map((item:any) => (
-        <Card key={item.name} className="bg-primary/5 rounded-xl cursor-pointer hover:opacity-75 transition border-0">
+        <Card key={item.name} className="bg-secondary rounded-xl cursor-pointer hover:opacity-75 transition border-0">
           <Link href={`/${item.profileId}`}>
             <CardHeader className="flex items-center justify-center text-center text-muted-foreground">
               <span className="bg-secondary px-4 py-1 mb-2 rounded-lg font-semibold text-sm">Education</span>

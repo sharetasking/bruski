@@ -56,6 +56,7 @@ const ProfileIdPage =  async ({
     //get profile details
     _profile = await prismadb.profile.findUnique({
       include: {
+        companion: true,
         listOfProfilesFollowingViewedProfile: {
           where: { followerId: localUser?.profiles[0].id },
           select: { followerId: true, followeeId: true },
@@ -65,6 +66,7 @@ const ProfileIdPage =  async ({
         id: params.profileId,
       }
     });
+
   }
   catch(err) {}
 
@@ -74,6 +76,14 @@ const ProfileIdPage =  async ({
     // if not found, search by url
     _profile = await prismadb.profile.findUnique({
       include: {
+        companion: {
+          select: {
+            id: true,
+            name: true,
+            ownerId: true,
+            categoryId: true,
+          }
+        },
         listOfProfilesFollowingViewedProfile: {
           where: { followerId: localUser?.profiles[0].id },
           select: { followerId: true, followeeId: true },
@@ -95,6 +105,7 @@ const ProfileIdPage =  async ({
     };
   }
   
+  console.log(profile)
 
   //get the user's profile
   // const followerProfile = await prismadb.profile.findFirst({

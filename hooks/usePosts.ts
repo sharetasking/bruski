@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import fetcher from '@/lib/fetcher';
-export function usePosts (profileId?: string, take?: number, skip?: number, orderBy?: string, fresh?: boolean) {
+export function usePosts (params:{profileId?: string, take?: number, skip?: number, orderBy?: string, fresh?: boolean, page?:number}) {
 
   
   
@@ -13,6 +13,18 @@ export function usePosts (profileId?: string, take?: number, skip?: number, orde
     [key: string]: any;
 
   }
+
+  const profileId = params?.profileId ?? null;
+  const take = params?.take ?? null;
+  const page = params?.page ?? 1;
+  const skip = params?.skip ?? null;
+  
+  // const {
+  //       take,
+  //       skip,
+  //       orderBy,
+  //       fresh,
+  //       page=1} = params;
 
 
 

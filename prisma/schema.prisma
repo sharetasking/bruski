@@ -139,7 +139,7 @@ model LoginActivity {
 
 model Companion {
   id                   String    @id @default(auto()) @map("_id") @db.ObjectId
-  ownerId               String
+  ownerId              String    @db.ObjectId
   username             String
   img                  String
   name                 String
@@ -157,6 +157,7 @@ model Companion {
   category             Category  @relation(fields: [categoryId], references: [id])
 
   profiles             Profile[]
+  owner         User  @relation("owner", fields: [ownerId], references: [id], onDelete: Cascade)        
 
 
   @@index([categoryId])
@@ -226,6 +227,7 @@ model User {
   date_deleted    DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  companions    Companion[]  @relation("owner")    
 
   
   hasNotifications Boolean?

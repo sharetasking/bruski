@@ -21,6 +21,7 @@ import useProfiles, {ExtendedProfile} from "@/hooks/useProfiles";
 import Link from "next/link";
 import Avatar from "@/components/Avatar"
 import FollowButton from "@/components/FollowButton"
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { usePosts } from "@/hooks/usePosts";
@@ -148,13 +149,23 @@ useEffect(() => {
     <div className="fadeInUp grid lg:grid-cols-4 grid-cols-1 w-7xl gap-2">
 
       {/* Left Column */}
-      <div className="hidden flex-1 gap-4 grow sm:flex flex-col w-full inset-0">
+      <div className="hidden flex-1 gap-4 grow sm:flex flex-col w-full inset-0 pr-8 ">
+        <p className="gap-4">
+          <h3>Discover Bruski</h3>
+          <p className="text-primary/70">
+            Connect, share, and engage with the latest topics.
+            {/* Your space to voice, your stage to influence. */}
+            {/* Join the conversation that&apos;s shaping the world, one post at a time. */}
+          </p>
+          {/* <p className="">👉 Post Now</p> */}
+        </p>
+        {/* TODO: 
         <h2 className="font-semibold tracking-tight text-left text-lg mb-2">Even more to explore</h2>
-        <Categories />
+        <Categories /> */}
 
-        <div className="mt-12 bg-primary/5 rounded-2xl p-8 min-h-96">
+        {/* <div className="mt-12 lg:flex hidden bg-secondary rounded-2xl p-8 h-[480px]">
           &nbsp;
-        </div>
+        </div> */}
 
       </div>
 
@@ -168,7 +179,7 @@ useEffect(() => {
 
         {/* Center column */}
         <div className="lg:col-span-2 w-full flex flex-col items-center mx-auto grow-0">
-          <PostCreator onPostSubmit={addPost} placeholder="Enter your post..." />
+          <PostCreator onPostSubmit={addPost} placeholder="What's going on in your world today?" />
           
           <PostFeed user={user} _posts={posts} onScrollEnd={loadMorePosts} />
         </div>
@@ -181,14 +192,16 @@ useEffect(() => {
 
 
         {/* Right column */}
-        <div className="flex-1 flex flex-col pb-72 px-4 gap-4 sticky">
+        <div className="flex-1 flex flex-col pb-72 px-4 gap-4 sticky pl-8">
           {/* FEATURED PROFILES */}
           <h3>Get updates from</h3>
           <div className="flex flex-col gap-4 lg:grid lg:grid-cols-1 xl:grid-cols-1 items-start justify-start text-left">
             {
-              profiles && profiles.length && profiles.map((profile: ExtendedProfile) => (
+              (profiles && profiles.length) && profiles.map((profile: ExtendedProfile, index) => (
                 
-                <div key={profile.id} className="text-sm bg-primary/5 rounded-xl p-4 font-semibold min-h-20 flex flex-col items-start">
+                  <>
+                { index < 3 &&
+                <div key={profile.id} className={cn("text-sm p-4 font-semibold min-h-[120px] flex flex-col items-start", index < profiles.length - 2 ? " border-b border-primary/5": "")}>
                   <div className="flex items-center gap-2">
                     <Avatar url={profile?.id} img={profile.img ?? "/images/placeholder.png"} size={8} hasBorder={true} />
                     <Link className="line-clamp-1 text-medium text-sm text-left " href={"/"+profile.id}>{profile?.display_name}</Link>
@@ -198,16 +211,18 @@ useEffect(() => {
                   {profile.id != user?.profiles?.[0]?.id && !profile.isFollowedByUser &&
                     <FollowButton settings={{profileId:profile.id, follows:profile.isFollowedByUser??false, followersCount:Math.max(profile.numFollowers, 0)}}  />
                   }
-                </div>
+                </div>}
+                </>
+
               ))
             }
           </div>
         <div className="">
           {/* Profile widget */}
-          {/* <div className="bg-primary/5 rounded-lg px-4 py-8 flex flex-col items-center ">
+          {/* <div className="bg-secondary rounded-lg px-4 py-8 flex flex-col items-center ">
             <div className="relative w-32 h-32 shrink-0 grow-0 rounded-full">
               
-<div className="w-full h-full bg-primary/5 rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/30 text-2xl font-bold">&nbsp;</div>
+<div className="w-full h-full bg-secondary rounded-full flex items-center shrink-0 grow-0 justify-center text-primary/30 text-2xl font-bold">&nbsp;</div>
 
             </div>
             <p className="font-bold mt-4">

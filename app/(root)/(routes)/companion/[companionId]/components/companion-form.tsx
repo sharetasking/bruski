@@ -78,11 +78,13 @@ export const CompanionForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (initialData) {
+        // edit
         await axios.patch(`/api/companion/${initialData.id}`, values);
       } else {
+        // create
         await axios.post("/api/companion", values);
       }
-
+      
       toast({
         description: "Success.",
         duration: 3000,
@@ -91,6 +93,7 @@ export const CompanionForm = ({
       router.refresh();
       router.push("/home");
     } catch (error) {
+      console.log(error)
       toast({
         variant: "destructive",
         description: "Something went wrong ",
