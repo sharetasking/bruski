@@ -116,6 +116,54 @@ body,
   .btn-follow{
     @apply bg-gradient-to-br from-orange-500 via-pink-500 to-sky-500 font-medium text-sm text-white/95 active:text-primary-foreground/70 rounded-md px-4 py-2 hover:bg-primary/80 active:bg-primary/90 ;
   }
+  /* .followable:after:hover {
+    background-color: #989898
+  } */
+  .followable:after {
+    border-image-slice: 1;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: -10px;
+    /* left: -10px; */
+    /* bottom: -10px; */
+    right: -10px;
+    background-color: #fafafa;
+    content: "+";
+    border-width: 2px;
+    color: #676767;
+    /* border-image-source: -webkit-linear-gradient(linear, left top, left bottom, from(#3384f4), to(#f4507f));
+    border-image-source: linear-gradient(to bottom, #3384f4, #f4507f); */
+    @apply rounded-full hover:bg-secondary active:bg-primary-foreground active:scale-95;
+  }
+
+  /* Add this class to your stylesheet */
+.placeholder:empty::before {
+  content: attr(data-placeholder);
+  color: #a1a1a1;
+  pointer-events: none;
+  display: block; /* or 'inline' depending on your layout */
+}
+
+/* When the div is not empty, do not show the placeholder */
+.placeholder:not(:empty)::before {
+  content: attr(data-placeholder);
+  display: none;
+}
+
+.wrap-words{
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+/* Ensure the contentEditable div is always treated as a block to prevent collapse */
+.placeholder:empty {
+  display: block;
+}
+
 
 .btn-beautified
   {

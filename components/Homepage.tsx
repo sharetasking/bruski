@@ -20,7 +20,7 @@ import BottomBar from "@/components/BottomBar";
 import useProfiles, {ExtendedProfile} from "@/hooks/useProfiles";
 import Link from "next/link";
 import Avatar from "@/components/Avatar"
-import FollowButton from "@/components/FollowButton"
+import FollowButtonPlus from "@/components/FollowButtonPlus"
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -157,6 +157,28 @@ useEffect(() => {
             {/* Your space to voice, your stage to influence. */}
             {/* Join the conversation that&apos;s shaping the world, one post at a time. */}
           </p>
+
+          <div>
+          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-1 xl:grid-cols-1 items-start justify-start text-left">
+            {/* TODO: Code this */}
+            {/* {
+              (profiles && profiles.length) && profiles.map((profile: ExtendedProfile, index) => (
+                
+                  <>
+                { index < 3 &&
+                <div key={profile.id} className={cn("text-sm p-4 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " ": "")}>
+                  <div className="flex items-center gap-2 relative">
+                    <Avatar url={profile?.id} img={profile.img ?? "/images/placeholder.png"} className="followable  " size={8} hasBorder={true} />
+                    <Link className="line-clamp-1 text-medium text-sm text-left " href={"/"+profile.id}>{profile?.display_name}</Link>
+                  </div>
+                </div>
+                }
+                </>
+
+              ))
+            } */}
+          </div>
+          </div>
           {/* <p className="">👉 Post Now</p> */}
         </p>
         {/* TODO: 
@@ -201,16 +223,22 @@ useEffect(() => {
                 
                   <>
                 { index < 3 &&
-                <div key={profile.id} className={cn("text-sm p-4 font-semibold min-h-[120px] flex flex-col items-start", index < profiles.length - 2 ? " border-b border-primary/5": "")}>
+                <div key={profile.id} className={cn("text-sm p-4 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " bordder-b bordder-primary/5": "")}>
                   <div className="flex items-center gap-2">
-                    <Avatar url={profile?.id} img={profile.img ?? "/images/placeholder.png"} size={8} hasBorder={true} />
+                    <div className="relative">
+                      <Avatar url={profile?.id} img={profile.img ?? "/images/placeholder.png"} size={8} hasBorder={true} />
+                      
+                      <FollowButtonPlus settings={{profileId:profile.id, follows:profile.isFollowedByUser??false, followersCount:Math.max(profile.numFollowers, 0)}}  />
+                    </div>
+                    
+                    
                     <Link className="line-clamp-1 text-medium text-sm text-left " href={"/"+profile.id}>{profile?.display_name}</Link>
                   </div>
                   
                   <div className="font-normal text-sm text-primary/50 line-clamp-3 text-left">{profile.bio}</div>
-                  {profile.id != user?.profiles?.[0]?.id && !profile.isFollowedByUser &&
+                  {/* {profile.id != user?.profiles?.[0]?.id && !profile.isFollowedByUser &&
                     <FollowButton settings={{profileId:profile.id, follows:profile.isFollowedByUser??false, followersCount:Math.max(profile.numFollowers, 0)}}  />
-                  }
+                  } */}
                 </div>}
                 </>
 

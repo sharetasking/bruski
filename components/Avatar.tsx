@@ -30,7 +30,7 @@ const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className }) 
   return (
     <div
       className={`
-        ${hasBorder ? 'border-4 border-black' : ''}
+        ${hasBorder ? 'gradient-border' : ''}
         ${size ? 'w-'+size+' h-'+size : 'w-12 h-12'}
         rounded-full 
         hover:opacity-90 

@@ -16,6 +16,8 @@ import useLike from '@/hooks/useLike';
 import useFollow from '@/hooks/useFollow';
 import Link from 'next/link';
 
+import FollowButtonPlus from '../FollowButtonPlus';
+
 interface PostItemProps {
   data: Record<string, any>;
   user: BruskiUser|null;
@@ -129,22 +131,27 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
         border-b
         border-primary/5
         duration-200
+        wrap-words
         grow
         flex
       `, data?.saving ? "border-2 border-dashed opacity-80": "")}>
-      <div className="flex flex-row items-start gap-3 flex-1">
+      <div className="flex sm:flex-row flex-col items-start gap-3 flex-1">
         {/* <Avatar profileId={data.poster?.id} /> */}
           <div className="flex flex-col gap-1 items-center rounded-full">
         <div className='w-10 h-10 flex-0 shrink-0 grow-0 flex relative rounded-full'>
 
         {/* AVATAR IMAGE */}
-        <Avatar img={data.poster?.img} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} />
-       
+        {/* <Avatar img={data.poster?.img} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} /> */}
+        <div className="relative">
+          <Avatar img={data.poster?.img} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} />
+          
+          {/* FOLLOW BUTTON */}
+          {(data.poster?.id != signedInUserProfileId) && 
+            <FollowButtonPlus settings={{profileId:data.poster?.id, follows:isFollowing??false, followersCount:Math.max(data.numFollowers, 0)}}  />
+          }
         </div>
-        {/* FOLLOW BUTTON */}
-        {/* Confirm user isn't the one being viewed */}
-        
-        {(data.poster.id != signedInUserProfileId) && <button 
+        </div>
+        {/* {(data.poster.id != signedInUserProfileId) && <button 
              onClick={onFollow}
                 className={cn(`
                   flex 
@@ -159,16 +166,15 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
               `, !isFollowing 
                   ? 'bg-gray-100 shadow-md hover:bg-gray-200 dark:bg-gray-800 text-primary/50 hover:text-sky-500'
                   : 'text-primary/20 hover:text-sky-500')}>
-                {/* TODO: Code */}
+                    
                { !isFollowing && <AiOutlineUserAdd size={16} /> }
                 
-              {/* {isFollowing && <AiOutlineUserDelete size={16} />} */}
-              </button>}
+              </button>} */}
 
           
         </div>
         {/* USER NAME */}
-        <div className="flex flex-col flex-1 grow">
+        <div className="flex flex-col flex-1 grow w-full">
           <div className="flex flex-row justify-between grow items-center gap-2">
             <div className="flex gap-2 items-center">
             <p 
@@ -207,8 +213,8 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           {
             data.mediaType == "CHALLENGE"
             && 
-          <div className="flex flex-col bg-secondary text-primary rounded-lg min-h-[260px] p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
-            <div className=" min-h-[240px] items-center text-center justify-center flex whitespace-pre-wrap">{data.body}</div>
+          <div className="flex flex-col bg-secondary text-primary rounded-lg w-full min-h-[260px] p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
+            <div className=" min-h-[200px] items-center text-center justify-center flex whitespace-pre-wrap break-words">{data.body}</div>
             <div className="text-xs mt-2 border border-primary/20 text-primary  py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.num_comments)}</span></div>
             <button className='mt-4 btn active:bg-opacity-90'>Answer</button>
           </div>
@@ -217,23 +223,31 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           {
             data.mediaType != "CHALLENGE"
             &&
-          <div className="text-primary text-[#262f3f] py-4 text-[15px] leading-[21px] mt-1 block grow-0 whitespace-pre-wrap">
+          <div className="text-primary text-[#262f3f] py-4 text-[15px] leading-[21px] mt-1 block grow-0 whitespace-pre-wrap break-words">
             {data.body}
           </div>
           
           }
 
           
-          {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId && <span className="flex flex-col bg-secondary hover:bg-primary/10 active:bg-primary/20 text-primary rounded-2xl min-h-[260px] p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
+          {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId && <span className="flex flex-col bg-secondary w-full hover:bg-primary/10 active:bg-primary/20 text-primary rounded-2xl min-h-[260px] p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               {/* {JSON.stringify(data.originalPost)} */}
               <div className="flex gap-2 items-center ">
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className=''>
-                  <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
+
+                <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
+                  {/* <div className="relative">
+                    <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
+                    <FollowButtonPlus settings={{profileId:data.id, follows:data.isFollowedByUser??false, followersCount:Math.max(data.numFollowers, 0)}}  />
+                  </div> */}
+
+
+                  
                 </div>
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline text-base font-medium '>{data.originalPost?.poster?.display_name} </div>
               </div>
-              <div className='font-normal text-2xl line-clamp-6 text-center items-center justify-center px-4 flex h-full w-full min-h-[240px] whitespace-pre-wrap'>{data.originalPost?.body}</div>
+              <div className='font-normal text-2xl line-clamp-6 text-center items-center justify-center px-4 flex h-grow w-full min-h-[240px] whitespace-pre-wrap break-words'>{data.originalPost?.body}</div>
               <div className="ml-8 text-xs mt-1 border border-primary/10 text-primary/80 py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.originalPost?.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.originalPost?.num_comments)}</span></div>
 
               <button className='mt-4 btn active:bg-opacity-90'>Answer</button>
@@ -251,7 +265,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                 </div>
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline text-base'>{data.originalPost?.poster?.display_name} </div>
               </div>
-              <div className='ml-8 font-normal text-sm line-clamp-6 opacity-70 whitespace-pre-wrap'>{data.originalPost?.body}</div>
+              <div className='ml-8 font-normal text-sm line-clamp-6 opacity-70 whitespace-pre-wrap break-words'>{data.originalPost?.body}</div>
             </div>
             
           </span>}
