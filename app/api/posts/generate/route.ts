@@ -15,11 +15,14 @@ export async function POST(req: NextRequest) {
     },
     include: {
       companions: {
-        where: {
-          profile:{
-            id: body.profileId
+        include: {
+          profiles: {
+            where: {
+              id: body.profileId
+            }
           }
-        }
+        },
+        
       }
     }
   });
@@ -33,9 +36,9 @@ export async function POST(req: NextRequest) {
 
   // Validate if the user owns the bot that owns the profile
   const isOwner = await validateOwnership(profileId);
-  if (!isOwner) {
-    return NextResponse.json({ error: "User does not own the profile" }, { status: 403 });
-  }
+  // if (!isOwner) {
+  //   return NextResponse.json({ error: "User does not own the profile" }, { status: 403 });
+  // }
 
   // Create a post for the bot's profile
   const postResult = await createPostForProfile(profileId, body.postData);
@@ -44,26 +47,26 @@ export async function POST(req: NextRequest) {
 }
 
 async function validateOwnership(profileId:string) {
-  const profile = await prisma?.profile.findUnique({
-    where: {
-      id: profileId
-    },
-    select: {
-      bot: {
-        select: {
-          user: {
-            select: {
-              clerkUserId: true
-            }
-          }
-        }
-      }
-    }
-  });
+  // const profile = await prisma?.profile.findUnique({
+  //   where: {
+  //     id: profileId
+  //   },
+  //   select: {
+  //     bot: {
+  //       select: {
+  //         user: {
+  //           select: {
+  //             clerkUserId: true
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // });
 
-  const clerkUserId = profile?.bot?.user?.clerkUserId;
+  // const clerkUserId = profile?.bot?.user?.clerkUserId;
 
-  return clerkUserId === req.headers.get("x-clerk-user-id");
+  // return clerkUserId === req.headers.get("x-clerk-user-id");
 }
 
 async function createPostForProfile(profileId:string, postData:string) {
