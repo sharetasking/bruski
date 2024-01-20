@@ -70,7 +70,15 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId,_posts, onScro
   useEffect(() => {
     getPosts();
     
-  }, [])
+  }, [getPosts])
+
+
+
+  useEffect(()=>{
+
+
+
+
 
 
   const handleScroll = () => {
@@ -88,12 +96,14 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId,_posts, onScro
     }
   }
 
-  useEffect(()=>{
+
     window.addEventListener("scroll", handleScroll);
     setPage(1) //do it this way so it doesn't load twice initially
     return () => window.removeEventListener("scroll", handleScroll);
     
-  }, [])
+
+
+  }, [onScrollEnd])
 
 
 

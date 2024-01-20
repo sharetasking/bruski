@@ -52,8 +52,8 @@ export default async function RootLayout({
 
 // const [isHovered, setIsHovered] = useState(false);
 
-const handleMouseEnter = () => setIsHovered(true);
-const handleMouseLeave = () => setIsHovered(false);
+// const handleMouseEnter = () => setIsHovered(true);
+// const handleMouseLeave = () => setIsHovered(false);
 
 
 
