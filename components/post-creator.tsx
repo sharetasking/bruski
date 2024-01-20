@@ -40,7 +40,7 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
   const { mutate: mutatePosts } = usePosts();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const adjustTextareaHeight = (textarea) => {
+  const adjustTextareaHeight = (textarea: HTMLTextAreaElement) => {
     textarea.style.height = 'auto'; // Reset the height
     textarea.style.height = textarea.scrollHeight + 'px'; // Set the height to match the content
   }
@@ -85,12 +85,12 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
 
 
 
-  const handlePaste = (event) => {
+  const handlePaste = (event: ClipboardEvent) => {
     event.preventDefault();
     const text = (event.clipboardData || window.clipboardData).getData('text/plain');
   
     const selection = window.getSelection();
-    if (!selection.rangeCount) return;
+    if (!selection?.rangeCount) return;
   
     const range = selection.getRangeAt(0);
     range.deleteContents();
@@ -125,8 +125,8 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
         const selection = window.getSelection();
         range.setStart(editableDiv, 0);
         range.collapse(true);
-        selection.removeAllRanges();
-        selection.addRange(range);
+        selection?.removeAllRanges();
+        selection?.addRange(range);
       }
     }
   };
@@ -139,9 +139,9 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
       e.preventDefault(); // Prevent the default Enter behavior
   
       const selection = window.getSelection();
-      if (!selection.rangeCount) return;
+      if (!selection?.rangeCount) return;
   
-      const range = selection.getRangeAt(0);
+      const range = selection?.getRangeAt(0);
       range.deleteContents(); // Clear any selected text
   
       // Create a breakline element
