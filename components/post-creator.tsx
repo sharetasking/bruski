@@ -216,9 +216,9 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
             required
             className="bg-transparent w-full flex flex-1 overflow-visible outline-none border-none p-0"
           ></textarea> */}
-          <div className="flex md:flex-row md:gap-4 gap-2 w-full grow inset-0 items-center">
-            <PostTypeToggles onTypeChange={setActivePostType}/>
-            <button type="submit" className="bg-primary w-36 h-12 text-primary-foreground btn text-sm rounded-2xl font-semibold border-transparent hover:border-primary/70 active:bg-primary/80 border-2 hover:text-primary">Post</button>
+          <div className="flex md:flex-row flex-col md:gap-4 gap-2 w-full grow inset-0 md:items-center items-start">
+            <div className='w-fit'><PostTypeToggles onTypeChange={setActivePostType}/></div>
+            <button type="submit" className="bg-primary self-end w-36 h-12 text-primary-foreground btn text-sm rounded-2xl font-semibold border-transparent hover:border-primary/70 active:bg-primary/80 border-2 hover:text-primary">Post</button>
           </div>
           
         </form>
