@@ -29,7 +29,7 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
   const [body, setBody] = useState<string>("");
 
 
-  const contentEditableRef = useRef(null);
+  const contentEditableRef = useRef<HTMLDivElement>(null);
   const [showPlaceholder, setShowPlaceholder] = useState<boolean>(true)
 
 
@@ -85,9 +85,9 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
 
 
 
-  const handlePaste = (event: ClipboardEvent) => {
+  const handlePaste = (event: React.ClipboardEvent) => {
     event.preventDefault();
-    const text = (event.clipboardData || window.clipboardData).getData('text/plain');
+    const text = event.clipboardData?.getData('text/plain');
   
     const selection = window.getSelection();
     if (!selection?.rangeCount) return;
@@ -95,7 +95,7 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
     const range = selection.getRangeAt(0);
     range.deleteContents();
   
-    const textNode = document.createTextNode(text);
+    const textNode = document.createTextNode(text || ''); // Add a fallback value for text
     range.insertNode(textNode);
   
     range.selectNodeContents(textNode);
@@ -106,17 +106,19 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
     selection.addRange(range);
   };
   
+  
+  
 
 
 
 
-  const handleInput = (e) => {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.innerText;
     setBody(e.target.innerText);
     setShowPlaceholder(text.trim() === '');
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent) => {
     if (showPlaceholder) {
       // Focus the contentEditable div and set the caret to the start
       const editableDiv = contentEditableRef.current;
@@ -131,7 +133,7 @@ export const PostCreator: React.FC<FormProps> = ({placeholder, isComment, postId
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
       // Submit the form
       onSubmit(e);

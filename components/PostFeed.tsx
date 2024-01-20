@@ -48,62 +48,88 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId,_posts, onScro
   const [hasMore, setHasMore] = useState(true);
   const num_per_page = 10;
 
-  // let isLoading = false;
 
-  async function getPosts() {
-    if(page == 0)
-    {
-      setLoading(false);
-      return;
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+        setLoading(true);
+        setPage(prevPage => {
+          const nextPage = prevPage + 1;
+          onScrollEnd({ page: nextPage });
+          return nextPage;
+        });
+      }
+    };
+  
+    window.addEventListener("scroll", handleScroll);
+  
+    // Initial load
+    if (page === 0) {
+      setPage(1); // Start loading from page 1
     }
-    else
-    {
-      setPage(page+1);
-      console.log(page)
-      onScrollEnd({page:page});
-    }
+  
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [onScrollEnd, page]);
+
+  
+  
+
+  // useEffect(() => {
+
+
+  // async function getPosts() {
+  //   if(page == 0)
+  //   {
+  //     setLoading(false);
+  //     return;
+  //   }
+  //   else
+  //   {
+  //     setPage(page+1);
+  //     console.log(page)
+  //     onScrollEnd({page:page});
+  //   }
 
    
     
-  }
-  
-  useEffect(() => {
-    getPosts();
+  // }
+
+  //   getPosts();
     
-  }, [getPosts])
+  // }, [onScrollEnd, page])
 
 
 
-  useEffect(()=>{
+  // useEffect(()=>{
 
 
 
 
 
 
-  const handleScroll = () => {
+  // const handleScroll = () => {
     
-    if(window.innerHeight + document.documentElement.scrollTop +1 >= document.documentElement.scrollHeight)
-    {
-      setLoading(true);
-      setPage(prev => {
+  //   if(window.innerHeight + document.documentElement.scrollTop +1 >= document.documentElement.scrollHeight)
+  //   {
+  //     setLoading(true);
+  //     setPage(prev => {
 
-      setPage(prev+1);
-      onScrollEnd({page: prev+1});
-        return prev + 1
-      });
+  //     setPage(prev+1);
+  //     onScrollEnd({page: prev+1});
+  //       return prev + 1
+  //     });
       
-    }
-  }
+  //   }
+  // }
 
 
-    window.addEventListener("scroll", handleScroll);
-    setPage(1) //do it this way so it doesn't load twice initially
-    return () => window.removeEventListener("scroll", handleScroll);
+  //   window.addEventListener("scroll", handleScroll);
+  //   setPage(1) //do it this way so it doesn't load twice initially
+  //   return () => window.removeEventListener("scroll", handleScroll);
     
 
 
-  }, [onScrollEnd])
+  // }, [onScrollEnd])
 
 
 
