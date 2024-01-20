@@ -136,7 +136,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
     
         if (months > 0) return months === 1 ? '1mo' : `${months}mo`;
     
-        let timeDifference = currentDate - targetDate; // Remaining difference in milliseconds
+        let timeDifference = Number(currentDate) - Number(targetDate); // Remaining difference in milliseconds
     
         const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
         if (days > 0) return days === 1 ? '1d' : `${days}d`;
