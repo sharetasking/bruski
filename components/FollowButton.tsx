@@ -48,7 +48,7 @@ const FollowButton = ({settings}: {settings: FollowButtonType}) => {
   return ( <div>
 
     {/* <Button onClick={handleFollow} className={cn("h-8 mt-2 mr-auto border-transparent hover:text-primary/80 active:ring-2 active:scale-95 ring-offset-0 hover:border-primary", !isFollowing ? "btn-beautified text-primary-foreground" : "bg-transparent text-primary")} variant="outline">{isFollowing ? "Unfollow": "Follow"}</Button> */}
-    <Button onClick={handleFollow} className={cn("h-8 mt-2 mr-auto py-1 hover:text-primary-foreground/80 active:ring-2 active:scale-95 ring-offset-0 border-0", !isFollowing ? "btn-follow text-primary-foreground" : " border bg-transparent text-primary")} variant="outline">{isFollowing ? "Unfollow": "Follow"}</Button>
+    <Button onClick={handleFollow} className={cn("h-8 mt-2 mr-auto py-1 hover:text-primary-foreground/80 active:ring-2 active:scale-95 ring-offset-0 border-0", !isFollowing ? "btn-follow text-primary-foreground" : " border bg-transparent text-primary")}>{isFollowing ? "Unfollow": "Follow"}</Button>
     
     
   </div> );

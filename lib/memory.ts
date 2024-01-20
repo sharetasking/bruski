@@ -6,7 +6,7 @@ import { PineconeStore } from "langchain/vectorstores/pinecone";
 export type CompanionKey = {
   companionName: string;
   modelName: string;
-  userId: string;
+  profileId: string;
 };
 
 export class MemoryManager {
@@ -60,11 +60,11 @@ export class MemoryManager {
   }
 
   private generateRedisCompanionKey(companionKey: CompanionKey): string {
-    return `${companionKey.companionName}-${companionKey.modelName}-${companionKey.userId}`;
+    return `${companionKey.companionName}-${companionKey.modelName}-${companionKey.profileId}`;
   }
 
   public async writeToHistory(text: string, companionKey: CompanionKey) {
-    if (!companionKey || typeof companionKey.userId == "undefined") {
+    if (!companionKey || typeof companionKey.profileId == "undefined") {
       console.log("Companion key set incorrectly");
       return "";
     }
@@ -79,7 +79,7 @@ export class MemoryManager {
   }
 
   public async readLatestHistory(companionKey: CompanionKey): Promise<string> {
-    if (!companionKey || typeof companionKey.userId == "undefined") {
+    if (!companionKey || typeof companionKey.profileId == "undefined") {
       console.log("Companion key set incorrectly");
       return "";
     }

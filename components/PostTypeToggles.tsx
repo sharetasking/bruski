@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { MediaType } from '@prisma/client';
 
-const PostTypeToggles = ({onTypeChange}: {onTypeChange: (type: MediaType) => void}) => {
-  const [activePostType, setActivePostType] = useState('TEXT');
+const PostTypeToggles = ({onTypeChange, initial}: {onTypeChange: (type: MediaType) => void, initial:MediaType}) => {
+  const [activePostType, setActivePostType] = useState(initial);
 
   onTypeChange(activePostType as MediaType);
 

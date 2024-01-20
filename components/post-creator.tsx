@@ -14,6 +14,7 @@ import PostTypeToggles from "@/components/PostTypeToggles";
 import { MediaType } from '@prisma/client';
 import Avatar from './Avatar';
 import { useRef } from 'react';
+import { cn } from '@/lib/utils';
 
 interface FormProps {
 placeholder: string;
@@ -197,13 +198,20 @@ const onSubmit = useCallback(async (event: FormEvent) => {
 }, [body, activePostType, onPostSubmit]);
 
 
+// useEffect(() => {
+//   // Set the activePostType based on some client-side logic or data fetching
+//   const initialActivePostType = "CHALLENGE"//getInitialActivePostType(); // Replace with your actual logic
+//   setActivePostType(initialActivePostType);
+// }, []);
+
+
 return (
-  <div className="lg:-mt-8 w-full bg-secondary mx-2 rounded-3xl px-4 py-1 shadow-sm mb-4 left-auto right-auto max-w-xl">
+  <div className={"lg:-mt-8 w-full mx-2 rounded-3xl px-4 py-1 shadow-sm mb-4 left-auto right-auto max-w-xl transition-colors duration-500 " + (activePostType == 'CHALLENGE' ? 'bg-primary/10': 'bg-secondary')}>
     
 {/* <h3>Create a post</h3> */}
     <div className="flex gap-1 py-4">
-
-    <span className='rounded-full bg-primary/30 h-12 w-12 grow-0 shrink-0 flex items-center justify-center mt-4 '><Avatar img={currentUser?.profiles?.[0]?.img ?? ""} /></span>
+      
+    <span className={'rounded-full h-12 w-12 grow-0 shrink-0 flex items-center justify-center mt-4 '}><Avatar img={currentUser?.profiles?.[0]?.img ?? ""} /></span>
   <div className="p-4 rounded-md flex flex-col max-w-2xl grow">
     {/* {activePostType} */}
     {currentUser && (
@@ -230,7 +238,7 @@ return (
             </div> 
         
         <div className="flex md:flex-row flex-col md:gap-4 gap-2 w-full grow inset-0 md:items-center items-start">
-          <div className='w-fit'><PostTypeToggles onTypeChange={setActivePostType}/></div>
+          <div className='w-fit'><PostTypeToggles onTypeChange={setActivePostType} initial={activePostType} /></div>
           <button type="submit" className="bg-primary self-end w-36 h-12 text-primary-foreground btn text-sm rounded-2xl font-semibold border-transparent hover:border-primary/70 active:bg-primary/80 border-2 hover:text-primary">Post</button>
         </div>
         

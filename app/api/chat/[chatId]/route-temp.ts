@@ -18,13 +18,19 @@
 //   { params }: { params: { chatId: string } }
 // ) {
 //   try {
+//     // GET PROMPT
 //     const { prompt } = await request.json();
+
+
+//     // GET CURRENT USER
 //     const user = await currentUser();
 
 //     if (!user || !user.firstName || !user.id) {
 //       return new NextResponse("Unauthorized", { status: 401 });
 //     }
 
+
+//     // GET COMPANION
 //     const identifier = request.url + "-" + user.id;
 //     const { success } = await rateLimit(identifier);
 

@@ -31,6 +31,7 @@ const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
 
     const generatePost = () =>
     {
+        toast.success(`Right away, ${user?.first_name}!\nI'll be done in a few mins.`)
         axios.post('/api/posts/generate', {profileId: profile?.id})
         .then((res) => {
            toast.success("Post generated") 

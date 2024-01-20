@@ -111,13 +111,56 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
   // LIKE ICON
   const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
 
+
+
+
+  function timeAgo(date:Date|string) {
+        const currentDate = new Date();
+        const targetDate = new Date(date);
+    
+        let years = currentDate.getFullYear() - targetDate.getFullYear();
+        let months = currentDate.getMonth() - targetDate.getMonth();
+    
+        // Adjust for year boundary
+        if (currentDate < new Date(targetDate.getFullYear() + years, targetDate.getMonth(), targetDate.getDate())) {
+            years--;
+        }
+    
+        // Adjust for month boundary
+        if (months < 0 && years > 0) {
+            years--;
+            months += 12; // Add 12 months as we moved one year back
+        }
+    
+        if (years > 0) return years === 1 ? '1y' : `${years}y`;
+    
+        if (months > 0) return months === 1 ? '1mo' : `${months}mo`;
+    
+        let timeDifference = currentDate - targetDate; // Remaining difference in milliseconds
+    
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        if (days > 0) return days === 1 ? '1d' : `${days}d`;
+    
+        const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+        if (hours > 0) return hours === 1 ? '1h' : `${hours}h`;
+    
+        const minutes = Math.floor(timeDifference / (1000 * 60));
+        if (minutes > 0) return minutes === 1 ? '1m' : `${minutes}m`;
+    
+        const seconds = Math.floor(timeDifference / 1000);
+        return seconds === 1 ? '1s' : `${seconds}s`;
+    }
+
+    
+
   // TIME AGO
   const createdAt = useMemo(() => {
     if (!data?.createdAt) {
       return null;
     }
   
-    return formatDistanceToNowStrict(new Date(data.createdAt));
+    return timeAgo(data.createdAt)
+    // return formatDistanceToNowStrict(new Date(data.createdAt));
   }, [data.createdAt])
 
   
@@ -138,6 +181,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
       <div className="flex sm:flex-row flex-col items-start gap-3 flex-1">
         {/* <Avatar profileId={data.poster?.id} /> */}
           <div className="flex flex-col gap-1 items-center rounded-full">
+
+
+            <div className="flex flex-col items-center gap-1">
         <div className='w-10 h-10 flex-0 shrink-0 grow-0 flex relative rounded-full'>
 
         {/* AVATAR IMAGE */}
@@ -150,6 +196,8 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
             <FollowButtonPlus settings={{profileId:data.poster?.id, follows:isFollowing??false, followersCount:Math.max(data.numFollowers, 0)}}  />
           }
         </div>
+
+            </div>
         </div>
         {/* {(data.poster.id != signedInUserProfileId) && <button 
              onClick={onFollow}
@@ -175,22 +223,14 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
         </div>
         {/* USER NAME */}
         <div className="flex flex-col flex-1 grow w-full">
-          <div className="flex flex-row justify-between grow items-center gap-2">
+          <div className="flex flex-row justify-start grow items-center gap-1">
             <div className="flex gap-2 items-center">
-            <p 
-              onClick={goToUser} 
-              className="user_name">
-              
-              {data.poster?.display_name}
-
-            </p>
-
-
-            {/* TIME AGO */}
-            <span className="text-primary/60 text-xs">
-            {createdAt}
-          </span>
-              </div>
+              <p 
+                onClick={goToUser} 
+                className="user_name">
+                  {data.poster?.display_name}
+              </p>
+            </div>
 
             
             {/* USERNAME */}
@@ -204,7 +244,18 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                 md:block
             ">
               {data.poster?.username && `@${data.poster?.username}`}
+                         
+
             </span>
+            
+            {/* TIME AGO */}
+            <span className="text-primary/60 text-sm">
+              <span className='mr-2 text-xs text-primary/10'>&bull;</span>
+              {createdAt}
+            </span>
+
+
+
           </div>
           
           {/* {data.originalPostId && <span className="text-xs py-1 font-medium rounded-full w-fit px-4 bg-primary/10">Comment</span>} */}
