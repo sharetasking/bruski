@@ -13,9 +13,11 @@ import FollowButton from "@/components/FollowButton";
 import { BruskiUser } from "@/hooks/useBruskiUser";
 import useProfiles, {ExtendedProfile} from "@/hooks/useProfiles";
 import { usePosts } from "@/hooks/usePosts";
-import { Post } from "@prisma/client";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useEffect } from "react";
+import { MediaType } from "@prisma/client";
+
 
 interface ProfilePageProps {
     profile: ExtendedProfile|null;
@@ -23,13 +25,23 @@ interface ProfilePageProps {
     page?: number;
 }
 
+
+interface Post{
+    body: string;
+    createdAt?: Date;
+    id?: string;
+    comments?: any[];
+    poster: {id:string, display_name:string, img:string};
+  }
+  
+
 const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
 
     const [posts, setPosts] = useState<Post[]>([]);
     const [generating, setGenerating] = useState<boolean>(false);
     
     const {data} = usePosts({ take: 4, page:page });
-
+    console.log(data)
     const generatePost = () =>
     {
         setGenerating(true)
@@ -45,22 +57,137 @@ const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
     }
     
   // FUNCTION: LOAD MORE POSTS
-  const loadMorePosts = async ({page}:{page:number}) => {
+//   const loadMorePosts = async ({page}:{page:number}) => {
 
-    setPosts((prev) => [...prev, ...data ])
-//     fetchPosts({ take: 4, page:page }).then((res) => {
-//       try{
-//         setPosts((prev) => [...prev, ...res ])
-//       }
-//       catch(error){
-//         console.error(error);
-//       }
-//       console.log(posts)
-//     }
-//     ).catch((error) => {
-//       console.error('Failed to fetch posts:', error);
-//     });
+//     setPosts((prev) => [...prev, ...data ])
+// //     fetchPosts({ take: 4, page:page }).then((res) => {
+// //       try{
+// //         setPosts((prev) => [...prev, ...res ])
+// //       }
+// //       catch(error){
+// //         console.error(error);
+// //       }
+// //       console.log(posts)
+// //     }
+// //     ).catch((error) => {
+// //       console.error('Failed to fetch posts:', error);
+// //     });
+//   }
+
+
+
+
+
+
+
+
+
+
+  // FUNCTION: ADD COMMENT 
+  const addPost = async (newComment:string, mediaType:MediaType) => {
+    const tempId = new Date().getTime().toString();
+
+    let comment = {
+        id: tempId,
+        body: newComment,
+        mediaType: mediaType,
+        poster: user?.profiles?.[0], //TODO: fix this
+        saving: true,
+      };
+    
+    if(comment.poster)
+      comment.poster.isFollowed = false;
+
+
+    setPosts(prevComments => [comment, ...prevComments]);
+
+
+    try {
+      // Replace this with your actual API call logic to submit the comment
+      const response = await fetch(`/api/posts?media_type=${mediaType}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ body: newComment, poster: user?.profiles?.[0] }),
+      });
+
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+
+      // Update the state with the permanent ID received from the server
+      setPosts(prevComments => prevComments.map(comment => 
+          comment.id === tempId ? { ...comment, id: data.id, saving:false } : comment
+      ));
+  } catch (error) {
+      console.error('Failed to submit comment:', error);
+      toast.error('Failed to submit comment');
+      // Optionally remove the temporary comment from the state
+      setPosts(prevComments => prevComments.filter(comment => comment.id !== tempId));
   }
+    
+  };
+
+
+  // FUNCTION: LOAD MORE POSTS
+  const loadMorePosts = ({page}:{page:number}) => {
+    fetchPosts({ take: 4, page:page }).then((res) => {
+      try{
+        setPosts((prev) => [...prev, ...res ])
+      }
+      catch(error){
+        console.error(error);
+      }
+      console.log(posts)
+    }
+    ).catch((error) => {
+      console.error('Failed to fetch posts:', error);
+    });
+  }
+
+  
+// function: fetch posts
+const fetchPosts = async ({ take, page=1 }:{ take:number, page?:number }) => {
+  const profileId = profile?.id;
+
+  setLoading(true);
+  page = page <= 0 ? 1 : page;
+
+  const url = profileId ? `/api/posts?page=${page}&size=${4}&profileId=${profileId}` : `/api/posts?page=${page}&size=${4}`;
+  console.log(url)
+  const response = await fetch(url);
+  const data = await response.json();
+  setLoading(false);
+  return data;
+};
+
+
+// INITIAL FETCH
+useEffect(() => {
+  fetchPosts({ take: 4 }).then((res) => {
+    try{
+      setPosts(res);
+    }
+    catch(error){
+      console.error(error);
+    }
+  }).catch((error) => {
+    console.error('Failed to fetch posts:', error);
+  });
+}, []); 
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -130,76 +257,9 @@ const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
                 
                 {/* {JSON.stringify(user)}
                 {JSON.stringify(profileId)} */}
-                <PostFeed profileId={profile?.id} user={user} onScrollEnd={loadMorePosts} />
+                <PostFeed profileId={profile?.id} _posts={posts} user={user} onScrollEnd={loadMorePosts} />
 
-                {/* <div className="bg-primary shadow rounded-lg p-6">
-                    <h2 className="text-xl font-bold mb-4">About Me</h2>
-                    <p className="text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est
-                        vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas
-                        suscipit. Nunc finibus vel ante id euismod. Vestibulum ante ipsum primis in faucibus orci luctus
-                        et ultrices posuere cubilia Curae; Aliquam erat volutpat. Nulla vulputate pharetra tellus, in
-                        luctus risus rhoncus id.
-                    </p>
-
-                    <h3 className="font-semibold text-center mt-3 -mb-2">
-                        Find me on
-                    </h3>
-                    <div className="flex justify-center items-center gap-6 my-6">
-                        <a className="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds LinkedIn" href=""
-                            target="_blank">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="h-6">
-                                <path fill="currentColor"
-                                    d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z">
-                                </path>
-                            </svg>
-                        </a>
-                    </div>
-
-
-                    <h2 className="text-xl font-bold mt-6 mb-4">Experience</h2>
-                    <div className="mb-6">
-                        <div className="flex justify-between flex-wrap gap-2 w-full">
-                            <span className="text-gray-700 font-bold">Web Developer</span>
-                            <p>
-                                <span className="text-gray-700 mr-2">at ABC Company</span>
-                                <span className="text-gray-700">2017 - 2019</span>
-                            </p>
-                        </div>
-                        <p className="mt-2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae
-                            tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas
-                            suscipit.
-                        </p>
-                    </div>
-                    <div className="mb-6">
-                        <div className="flex justify-between flex-wrap gap-2 w-full">
-                            <span className="text-gray-700 font-bold">Web Developer</span>
-                            <p>
-                                <span className="text-gray-700 mr-2">at ABC Company</span>
-                                <span className="text-gray-700">2017 - 2019</span>
-                            </p>
-                        </div>
-                        <p className="mt-2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae
-                            tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas
-                            suscipit.
-                        </p>
-                    </div>
-                    <div className="mb-6">
-                        <div className="flex justify-between flex-wrap gap-2 w-full">
-                            <span className="text-gray-700 font-bold">Web Developer</span>
-                            <p>
-                                <span className="text-gray-700 mr-2">at ABC Company</span>
-                                <span className="text-gray-700">2017 - 2019</span>
-                            </p>
-                        </div>
-                        <p className="mt-2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae
-                            tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas
-                            suscipit.
-                        </p>
-                    </div>
-                </div> */}
+                
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 import { auth, currentUser } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
-import { MediaType } from ".prisma/client";
+import { MediaType } from "@prisma/client";
 
 
 import prismadb from "@/lib/prismadb";
