@@ -145,6 +145,7 @@ model Companion {
   username             String
   img                  String
   name                 String
+  model_type           String?
   description          String
   instructions         String
   profileId            String?   @db.ObjectId
@@ -296,6 +297,7 @@ enum PostType {
 
 enum MediaType {
   TEXT
+  QUOTE
   IMAGE
   VIDEO
   POLL
@@ -330,6 +332,7 @@ model Notification {
 enum NotificationType {
   LIKE
   COMMENT
+  QUOTE
   REPORT
   FOLLOW
   DIRECT_MESSAGE

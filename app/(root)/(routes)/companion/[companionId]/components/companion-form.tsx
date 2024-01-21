@@ -86,7 +86,7 @@ export const CompanionForm = ({
       }
       
       toast({
-        description: "Success.",
+        description:  "Success.",
         duration: 3000,
       });
 
@@ -147,7 +147,8 @@ export const CompanionForm = ({
               name="description"
               control={form.control}
               render={({ field }) => (
-                <FormItem>
+                <FormItem
+                className="col-span-2 md:col-span-1">
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Input disabled={isLoading} placeholder="World Renowned Athlete" {...field} />
@@ -163,7 +164,8 @@ export const CompanionForm = ({
               control={form.control}
               name="categoryId"
               render={({ field }) => (
-                <FormItem>
+                <FormItem
+                className="col-span-2 md:col-span-1">
                   <FormLabel>Category</FormLabel>
                   <Select disabled={isLoading} onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                     <FormControl>
@@ -171,7 +173,7 @@ export const CompanionForm = ({
                         <SelectValue defaultValue={field.value} placeholder="Select a category" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className={"overflow-y-scroll max-h-48"}>
                       {categories.map((category) => (
                         <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
                       ))}
