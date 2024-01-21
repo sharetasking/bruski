@@ -59,6 +59,7 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
   
 
   // CREATE LIKE
+  let post
   let like2 = null;
   try{
 
@@ -100,7 +101,7 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
 
     // CREATE NOTIFICATION
     //get the profile that owns the post
-    let post = await prismadb.post.findUnique({
+    post = await prismadb.post.findUnique({
       where: {
         id: postId
       },
