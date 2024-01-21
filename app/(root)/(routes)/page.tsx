@@ -6,6 +6,8 @@ import { useClerk } from '@clerk/clerk-react';
 import LandingPageComponent from "./LandingPageComponent";
 import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 
 const SignInPage = async () => {
@@ -14,7 +16,6 @@ const SignInPage = async () => {
   // const { signOut } = useClerk();
 
   // const { data: currentUser, isLoading } = useBruskiUser();
-
 
 
   const user = await currentUser();
@@ -68,8 +69,10 @@ const SignInPage = async () => {
   else if(localUser)
   {
    
-    // window.location.href = "/home"
+
     // redirect to home
+    redirect('/home');
+    
 
   }
   else{

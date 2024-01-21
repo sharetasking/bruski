@@ -76,7 +76,7 @@ export const Navbar = ({
           </Button> */}
 
       <div className="flex items-center gap-x-3  bg-gradient-to-b from-white dark:from-black via-white/70 dark:via-black/70 to-white/30 dark:to-bg-secondary/10">
-          <Link href="/notifications" onClick={()=>{return countTo(0)}} className="clickable mx-4 relative">
+          {user?.id && <Link href="/notifications" onClick={()=>{return countTo(0)}} className="clickable mx-4 relative">
             <Bell height={24} width={24} />
             {
             parseInt(num_notifications) > 0 && <span className="bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs absolute -top-2 -right-1 z-10">
@@ -84,7 +84,7 @@ export const Navbar = ({
               </span>
 
             }
-          </Link>
+          </Link> }
         
         {/* TODO: {!isPro && ( */}
           {/* {(

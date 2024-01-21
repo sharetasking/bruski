@@ -141,7 +141,6 @@ const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
       catch(error){
         console.error(error);
       }
-      console.log(posts)
     }
     ).catch((error) => {
       console.error('Failed to fetch posts:', error);

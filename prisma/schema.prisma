@@ -232,6 +232,8 @@ model User {
   companions    Companion[]  @relation("owner")    
 
   
+  taggedPosts Post[]       @relation("PostTags")
+  
   num_notifications     Int    @default(0)
   profiles  Profile[] //Profile?  @relation(fields: [profileId], references: [id])
   logins LoginActivity[]
@@ -269,6 +271,9 @@ model Post {
   likeList              PostLike[]
   bookmarksReceivedList Bookmark[]
   comments          Post[]    @relation("OriginalPostRelations")
+  hashtags   Hashtag[]     @relation("PostHashtags")
+  taggedUsers User[]       @relation("PostTags")
+
 
   // Relations for rebrews
   rebrewedByProfile     Profile?  @relation("RebrewsMadeByProfile", fields: [rebrewedById], references: [id])
@@ -349,4 +354,29 @@ enum NotificationType {
   ALERT
   BOT_ALERT
   OTHER
+}
+
+
+model Hashtag {
+  id        Int    @id @default(autoincrement())
+  tag       String @unique
+  posts     Post[] @relation("PostHashtags")
+}
+
+model PostHashtag {
+  post       Post     @relation(fields: [postId], references: [id])
+  postId     Int      // Foreign key to the Post model
+  hashtag    Hashtag  @relation(fields: [hashtagId], references: [id])
+  hashtagId  Int      // Foreign key to the Hashtag model
+
+  @@id([postId, hashtagId])
+}
+
+model PostTag {
+  post   Post   @relation(fields: [postId], references: [id])
+  postId Int    // Foreign key to the Post model
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    // Foreign key to the User model
+
+  @@id([postId, userId])
 }
