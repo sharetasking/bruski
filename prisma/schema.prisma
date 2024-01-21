@@ -358,25 +358,27 @@ enum NotificationType {
 
 
 model Hashtag {
-  id        Int    @id @default(autoincrement())
+  id        Int    @id @default(autoincrement()) @map("_id") @db.ObjectId
   tag       String @unique
   posts     Post[] @relation("PostHashtags")
 }
 
 model PostHashtag {
+  id        Int    @id @default(autoincrement()) @map("_id") @db.ObjectId
   post       Post     @relation(fields: [postId], references: [id])
   postId     Int      // Foreign key to the Post model
   hashtag    Hashtag  @relation(fields: [hashtagId], references: [id])
   hashtagId  Int      // Foreign key to the Hashtag model
 
-  @@id([postId, hashtagId])
+  @@unique([postId, hashtagId])
 }
 
 model PostTag {
+  id        Int    @id @default(autoincrement()) @map("_id") @db.ObjectId
   post   Post   @relation(fields: [postId], references: [id])
   postId Int    // Foreign key to the Post model
   user   User   @relation(fields: [userId], references: [id])
   userId Int    // Foreign key to the User model
 
-  @@id([postId, userId])
+  @@unique([postId, userId])
 }
