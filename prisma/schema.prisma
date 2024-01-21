@@ -231,8 +231,7 @@ model User {
   updatedAt       DateTime  @updatedAt
   companions    Companion[]  @relation("owner")    
 
-  
-  taggedPosts Post[]       @relation("PostTags")
+  postTags PostTag[]
   
   num_notifications     Int    @default(0)
   profiles  Profile[] //Profile?  @relation(fields: [profileId], references: [id])
@@ -271,8 +270,11 @@ model Post {
   likeList              PostLike[]
   bookmarksReceivedList Bookmark[]
   comments          Post[]    @relation("OriginalPostRelations")
-  hashtags   Hashtag[]     @relation("PostHashtags")
-  taggedUsers User[]       @relation("PostTags")
+
+
+  postHashtags PostHashtag[] // Relation to PostHashtag
+  postTags     PostTag[]     // Relation to PostTag
+  
 
 
   // Relations for rebrews
@@ -281,6 +283,8 @@ model Post {
 
   originalPostByProfile Profile?  @relation("RebrewsReceivedByProfile", fields: [originalPostById], references: [id])
   originalPostById      String?   @db.ObjectId
+
+
 }
 
 
@@ -358,27 +362,33 @@ enum NotificationType {
 
 
 model Hashtag {
-  id        Int    @id @default(autoincrement()) @map("_id") @db.ObjectId
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
   tag       String @unique
-  posts     Post[] @relation("PostHashtags")
+  postHashtags PostHashtag[] // Relation to PostHashtag
 }
 
 model PostHashtag {
-  id        Int    @id @default(autoincrement()) @map("_id") @db.ObjectId
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  postId     String    @db.ObjectId  // Foreign key to the Post model
+  hashtagId  String    @db.ObjectId  // Foreign key to the Hashtag model
+
+
+
   post       Post     @relation(fields: [postId], references: [id])
-  postId     Int      // Foreign key to the Post model
   hashtag    Hashtag  @relation(fields: [hashtagId], references: [id])
-  hashtagId  Int      // Foreign key to the Hashtag model
+
 
   @@unique([postId, hashtagId])
 }
 
 model PostTag {
-  id        Int    @id @default(autoincrement()) @map("_id") @db.ObjectId
-  post   Post   @relation(fields: [postId], references: [id])
-  postId Int    // Foreign key to the Post model
-  user   User   @relation(fields: [userId], references: [id])
-  userId Int    // Foreign key to the User model
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  postId String    @db.ObjectId // Foreign key to the Post model
+  userId String    @db.ObjectId// Foreign key to the User model
 
+  user   User   @relation(fields: [userId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
+
+  
   @@unique([postId, userId])
 }
