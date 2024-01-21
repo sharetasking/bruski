@@ -103,7 +103,6 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
 
 
     // CREATE NOTIFICATION
-      console.log("post", targetPost)
 
       try {
        
@@ -119,7 +118,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
             let notification = await prismadb.notification.create({
               data: {
                 body: body,
-                targetProfileId: targetPost?.poster.id,
+                targetProfileId: targetPost?.poster?.id ?? "",
                 targetObjectId: targetPost?.id,
                 createdObjectId: savedComment.id,
                 type: "COMMENT",
@@ -128,7 +127,6 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
               }
             });
 
-            console.log("notification", notification)
 
             // UPDATE THE TARGET USER'S NOTIFICATION COUNT
             let updatedUser = await prismadb.user.update({
