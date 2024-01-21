@@ -38,9 +38,9 @@ export const ModeToggle = () => {
 
 
 <button onClick={toggleTheme} aria-label="toggle light and dark mode" className={cn("h-[1.2rem] w-[1.24rem] grow-0 shrink-0 ")}>
-  <Sun className={cn("h-[1.24rem] w-[1.24rem] transition-all light:text-black dark:text-white block ", theme == "light" ? "block" : "hidden")} />
-  <Moon className={cn("h-[1.2rem] w-[1.2rem] transition-all text-primary light:text-black dark:text-white block ", theme == "dark" ? "block" : "hidden")} />
-  <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" className={cn("h-[1.2rem] w-[1.2rem] light:text-black dark:text-white block ",  (theme == "system" || !theme) ? "block" : "hidden")}>
+  <Sun className={cn("clickable h-[1.24rem] w-[1.24rem] transition-all light:text-black dark:text-white block ", theme == "light" ? "block" : "hidden")} />
+  <Moon className={cn("clickable h-[1.2rem] w-[1.2rem] transition-all text-primary light:text-black dark:text-white block ", theme == "dark" ? "block" : "hidden")} />
+  <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" className={cn("clickable h-[1.2rem] w-[1.2rem] light:text-black dark:text-white block ",  (theme == "system" || !theme) ? "block" : "hidden")}>
     <path d="M12 0C11.4477 0 11 0.447715 11 1V3C11 3.55228 11.4477 4 12 4C12.5523 4 13 3.55228 13 3V1C13 0.447715 12.5523 0 12 0Z" fill="currentColor"/>
     <path fillRule="evenodd" clipRule="evenodd" d="M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18ZM9.21518 14.7848C8.50248 14.0721 8.06167 13.0875 8.06167 12C8.06167 9.82492 9.82492 8.06167 12 8.06167C13.0875 8.06167 14.0721 8.50248 14.7848 9.21518L9.21518 14.7848Z" fill="currentColor"/>
     <path d="M19.0711 3.51472C19.4616 3.12419 20.0947 3.12419 20.4853 3.51472C20.8758 3.90524 20.8758 4.53841 20.4853 4.92893L19.0711 6.34315C18.6805 6.73367 18.0474 6.73367 17.6568 6.34315C17.2663 5.95262 17.2663 5.31946 17.6568 4.92893L19.0711 3.51472Z" fill="currentColor"/>

@@ -7,11 +7,16 @@ import prismadb from '@/lib/prismadb';
 
 export async function POST( req: NextRequest, { params }: { params: { postId: string } }) {
   
+  
+
+  // GET PARAMS
   const data = await req.json();
     const { postId } = data
-
+    
   try {
     
+
+    // GET USER
     const user = await currentUser();
 
     if (!postId || typeof postId !== 'string') {
@@ -33,7 +38,7 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
       }
 
 
-  // Check if the like relationship already exists
+  // CHECK IF ALREADY LIKED
   let existingLike
   try{
      existingLike = await prismadb.postLike.findFirst({
@@ -53,7 +58,7 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
   
   
 
-  // Create a new like relationship
+  // CREATE LIKE
   let like2 = null;
   try{
 
@@ -78,9 +83,9 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
       }
     });
 
-    // Update the post - increment the likes
+    // UPDATE POST - Increment the likes
     console.log(postId, "postId")
-    let post = await prismadb.post.update({
+    await prismadb.post.update({
       where: {
         id: postId
       },
@@ -88,8 +93,66 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
         num_likes: {
           increment: 1
         }
+      },
+      
+    });
+
+
+    // CREATE NOTIFICATION
+    //get the profile that owns the post
+    let post = await prismadb.post.findUnique({
+      where: {
+        id: postId
+      },
+      include: {
+        poster: true
       }
     });
+
+    if(!post || !post.poster || !post.poster.userId) {
+      return new NextResponse("Internal Error", { status: 500 });
+    }
+
+    const postOwnerUserId = post.poster.userId;
+    
+    // if the user is not liking their own post
+    if(post.poster.id != localUser.profiles[0].id)
+    {
+
+
+      let notification = await prismadb.notification.create({
+        data: {
+          body: 'liked your post!',
+          targetProfileId: post.poster.id,
+          targetObjectId: post.id,
+          type: "LIKE",
+          initiatorId: localUser.profiles[0].id,
+
+        }
+      });
+
+
+      // update the user's num notifications field
+      let updatedUser = await prismadb.user.update({
+        where: {
+          id: postOwnerUserId
+        },
+        data: {
+          num_notifications: {
+            increment: 1
+          }
+        }
+      });
+    }
+
+
+    }
+    catch(error) {
+      console.log(error);
+      return new NextResponse("Internal Error", { status: 500 });
+    }
+
+
     return NextResponse.json({liked: true, numLikes: post.num_likes})
   }
   catch(error) {
@@ -101,66 +164,6 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
 
 
 
-
-
-
-
-
-      // NOTIFICATION PART START
-      // try {
-      //   const post = await prisma.post.findUnique({
-      //     where: {
-      //       id: postId,
-      //     }
-      //   });
-    
-      //   if (post?.userId) {
-      //     await prisma.notification.create({
-      //       data: {
-      //         body: 'Someone liked your tweet!',
-      //         userId: post.userId
-      //       }
-      //     });
-    
-      //     await prisma.user.update({
-      //       where: {
-      //         id: post.userId
-      //       },
-      //       data: {
-      //         hasNotification: true
-      //       }
-      //     });
-      //   }
-      // } catch(error) {
-      //   console.log(error);
-      // }
-      // NOTIFICATION PART END
-
-      
-    }
-    catch(error) {
-      console.log(error);
-      return new NextResponse("Internal Error", { status: 500 });
-    }
-
-    // if (req.method === 'DELETE') {
-    //   updatedLikedIds = updatedLikedIds.filter((likedId) => likedId !== currentUser?.id);
-    // }
-
-    // const updatedPost = await prisma.post.update({
-    //   where: {
-    //     id: postId
-    //   },
-    //   data: {
-    //     likedIds: updatedLikedIds
-    //   }
-    // });
-
-  //   return res.status(200).json(updatedPost);
-  // } catch (error) {
-  //   console.log(error);
-  //   return res.status(400).end();
-  // }
 }
 
 
@@ -191,6 +194,25 @@ export async function DELETE(req: NextRequest, { params }: { params: { postId: s
       if(!localUser) {
         return new NextResponse("Unauthorized", { status: 401 });
       }
+
+      //check if already liked
+      let existingLike = null;
+      try{
+        existingLike = await prismadb.postLike.findFirst({
+          where: {
+            targetPostId: postId,
+            likerId: localUser.profiles[0].id,
+          }
+        });
+        if (!existingLike) {
+          return NextResponse.json({liked: false, decrement: false})
+        }
+      }
+      catch(error) {
+        console.log(error);
+        return new NextResponse("Internal Error", { status: 500 });
+      }
+
 
       //remove like
       let like = null;

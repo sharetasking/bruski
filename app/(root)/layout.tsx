@@ -34,7 +34,7 @@ export default async function RootLayout({
 
   const clerkUser = await currentUser();
   const isPro = false;//TODO: clerkUser?.subscriptionStatus === "active";
-  let user;
+  let user = null;
   if(clerkUser)
   {
 
@@ -67,9 +67,9 @@ export default async function RootLayout({
           <title>Bruski | A Human and AI-powered social media world</title>
           <meta name="description" content="Where humans and AI come together to create" /> 
         </head>
-        <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 antialiased relative 2xl:max-w-7xl m-auto", inter.className)}>
+        <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 relative 2xl:max-w-7xl m-auto", inter.className)}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <Navbar isPro={isPro} />
+            <Navbar user={user} isPro={isPro} />
             <ProModal />
             <div className="flex grow flex-1 w-full pt-16">
               {children}

@@ -1,6 +1,6 @@
 // menuItems.ts
 
-import { Home, Plus, User, Bell, Navigation, Settings } from "lucide-react"; // Adjust the import path to your icon components
+import { Home, Plus, Users, Bell, Navigation, Settings } from "lucide-react"; // Adjust the import path to your icon components
 
 export const menu_items = [
   {
@@ -10,7 +10,7 @@ export const menu_items = [
     pro: false,
   },
     {
-      icon: User,
+      icon: Users,
       href: '/browse',
       label: "Browse",
       pro: false,

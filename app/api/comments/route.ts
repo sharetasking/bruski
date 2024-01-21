@@ -7,28 +7,37 @@ import { checkSubscription } from "@/lib/subscription";
 import { log } from "console";
 export async function POST(request: NextRequest, { params }: { params: { postId: string, body:string } }) {
   
+  // GET PARAMS
   const { body } = await request.json();
-  const postId = request.nextUrl.searchParams.get("postId");
-  console.log("postId", postId)
+  const submittedTargetPostId = request.nextUrl.searchParams.get("postId");
+
+  if(!submittedTargetPostId) 
+  {
+    return new NextResponse("Missing required fields", { status: 400 });
+  }
+
   try {
+
+    // GET USER
     const user = await currentUser();
-
-
     if (!user || !user.id || !user.firstName) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    // RETURN IF EMPTY COMMENT
     if (!body) {
       return new NextResponse("Missing required fields", { status: 400 });
     };
 
-    // const isPro = await checkSubscription();
 
-    // if (!isPro) {
-    //   return new NextResponse("Pro subscription required", { status: 403 });
-    // }
+    // CHECK IF PRO
+          // const isPro = await checkSubscription();
 
-    //find corresponding db user
+          // if (!isPro) {
+          //   return new NextResponse("Pro subscription required", { status: 403 });
+          // }
+
+    // GET LOCAL USER
     const localUser = await prismadb.user.findFirst({
       where: {
         clerkUserId: user.id
@@ -38,78 +47,51 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
       }
     });
 
-    // if not found
-    if (!localUser) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
+      // if not found
+      if (!localUser) {
+        return new NextResponse("Unauthorized", { status: 401 });
+      }
 
-    console.log("localUser", localUser)
-    
-
-  // profileId             String    @db.ObjectId
-  // media                 String[]
-  // mediaType             MediaType?
-  // num_comments          Int       @default(0)
-  // categoryId            String?   @db.ObjectId
-  
-  // // Relations
-  // poster                Profile   @relation("PostAndOwner", fields: [profileId], references: [id], onDelete: Cascade)
-  // category              Category? @relation(fields: [categoryId], references: [id])
-
-  // // Original Post, Comment, or Rebrew
-  // postType              PostType
-
-  // // Reference to the original post (for comments and rebrews)
-  // originalPostId        String?   @db.ObjectId
-  // originalPost          Post?     @relation("OriginalPostRelations", fields: [originalPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-
-  // Relations for rebrews
-  // rebrewedByProfile     Profile?  @relation("RebrewsMadeByProfile", fields: [rebrewedById], references: [id])
-  // rebrewedById          String?   @db.ObjectId
-
-  // originalPostByProfile Profile?  @relation("RebrewsReceivedByProfile", fields: [originalPostById], references: [id])
-  // originalPostById      String?   @db.ObjectId
-console.log("postId", postId)
-    //create the comment
-    const _post = await prismadb.post.create({
+   
+    // SAVE THE COMMENT
+    const savedComment = await prismadb.post.create({
       data: {
         body,
         profileId: localUser.profiles[0].id,
-        originalPostId: postId,
+        originalPostId: submittedTargetPostId,
         postType: "COMMENT",
-        // originalPost: {
-        //   connect: {
-        //     id: postId ?? ""
-        //   }
-        // }
-          
       }
     });
     
-    if(!_post) {
-      return
+    // IF NOT SUCCESSFULLY SAVED
+    if(!savedComment) {
+      return new NextResponse("Internal Error", { status: 500 });
     }
 
-    //get the comment with the poster and comment information
-    const post = await prismadb.post.findFirst({
+    // REFETCH THE TARGET POST
+    const targetPost = await prismadb.post.findFirst({
       where: {
-        id: _post.id
+        id: submittedTargetPostId
       },
       include: {
-        poster: true,
-        // comments: true,
+        poster: {
+          include: {
+            user: true
+          }
+        }
       },
     });
+
+    console.log(targetPost)
     
       
-    console.log(post)
 
-    //update original post count
-    if(post?.id && postId)
+    //UPDATE THE TARGET POST COMMENT COUNT
+    if(targetPost?.id)
+    {
       await prismadb.post.update({
         where: {
-          id: postId
+          id: targetPost?.id
         },
         data: {
           num_comments: {
@@ -117,20 +99,60 @@ console.log("postId", postId)
           }
         }
       });
+    }
 
-    // const comment = null;
 
-    // await prismadb.comment.create({
-    //   data: {
-    //     postId: params.postId,
-    //     senderId: localUser.profiles[0].id,
-    //     body
-    //   }
-    // });
+    // CREATE NOTIFICATION
+      console.log("post", targetPost)
 
-    console.log(post)
+      try {
+       
+          // if the user is not commenting on their own post
+          if(targetPost?.poster.id != localUser.profiles[0].id)
+          {
+            // GET THE TARGET PROFILE USER ID
+            const targetPostOwnerUserId = targetPost?.poster?.user?.id;
 
-    return NextResponse.json(post);
+            console.log("targetPostOwnerUserId", targetPostOwnerUserId)
+
+            // CREATE NOTIFICATION ENTRY
+            let notification = await prismadb.notification.create({
+              data: {
+                body: body,
+                targetProfileId: targetPost?.poster.id,
+                targetObjectId: targetPost?.id,
+                createdObjectId: savedComment.id,
+                type: "COMMENT",
+                initiatorId: localUser.profiles[0].id,
+
+              }
+            });
+
+            console.log("notification", notification)
+
+            // UPDATE THE TARGET USER'S NOTIFICATION COUNT
+            let updatedUser = await prismadb.user.update({
+              where: {
+                id: targetPost?.poster?.user?.id
+              },
+              data: {
+                num_notifications: {
+                  increment: 1
+                }
+              }
+            });
+
+            console.log("updatedUser", updatedUser)
+          }
+      } catch (error) {
+            console.log(error)
+      }
+
+
+
+    console.log(targetPost)
+
+    return NextResponse.json(targetPost);
   } catch (error) {
 
     console.error(error);

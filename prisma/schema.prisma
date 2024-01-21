@@ -53,7 +53,9 @@ model Profile {
   listOfProfilesFollowingViewedProfile Follower[] @relation("listOfProfilesFollowingViewedProfile")
   listOfProfilesFollowedByViewedProfile Follower[] @relation("listOfProfilesFollowedByViewedProfile")
 
-  notifications Notification[]
+
+  notifications             Notification[] @relation("targetProfile")
+  notificationsCreated      Notification[] @relation("initiator")
 
   // Messages and posts relations
   messagesSent Message[] @relation("MessageSender")
@@ -230,7 +232,7 @@ model User {
   companions    Companion[]  @relation("owner")    
 
   
-  hasNotifications Boolean?
+  num_notifications     Int    @default(0)
   profiles  Profile[] //Profile?  @relation(fields: [profileId], references: [id])
   logins LoginActivity[]
 
@@ -296,16 +298,55 @@ enum MediaType {
 
 model Notification {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  body      String
-  profileId    String @db.ObjectId
-  type      String
+  body      String?
+  targetProfileId    String @db.ObjectId
+  targetObjectId    String?
+  createdObjectId   String?
+  initiatorId         String @db.ObjectId
+  type      NotificationType 
+  date_notified   DateTime?
   date_deleted    DateTime?
   createdAt DateTime @default(now())
-  profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  targetProfile   Profile   @relation("targetProfile", fields: [targetProfileId], references: [id], onDelete: Cascade)
+  initiator  Profile  @relation("initiator", fields: [initiatorId], references: [id], onDelete: Cascade)
   
-  dateCleared DateTime
+  dateCleared DateTime?
 
 
   updatedAt            DateTime  @updatedAt
 
+}
+
+enum NotificationType {
+  LIKE
+  COMMENT
+  REPORT
+  FOLLOW
+  DIRECT_MESSAGE
+  POST_ON_PAGE
+  TAG
+  TRENDING
+  BREAKING_NEWS
+  SHARE
+  BOOKMARK
+  MILESTONE
+  NOTICE
+  INFRACTION
+  UPVOTED
+  DOWNVOTED
+  APP_UPDATE
+  TOS_CHANGES
+  POST_REMOVED
+  WON_CONTEST
+  BIRTHDAY
+  EARNINGS
+  HOURLY_SUMMARY
+  DAILY_SUMMARY
+  WEEKLY_SUMMARY
+  MONTHLY_SUMMARY
+  ANNUAL_SUMMARY
+  ALERT
+  BOT_ALERT
+  OTHER
 }

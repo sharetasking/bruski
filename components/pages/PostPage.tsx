@@ -86,8 +86,8 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
 }
   { post.mediaType != "CHALLENGE" && <div className="p-8 subpixel-antialiased whitespace-pre-line">{post?.body}</div> }
   <div className="flex items-center gap-2 justify-end text-sm text-primary/50">
+    <div><span className="font-medium text-primary">{post?.num_likes ?? 0}</span> likes</div>
     <div><span className="font-medium text-primary">{post?.num_comments ?? 0}</span> comments</div>
-    {/* <div><span className="font-medium text-primary">{post?.num_likes ?? 0}</span> likes</div> */}
     {/* TODO: Readd <div><span className="font-medium text-primary">{post?.num_bookmarks ?? 0}</span> bookmarks</div> */}
   </div>
 
@@ -188,7 +188,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
                 transition"
             />
             <div className="mt-4 flex flex-row justify-end">
-              <Button disabled={isLoading || !body} onClick={onSubmit} label="Tweet" />
+              <Button disabled={isLoading || !body} onClick={onSubmit} label="Post" />
             </div>
           </div>
         </div>

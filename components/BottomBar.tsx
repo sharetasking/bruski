@@ -14,54 +14,8 @@ interface BottomBarProps {
   alert?: boolean
 }
 
-const BottomBar: React.FC<BottomBarProps> = (alert, user) => {
-  
-  // const menu_items = [
-  //   {
-  //     icon: Home,
-  //     href: '/home',
-  //     label: "Home",
-  //     pro: false,
-  //     notification: false
-  //   },
-  //   {
-  //     icon: User,
-  //     href: '/browse',
-  //     label: "Browse",
-  //     pro: false,
-  //   },
-  //   // {
-  //   //   icon: User,
-  //   //   href: '/companion',
-  //   //   label: "Companion",
-  //   //   pro: false,
-  //   //   notification: "12.6k",
-  //   // },
-  //   {
-  //     icon: Bell,
-  //     href: '/notifications',
-  //     label: "Notifications",
-  //     alert: user?.hasNotification,
-  //   },
-  //   // {
-  //   //   icon: Navigation,
-  //   //   href: '/explore',
-  //   //   label: "Explore",
-  //   //   pro: false,
-  //   // },
-  //   {
-  //     icon: Plus,
-  //     href: '/companion/new',
-  //     label: "Create",
-  //     pro: false,
-  //   },
-  //   {
-  //     icon: Settings,
-  //     href: '/settings',
-  //     label: "Settings",
-  //     pro: false,
-  //   },
-  // ]
+const BottomBar: React.FC<BottomBarProps> = ({alert, user}) => {
+
 
   const proModal = useProModal();
   const router = useRouter();
@@ -74,6 +28,7 @@ const BottomBar: React.FC<BottomBarProps> = (alert, user) => {
 
     return router.push(url);
   }
+
 
 
   return (
@@ -94,7 +49,7 @@ const BottomBar: React.FC<BottomBarProps> = (alert, user) => {
                 key={route.href}
                 aria-label={route.label}
                 className={cn(
-                  " text-muted-foreground text-sm group flex p-3 justify-center relative font-medium cursor-pointer hover:text-primary hover:bg-primary/10 active:bg-primary/30 rounded-full transition-colors duration-100",
+                  "clickable text-muted-foreground text-sm group flex p-3 justify-center relative font-medium cursor-pointer hover:text-primary hover:bg-primary/10 active:bg-primary/30 rounded-full transition-colors duration-100",
                   pathname === route.href && "bg-primary/10 text-primary",
                 )}
               >

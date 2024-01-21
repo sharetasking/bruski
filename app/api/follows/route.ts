@@ -6,17 +6,21 @@ import { ConsoleCallbackHandler } from "langchain/callbacks";
 
 export async function POST( request: NextRequest)
 {
+
+
+  // GET PARAMS (target profile id)
+  const { profileId } = await request.json()
   
+  // GET USER
   const user = await currentUser();
 
-  const { profileId } = await request.json()
 
-  //if wrong profile format
+  // IF WRONG PROFILE FORMAT
   if (!profileId || typeof profileId !== 'string') {
     throw new Error('Invalid ID');
   }
 
-  //get localUser
+  //GET LOCAL USER
   const localUser = await prismadb.user.findUnique({
     where: {
       clerkUserId: user?.id
@@ -26,31 +30,33 @@ export async function POST( request: NextRequest)
     }
   });
 
+  // IF NO LOCAL USER
   if(!localUser) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  //confirm user and profile aren't the same
+  // CONFIRM NOT FOLLOWING SELF
   if(localUser.profiles?.[0].id === profileId)
   {
     throw new Error('Cannot follow yourself');
   }
   
-  console.log(profileId)
-  // see if already following
-  // 
+  // CHECK IF ALREADY FOLLOWING
   const existingFollow = await prismadb.follower.findFirst({
     where: {
       followerId: localUser.profiles[0].id,
       followeeId: profileId
     }
   });
-console.log(existingFollow)
+
+  // IF ALREADY FOLLOWING
   if(existingFollow)
   {
     console.log("already following")
     return NextResponse.json({following: true, increment: false})
   }
+
+  // IF NOT FOLLOWING - Create a new follow relationship
   else
   {
     const follow = await prismadb.follower.create({
@@ -70,7 +76,8 @@ console.log(existingFollow)
     });
     console.log(follow)
 
-    //update follower and following counts on database
+    //UPDATE FOLLOWER AND FOLLOWING COUNTS ON DATABASE
+    //Followers
     await prismadb.profile.update({
       where: {
         id: profileId
@@ -82,6 +89,8 @@ console.log(existingFollow)
       }
     });
 
+    console.log("updated follower count")
+    //Following
     await prismadb.profile.update({
       where: {
         id: localUser.profiles[0].id // ID of the follower's profile
@@ -93,6 +102,63 @@ console.log(existingFollow)
       }
     });
     
+
+    console.log("updated following count")
+    // CREATE NOTIFICATION
+
+    try {
+    //  localUser.profiles[0].id
+        // if the user is not liking their own post
+        // if(profileId != localUser.profiles[0].id)
+        // {
+
+
+          // CREATE NOTIFICATION ENTRY
+          let notification = await prismadb.notification.create({
+            data: {
+              targetProfileId: profileId,
+              targetObjectId: profileId,
+              type: "FOLLOW",
+              initiatorId: localUser.profiles[0].id,
+              body: ""
+
+            }
+          });
+
+          console.log("notification", notification)
+
+          // GET TARGET PROFILE WITH CORRESPONDING USER
+          let targetProfile = await prismadb.profile.findUnique({
+            where: {
+              id: profileId
+            },
+            include: {
+              user: true
+            }
+          });
+
+
+          // UPDATE THE TARGET USER'S NOTIFICATION COUNT
+          let updatedUser = await prismadb.user.update({
+            where: {
+              id: targetProfile?.user?.id
+            },
+            data: {
+              num_notifications: {
+                increment: 1
+              }
+            }
+          });
+
+          console.log("updatedUser", updatedUser)
+        // }
+    } catch (error) {
+          console.log(error)
+    }
+
+
+
+
 
 
     return NextResponse.json({following: true, increment: true})

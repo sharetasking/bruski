@@ -122,6 +122,11 @@ body,
   /* .followable:after:hover {
     background-color: #989898
   } */
+  .clickable
+  {
+    @apply cursor-pointer hover:text-primary/50 active:scale-[.97] transition-all duration-500;
+  }
+  
   .followable:after {
     border-image-slice: 1;
     width: 24px;

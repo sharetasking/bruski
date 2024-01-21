@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
 
   // GET PROMPT
   // TODO: make these dynamic
-  const prompt = "You are a cat that specializes in a specific type of magic. Give a random trivia (different each time) to engage your users. You are a cool teenager in terms of the vibe. Create a 250 word max post. Only give one thought. Do not repeat what was said before. "
+  const prompt = "You are a cat that specializes in a specific type of magic. Give a random trivia (different each time) to engage your users. Create a post with 2 sentences. Only give one thought. Do not repeat what was said before. "
   const seed = `
     EXAMPLE 1: If you were a magical cat and you could do any type of magic, what would it be?
     EXAMPLE 2: Who remenbers the ingredients for the cauldron in Macbeth?
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
     EXAMPLE 4: What is your favorite magical animal?
   `
   const companionName = "Cat"
-  const companionInstructions = "You are a cat that specializes in a specific type of magic. Give a random trivia (different each time) to engage your users. You are a cool teenager in terms of the vibe. Create a 250 word max post. Only give one thought. Do not repeat what was said before. "
+  const companionInstructions = "You are a cat that specializes in a specific type of magic. Give a random trivia (different each time) to engage your users.Create a 250 character max post. Only give one thought. Do not repeat what was said before. "
 
 
   // CREATE A POST FOR THE BOT'S PROFILE
@@ -96,13 +96,13 @@ async function createPostForProfile(profileId:string, prompt:string, seed:string
 
   // QUERY THE LLM 
   const name = profileId;
-  const companion_file_name = name + ".txt"; //create file name based on profileId
+  const companion_file_name = name + "2.txt"; //create file name based on profileId
 
   // CREATE THE COMPANION KEY
   const companionKey = {
-    companionName: name!,
+    companionName: name+"1"!,
     profileId: profileId,
-    modelName: "llama2-13b",
+    modelName: "mistralai/mixtral",//"llama2-13b",
   };
 
 
@@ -139,8 +139,9 @@ async function createPostForProfile(profileId:string, prompt:string, seed:string
 
   // CALL REPLICATE FOR INFERENCE
   const model = new Replicate({
-    model:
-      "a16z-infra/llama-2-13b-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
+    // model:"a16z-infra/llama-2-13b-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
+    // model:"meta/llama-2-70b-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
+    model:"mistralai/mixtral-8x7b-instruct-v0.1:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
     input: {
       max_length: 2048,
     },
@@ -154,16 +155,39 @@ async function createPostForProfile(profileId:string, prompt:string, seed:string
   
 
   // GET THE RESPONSE
-  const completeCallDetails = `
-  ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companionName}: prefix. 
+  let completeCallDetails = `
 
   ${companionInstructions}
-
-  Below are relevant details about ${companionName}'s past posts that were made. Do do duplicate. It should be different each time.
-  ${relevantHistory}
+  Do not duplicate posts. It should be different each time.
 
 
-  ${recentChatHistory}\n${companionName}:`
+
+  ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companionName}: prefix. 
+  `;
+
+
+  // TODO - REINSTATE THIS
+  completeCallDetails = `
+  Prompt:
+- Character Name: ICU Ivy
+- URL: ICUIvy
+- Companion ID: ivy.id
+- Bio: "Are you smarter than a medical practitioner? Let's find out :)"
+- Image Reference: [An intelligent, approachable female figure, with a friendly demeanor, dressed in medical attire. The image conveys expertise and approachability.]
+- Type: Companion (AI)
+- Theme: Medical knowledge, friendly challenge, engaging and informative
+- Objective: Create a short post that invites interaction and tests the reader's medical knowledge in a fun, engaging way.
+
+Generate a short social media-style post for ICU Ivy that embodies her playful, challenging persona. The post should be educational about a medical topic, contain a question or a fun fact to engage the audience, and invite responses. Keep the tone light-hearted and friendly, encouraging interaction and learning.
+
+
+`;
+  // completeCallDetails += `${relevantHistory} "\n\n"
+  // Below are relevant details about ${companionName}'s past posts that were made. 
+  //`; //TODO: Reinstate
+
+
+  // completeCallDetails += `${recentChatHistory} \n${companionName}:`//TODO: Reinstate
 
 
   console.log(completeCallDetails)
@@ -201,20 +225,6 @@ async function createPostForProfile(profileId:string, prompt:string, seed:string
   // WRITE THE RESPONSE TO HISTORY
   if (responseText && responseText.length > 1) {
     await memoryManager.writeToHistory(responseText, companionKey);
-
-    // await prismadb.companion.update({
-    //   where: { id: params.chatId },
-    //   data: {
-    //     messages: {
-    //       create: {
-    //         content: responseText,
-    //         role: "system",
-    //         userId: user.id,
-    //       },
-    //     },
-    //   },
-    // });
-
   }
 
 
@@ -243,6 +253,9 @@ async function createPostForProfile(profileId:string, prompt:string, seed:string
       body: body
     }
   });
+
+
+  console.log(body)
   
   return postResult; 
 }
