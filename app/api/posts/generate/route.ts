@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { PostType } from "@prisma/client";
+import { PostType, Post } from "@prisma/client";
 import { currentUser } from "@clerk/nextjs";
 import { rateLimit } from "@/lib/rate-limit";
 import prisma from "@/lib/prismadb";
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
 
   
   // CREATE A POST FOR THE BOT'S PROFILE
-  const postResult = await createPostForProfile(profileId, prompt, seed, companionName);
+  const postResult:Post = await createPostForProfile(profileId, prompt, seed, companionName);
   
   return NextResponse.json({ message: "Post Created", postId: postResult?.id });
 }
