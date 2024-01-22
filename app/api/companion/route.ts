@@ -41,12 +41,54 @@ export async function POST(req: Request) {
         ownerId: localUser?.id,
         username: name?.replace(" ", "-"),
         img,
-        name,
         description,
         instructions,
         seed,
       }
     });
+
+
+
+    
+  // GENERATE USERNAME
+  // CHECK IF AVAILABLE
+  const initial_username = name?.replace(" ", "");
+  let usernameAvailable = false;
+  let usernameAvailableCount = 0;
+  let username;
+
+  // LOOP UNTIL A USERNAME ATTEMPT IS AVAILABLE
+  while(!usernameAvailable)
+  {
+    const profile = await prismadb.profile.findFirst({
+      where: {
+        username
+      }
+    });
+
+    if(!profile)
+      usernameAvailable = true;
+    else
+    {
+      usernameAvailableCount++;
+      username = initial_username + usernameAvailableCount;
+    }
+  }
+
+
+
+
+    // CHECK IF USERNAME IS UNIQUE
+
+
+
+
+
+    
+
+
+
+
 
     // if successful, create a profile for the companion
     const profile = await prismadb.profile.create({
@@ -54,6 +96,7 @@ export async function POST(req: Request) {
         companionId: companion.id,
         img,
         display_name: name,
+        username: username,
         bio: description,
         url: companion.id,
         categoryId,

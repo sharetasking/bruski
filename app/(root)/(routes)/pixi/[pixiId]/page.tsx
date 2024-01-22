@@ -17,7 +17,7 @@ interface CompanionIdPageProps {
 
 const PixiEditPage = async ({ params }: CompanionIdPageProps) => {
 
-  const { pixiId: companionId } = params;
+  const { companionId } = params;
 
   const clerkUser = await currentUser();
 
@@ -62,7 +62,7 @@ const PixiEditPage = async ({ params }: CompanionIdPageProps) => {
 
       // update the name
       if(companion)
-        companion.name = companion?.profiles?.[0]?.display_name ?? "";
+        companion.username = companion?.profiles?.[0]?.display_name ?? "";
 
         
   } catch (error) {

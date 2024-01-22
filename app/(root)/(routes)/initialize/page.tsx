@@ -7,6 +7,7 @@ import { BruskiUser } from "@/hooks/useBruskiUser";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import prisma from "@/lib/prismadb";
+import { AccountType } from "@prisma/client";
 
 const InitPage = async () => {
 
@@ -188,7 +189,7 @@ console.log('creating new user')
     first_name: firstName,
     last_name: lastName,
     username,
-    accountType: "INDIVIDUAL_USER",
+    accountType: AccountType.INDIVIDUAL_USER,
     email: emailAddresses[0].emailAddress,
     phone: phoneNumbers[0].phoneNumber,
     createdAt: new Date(),

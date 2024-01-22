@@ -19,7 +19,7 @@ const BrowsePageComponent = ({profiles, user}:{profiles:ExtendedProfile[]|null, 
   //   router.push('/'+url)
   // }
 
-  const handleClick = (e) =>
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) =>
   {
     e.stopPropagation();
   }

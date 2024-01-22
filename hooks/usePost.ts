@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 
 import fetcher from '@/lib/fetcher';
-import { Profile, MediaType } from 'prisma/prisma-client'
+import { Profile, MediaType, Category } from 'prisma/prisma-client'
 
 export interface BruskiPost {
   id: string;

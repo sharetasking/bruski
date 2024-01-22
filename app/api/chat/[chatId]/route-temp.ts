@@ -135,15 +135,15 @@
 //       await model
 //         .call(
 //           `
-//         ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix. 
+//         ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.username}: prefix. 
 
 //         ${companion.instructions}
 
-//         Below are relevant details about ${companion.name}'s past and the conversation you are in.
+//         Below are relevant details about ${companion.username}'s past and the conversation you are in.
 //         ${relevantHistory}
 
 
-//         ${recentChatHistory}\n${companion.name}:`
+//         ${recentChatHistory}\n${companion.username}:`
 //         )
 //         .catch(console.error)
 //     );

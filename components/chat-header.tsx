@@ -57,7 +57,7 @@ export const ChatHeader = ({
         <BotAvatar img={companion.img} />
         <div className="flex flex-col gap-y-1">
           <div className="flex items-center gap-x-2">
-            <p className="font-bold">{companion.name}</p>
+            <p className="font-bold">{companion.username}</p>
             {/* <div className="flex items-center text-xs text-muted-foreground">
               <MessagesSquare className="w-3 h-3 mr-1" />
               {companion._count.messages}

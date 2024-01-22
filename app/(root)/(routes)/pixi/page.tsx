@@ -1,6 +1,6 @@
 import prisma from "@/lib/prismadb";
 import { currentUser } from "@clerk/nextjs";
-import Avatar from "@/components/avatar";
+import Avatar from "@/components/Avatar";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { SmilePlus } from "lucide-react";

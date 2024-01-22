@@ -42,7 +42,7 @@ const CompanionIdPage = async ({
 
   // update the name
   if(companion)
-    companion.name = companion?.profiles?.[0]?.display_name ?? "";
+    companion.username = companion?.profiles?.[0]?.display_name ?? "";
 
   const categories = await prismadb.category.findMany({
     take: 30,

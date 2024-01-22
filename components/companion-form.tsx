@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/image-upload";
 import { useToast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
-import CheckUsernameField from "@/components/CheckUsernameField";
+// import CheckUsernameField from "@/components/CheckUsernameField";
 import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@/components/ui/select";
 import { toast } from "react-hot-toast";
 
