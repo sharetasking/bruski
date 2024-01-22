@@ -74,7 +74,8 @@ export async function POST(req: NextRequest) {
 
   
   // CREATE A POST FOR THE BOT'S PROFILE
-  const postResult:Post = await createPostForProfile(profileId, prompt, seed, companionName);
+  let postResult = <Post|null> null;
+  postResult = await createPostForProfile(profileId, prompt, seed, companionName);
   
   return NextResponse.json({ message: "Post Created", postId: postResult?.id });
 }
