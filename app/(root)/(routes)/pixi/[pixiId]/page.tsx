@@ -67,7 +67,7 @@ const PixiEditPage = async ({ params }: CompanionIdPageProps) => {
         companion.username = companion?.profiles?.[0]?.display_name ?? "";
 
         
-  companion.name = companion?.name ?? companion?.username ?? "";
+  // companion.name = companion?.name ?? companion?.username ?? "";
       }
   } catch (error) {
     console.log(error)

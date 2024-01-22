@@ -54,7 +54,7 @@ export async function PATCH(
     //   return new NextResponse("Pro subscription required", { status: 403 });
     // }
 
-
+    
     // UPDATE COMPANION
     const companion = await prismadb.companion.update({
       where: {
@@ -83,15 +83,56 @@ export async function PATCH(
       
     });
 
+    // confirm that companion has a profile
+    let companionProfile = refetchedCompanion?.profiles?.[0];
+
+    if (!companionProfile) {
+      // CREATE PROFILE
+      let initialUsername = refetchedCompanion?.username ?? "pixi";
+
+      // loop through and find a unique username
+      let usernameExists = true;
+      let username = initialUsername;
+      let i = 0;
+      while (usernameExists) {
+        const existingProfile = await prismadb.profile.findFirst({
+          where: {
+            username: username,
+          }
+        });
+
+        if (!existingProfile) {
+          usernameExists = false;
+        } else {
+          i++;
+          username = initialUsername + i;
+        }
+      }
+
+      companionProfile = await prismadb.profile.create({
+        data: {
+          display_name: name,
+          companionId: params.companionId,
+          username: username,
+          bio: description,
+          url: username,
+        }
+      });
+    }
+
+
+
     // UPDATE COMPANION PROFILE
     await prismadb.profile.update({
       where: {
-        id: refetchedCompanion?.profiles?.[0]?.id,
+        id: companionProfile?.id,
       },
       data: {
         display_name: name,
       }
     });
+
+    console.log(companion)
 
     return NextResponse.json(companion);
   } catch (error) {

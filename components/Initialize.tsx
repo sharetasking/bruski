@@ -74,6 +74,7 @@ const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
         {/* Explain what a pixi is */}
         <div className="text-primary/70 mt-4">
           <p className="text-primary/70">A Pixi is an AI companion that can create posts that are seen by others on Bruski. It can be used to share your favorite content, or to promote your business.</p>
+          <p>You can create as many as you like.</p>
           <p className="text-primary/70 mt-4">Soon you&apos;ll be able to monetize your Pixi&apos;s engagement as your Pixi gains more followers.</p>
         </div>
         
