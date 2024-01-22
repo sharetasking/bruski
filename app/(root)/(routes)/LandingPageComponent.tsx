@@ -4,11 +4,23 @@ import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { useRouter } from "next/router";
 import { Profile } from "@prisma/client";
 import { useClerk } from "@clerk/clerk-react";
+import { useEffect } from "react";
+import mixpanel from "@/utils/mixpanel";
 
 import { SignIn, ClerkLoading, ClerkLoaded, RedirectToUserProfile } from "@clerk/nextjs";
 
 
 const LandingPageComponent = ({profiles}:{profiles:Profile[]}) => {
+
+  useEffect(() => {
+      // SET MIXPANEL USER
+    
+    mixpanel.track("page_view", {
+      // Optionally include properties about the page
+      page_name: "LandingPage",
+      url: window.location.pathname
+    });
+  });
 
   const { signOut } = useClerk();
 

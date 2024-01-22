@@ -1,5 +1,5 @@
 //clerk user
-import { auth, redirectToSignIn, useUser } from "@clerk/nextjs";
+import { auth, useUser } from "@clerk/nextjs";
 import prismadb from "@/lib/prismadb";
 
 

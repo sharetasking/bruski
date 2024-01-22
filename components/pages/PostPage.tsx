@@ -13,6 +13,8 @@ import { Profile, Post } from "@prisma/client";
 import { Navbar } from "../navbar";
 import PostItem from "../posts/PostItem";
 import { BruskiPost } from "@/hooks/usePost";
+import { useEffect } from "react";
+import mixpanel from "@/utils/mixpanel";
 
 export interface PostPageProps {
   user: BruskiUser|null;
@@ -23,6 +25,29 @@ export interface PostPageProps {
 const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost, comments:Post[]|null}) => {
 
   const router = useRouter();
+
+
+
+
+      useEffect(() => {
+
+        
+        // SET MIXPANEL USER
+      mixpanel.identify(user?.id);
+      mixpanel.people.set({
+        $email: user?.email,
+        // ... other user properties
+      });
+
+      mixpanel.track("page_view", {
+        // Optionally include properties about the page
+        page_name: "PostPage",
+        url: window.location.pathname,
+        post: post?.id,
+      });
+
+    });
+
 
 
 

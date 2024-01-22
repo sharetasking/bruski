@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
 import { currentUser } from "@clerk/nextjs";
 import PostPage from "@/components/pages/PostPage";
+import { redirect } from "next/navigation";
 
 interface PostPageProps {
   params: {
@@ -79,7 +80,7 @@ const postPage = async ({params}:PostPageProps ) => {
 
 const clerkUser = await currentUser();
 if(!clerkUser) {
-  redirectToSignIn();
+  redirect("/")
 
 }
 const user = await prismadb.user.findFirst({

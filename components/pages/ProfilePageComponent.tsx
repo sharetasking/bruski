@@ -17,6 +17,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useEffect } from "react";
 import { MediaType } from "@prisma/client";
+import mixpanel from "@/utils/mixpanel";
 
 
 interface ProfilePageProps {
@@ -36,6 +37,28 @@ interface Post{
   
 
 const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
+
+
+
+  useEffect(() => {
+
+    
+    // SET MIXPANEL USER
+  mixpanel.identify(user?.id);
+  mixpanel.people.set({
+    $email: user?.email,
+    // ... other user properties
+  });
+
+  mixpanel.track("profile_view", {
+    // Optionally include properties about the page
+    page_name: "ProfilePage",
+    url: window.location.pathname,
+    profile_id: profile?.id,
+  });
+
+});
+
 
     const [posts, setPosts] = useState<Post[]>([]);
     const [generating, setGenerating] = useState<boolean>(false);
@@ -176,7 +199,7 @@ useEffect(() => {
   }).catch((error) => {
     console.error('Failed to fetch posts:', error);
   });
-}, []); 
+}); 
 
 
 

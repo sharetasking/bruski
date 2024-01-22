@@ -54,7 +54,7 @@ const FollowButtonPlus = ({settings}: {settings: FollowButtonType}) => {
 
 
     // router.push('/home')
-  }, [toggleFollow]); //loginModal, currentUser, 
+  }, [toggleFollow, isFollowing, profileId]); //loginModal, currentUser, 
 
 
   const router = useRouter();
