@@ -10,10 +10,25 @@ import { StreamingTextResponse, LangChainStream } from "ai";
 
 import fetch from 'node-fetch';
 
+const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'//'https://api.openai.com/v1/engines/davinci/completions';
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+
+
+interface OpenAIResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
+
+
+
+
+// GET PARAMS
 // ******* POST FUNCTION *******
 export async function POST(req: NextRequest) {
-  
-  // GET PARAMS
   const {profileId} = await req.json();
 
   // GET CURRENT USER
@@ -74,69 +89,77 @@ export async function POST(req: NextRequest) {
 
   
   // CREATE A POST FOR THE BOT'S PROFILE
-  let postResult = <Post|null> null;
-  postResult = await createPostForProfile(profileId, prompt, seed, companionName);
+  let postResult = await createPostForProfile(profileId, prompt, seed, companionName);
   
   return NextResponse.json({ message: "Post Created", postId: postResult?.id });
 }
 
 
-// FUNCTION TO: Create a post for the bot's profile
-async function createPostForProfile(profileId:string, prompt:string, seed:string, companionName:string,) {
-  
 
-console.log(prompt)
-
-
-//prefix it
-prompt = `
-
-You are a social media account creating a post almost in a Twitter or Instagram style.
-IMPORTANT: Do NOT mention Twitter or Instagram in your post.
-Create a post for your profile that is interesting and engaging.
-Limit your post to 150 characters.
-
-
-
-`+prompt
-
-const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'//'https://api.openai.com/v1/engines/davinci/completions';
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-async function queryGPT3(prompt) {
+// Function to create a post for the bot's profile
+async function createPostForProfile(profileId: string, prompt: string, seed: string, companionName: string) {
   try {
+    // Add prefix to prompt
+    const modifiedPrompt = `
+      You are a social media account creating a post almost in a Twitter or Instagram style.
+      IMPORTANT: Do NOT mention Twitter or Instagram in your post.
+      Create a post for your profile that is interesting and engaging.
+      Limit your post to 150 characters.
+    ` + prompt;
 
-    console.log(prompt)
-    const requestBody = {
-      model: 'gpt-3.5-turbo', // Specify the GPT-3 model here
-      messages: [
-        {
-          "role": "system",
-          "content": prompt
-        },
-        {
-          "role": "user",
-          "content": ""
-        }
-      ],
-      max_tokens: 150,
-      temperature: 0.7,
-      // Add other parameters as needed
-    };
-    console.log(requestBody)
+    // Query GPT-3
+    const response = await queryGPT3(modifiedPrompt);
+    if (!response) {
+      throw new Error('No response from GPT-3');
+    }
 
+    // Create a post in the database
+    const postResult = await prisma.post.create({
+      data: {
+        profileId,
+        postType: PostType.ORIGINAL,
+        mediaType: 'CHALLENGE',
+        body: response,
+      },
+    });
+
+    return postResult;
+  } catch (error) {
+    console.error('Error in createPostForProfile:', error);
+    return null;
+  }
+}
+
+
+
+
+// Function to query GPT-3
+async function queryGPT3(prompt:string) {
+
+
+  try {
     const response = await fetch(OPENAI_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${OPENAI_API_KEY}`,
       },
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo', // Specify the GPT-3 model here
+        messages: [
+          { "role": "system", "content": prompt },
+          { "role": "user", "content": "" }
+        ],
+        max_tokens: 150,
+        temperature: 0.7,
+      }),
     });
-    console.log(response)
 
-    const data = await response.json();
-    return data?.choices?.[0]?.message?.content?.trim();
+
+    // Use a type assertion when parsing the JSON response
+const data = (await response.json()) as OpenAIResponse;
+
+    return data?.choices?.[0]?.message?.content?.trim() ?? null;
   } catch (error) {
     console.error('Error querying GPT-3:', error);
     return null;
@@ -144,34 +167,98 @@ async function queryGPT3(prompt) {
 }
 
 
-// Example usage
-const prompt2 = 'Write a short, trendy social media post about the latest fashion:';
-queryGPT3(prompt).then(async(response) => {
+
+// FUNCTION TO: Create a post for the bot's profile
+// async function createPostForProfile(profileId:string, prompt:string, seed:string, companionName:string,) {
+  
+
+// console.log(prompt)
 
 
-  // Create a post for the bot's profile
-  const body = response;
+// //prefix it
+// prompt = `
 
-  const postResult = await prisma?.post.create({
-    data: {
-      profileId,
-      postType: PostType.ORIGINAL,
-      mediaType: "CHALLENGE",
-      body: body
-    }
-  });
+// You are a social media account creating a post almost in a Twitter or Instagram style.
+// IMPORTANT: Do NOT mention Twitter or Instagram in your post.
+// Create a post for your profile that is interesting and engaging.
+// Limit your post to 150 characters.
 
-  return postResult ?? null; 
+
+
+// `+prompt
+
+// const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'//'https://api.openai.com/v1/engines/davinci/completions';
+// const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+// async function queryGPT3(prompt) {
+//   try {
+
+//     console.log(prompt)
+//     const requestBody = {
+//       model: 'gpt-3.5-turbo', // Specify the GPT-3 model here
+//       messages: [
+//         {
+//           "role": "system",
+//           "content": prompt
+//         },
+//         {
+//           "role": "user",
+//           "content": ""
+//         }
+//       ],
+//       max_tokens: 150,
+//       temperature: 0.7,
+//       // Add other parameters as needed
+//     };
+//     console.log(requestBody)
+
+//     const response = await fetch(OPENAI_API_URL, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${OPENAI_API_KEY}`,
+//       },
+//       body: JSON.stringify(requestBody),
+//     });
+//     console.log(response)
+
+//     const data = await response.json();
+//     return data?.choices?.[0]?.message?.content?.trim() ?? null;
+//   } catch (error) {
+//     console.error('Error querying GPT-3:', error);
+//     return null;
+//   }
+// }
+
+
+// // Example usage
+// const prompt2 = 'Write a short, trendy social media post about the latest fashion:';
+// queryGPT3(prompt).then(async(response) => {
+
+
+//   // Create a post for the bot's profile
+//   const body = response;
+
+//   const postResult = await prisma?.post.create({
+//     data: {
+//       profileId,
+//       postType: PostType.ORIGINAL,
+//       mediaType: "CHALLENGE",
+//       body: body
+//     }
+//   });
+
+//   return postResult ?? null; 
 
 
 
   
-}).catch(error => {
- console.log( 'Error querying GPT-3:' + error)
- return null;
- 
-});
-;
+// }).catch(error => {
+//  console.log( 'Error querying GPT-3:' + error)
+//  return null;
+
+// });
+// ;
 
 
 
@@ -184,7 +271,7 @@ queryGPT3(prompt).then(async(response) => {
 
 
 
-}
+// }
 
 
 
