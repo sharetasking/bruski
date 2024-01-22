@@ -7,6 +7,13 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import Avatar from "@/components/Avatar"
+import { MoreHorizontal } from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
 
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
@@ -217,6 +224,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
               <span className='mr-2 text-xs text-primary/10'>&bull;</span>
               {createdAt}
             </span>
+
+
+
 
 
 

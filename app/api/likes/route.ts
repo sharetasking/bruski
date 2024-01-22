@@ -103,7 +103,7 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
     //get the profile that owns the post
     post = await prismadb.post.findUnique({
       where: {
-        id: postId
+        id: postId,
       },
       include: {
         poster: true

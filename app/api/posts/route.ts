@@ -127,7 +127,7 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
     {
       posts = await prismadb.post.findMany({
         where: {
-          profileId: followee
+          profileId: followee,
         },
         include: {
           poster: true,

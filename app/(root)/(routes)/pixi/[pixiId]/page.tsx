@@ -10,14 +10,14 @@ import { CompanionForm } from "@/components/companion-form";
 
 interface CompanionIdPageProps {
   params: {
-    companionId: string;
+    pixiId: string;
   };
 };
 
 
 const PixiEditPage = async ({ params }: CompanionIdPageProps) => {
 
-  const { companionId } = params;
+  const { pixiId } = params;
 
   const clerkUser = await currentUser();
 
@@ -42,15 +42,15 @@ const PixiEditPage = async ({ params }: CompanionIdPageProps) => {
   // if (!validSubscription) {
   //   return redirect("/home");
   // }
-
+  
   let companion = null;
   
   try {
       
-      if(params.companionId != "new")
+      if(params.pixiId != "new")
       companion = await prismadb.companion.findUnique({
       where: {
-        id: companionId,
+        id: pixiId,
         ownerId: userId ?? "",
       },
       include: {
@@ -62,12 +62,17 @@ const PixiEditPage = async ({ params }: CompanionIdPageProps) => {
 
       // update the name
       if(companion)
+      {
+
         companion.username = companion?.profiles?.[0]?.display_name ?? "";
 
         
+  companion.name = companion?.name ?? companion?.username ?? "";
+      }
   } catch (error) {
     console.log(error)
   }
+
 
   const categories = await prismadb.category.findMany({take:30});
 

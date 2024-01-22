@@ -17,6 +17,25 @@ import { useEffect } from "react";
 import mixpanel from "@/utils/mixpanel";
 import { usePosts } from "@/hooks/usePosts";
 import { useComments } from "@/hooks/useComments";
+import { MoreHorizontal } from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 
 export interface PostPageProps {
   user: BruskiUser|null;
@@ -34,7 +53,18 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
 
 
   const {data:posts, isLoading, isError, mutate} = usePosts({take: 30, target: post?.id});
-console.log(posts)
+  
+  const handleDeletePost = useCallback(async () => {
+    try {
+      const results = await axios.delete(`/api/posts/${post?.id}`);
+      
+      toast.success('Post deleted');
+      router.push('/');
+    } catch (error) {
+      toast.error('Something went wrong');
+    }
+  }
+  , [post?.id, router]);
 
 
       useEffect(() => {
@@ -61,7 +91,8 @@ console.log(posts)
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [body, setBody] = useState('');
   
-    const onSubmit = useCallback(async (event: FormEvent) => {
+    const onSubmit = useCallback(async () => {
+      console.log('submitting') 
       try {
         
         setIsSubmitting(true);
@@ -106,7 +137,7 @@ console.log(posts)
 
 
   return (
-  <div className="lg:max-w-lg w-full m-auto pb-48">
+  <div className="lg:max-w-lg w-full m-auto pb-48 relative">
     <div className="flex flex-col md:flex-row gap-4 md:-ml-40 md:p-8 p-4">
 
 <div>
@@ -115,9 +146,58 @@ console.log(posts)
        
       <h2 className="user_name text-base" onClick={goToUser}>{post.poster?.display_name}</h2>
   
+
 </div>
 
+
+
+
+
+
+
+
   <div className="grow flex flex-col rounded-lg">
+
+
+              {/* PopUp Menu */}
+              <Popover>
+                <PopoverTrigger className="top-0 right-0 absolute z-40">
+                  <MoreHorizontal />
+                </PopoverTrigger>
+
+                <PopoverContent className="top-0 right-0 absolute z-50">
+                  
+                  Coming Soon
+                  {/* TODO: Delete post */}
+                  {
+                  //   post.poster?.id == user?.profiles?.[0]?.id &&
+                  // <AlertDialog>
+                  //   <AlertDialogTrigger><button className="btn bg-destructive hover:opacity-80 hover:bg-destructive">Delete Post</button></AlertDialogTrigger>
+                  //   <AlertDialogContent>
+                  //     <AlertDialogHeader>
+                  //       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  //       <AlertDialogDescription>
+                  //         This action cannot be undone. This will permanently delete your post.
+                  //       </AlertDialogDescription>
+                  //     </AlertDialogHeader>
+                  //     <AlertDialogFooter>
+                  //       <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  //       <AlertDialogAction onClick={handleDeletePost} className=" bg-destructive hover:opacity-80 hover:bg-destructive">Yes, delete post</AlertDialogAction>
+                  //     </AlertDialogFooter>
+                  //   </AlertDialogContent>
+                  // </AlertDialog>
+
+                }
+                  {/* End delete post */}
+
+
+
+
+
+                </PopoverContent>
+              </Popover>
+
+
   { post.mediaType == "CHALLENGE" && <div className="flex flex-col subpixel-antialiased bg-primary/90 text-primary-foreground rounded-lg min-h-90 p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
             {post.body}
           </div>
@@ -129,12 +209,17 @@ console.log(posts)
     {/* TODO: Readd <div><span className="font-medium text-primary">{post?.num_bookmarks ?? 0}</span> bookmarks</div> */}
   </div>
 
+
+
+
+
+
   {/* COMMENT CREATOR */}
 
   <div className="border-b-[1px] border-neutral-800/10 px-5 pt-2 pb-8">
     {
       (user && user.id)
-        ? (<div>
+        ? (<form><div>
           
           <div className="flex flex-row gap-4">
            <div>
@@ -146,7 +231,7 @@ console.log(posts)
               onChange={(event) => setBody(event.target.value)}
               onKeyDown={(e) => {
               if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
-                onSubmit(e);
+                onSubmit();
               }
             }}
               value={body}
@@ -179,14 +264,14 @@ console.log(posts)
                 transition"
             /> */}
             <div className="mt-4 flex flex-row justify-end">
-              <button className="btn" disabled={isLoading || !body} onClick={onSubmit}>Comment</button>
+              <button type="submit" className="btn" disabled={!body} onClick={onSubmit}>Comment</button>
             </div>
           </div>
         </div>
 
 
-      
-        </div>)
+        </div>
+        </form>)
         : (<div>
           Not logged in
         </div>)

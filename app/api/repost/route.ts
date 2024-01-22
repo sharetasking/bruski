@@ -94,7 +94,7 @@ console.log("postId", postId)
     //get the comment with the poster and comment information
     const post = await prismadb.post.findFirst({
       where: {
-        id: _post.id
+        id: _post.id,
       },
       include: {
         poster: true,

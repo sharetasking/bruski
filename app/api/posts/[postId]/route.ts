@@ -114,6 +114,74 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
     }
   }
   
+
+
+  export async function DELETE(request: NextRequest, { params }: { params: { postId: string, } }) {
+
+    // GET ID
+    const postId = params.postId;
+
+    // GET CLERK USER
+    const clerkUser = await currentUser();
+
+    // IF NOT EXISTS
+    if (!clerkUser || !clerkUser.id) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    // GET LOCAL USER
+    const localUser = await prismadb.user.findFirst({
+      where: {
+        clerkUserId: clerkUser.id
+      },
+      include: {
+        profiles: true // Include the related Profile records
+      }
+    });
+
+    // IF NOT EXISTS
+    if (!localUser) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    // GET POST
+    const post = await prismadb.post.findFirst({
+      where: {
+        id: postId,
+        profileId: localUser.profiles[0].id,
+      }
+    });
+
+    // IF NOT EXISTS
+    if (!post) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+
+    try {
+      
+
+      // SOFT DELETE POST
+      const res = await prismadb.post.update({
+        where: {
+          id: postId
+        },
+        data: {
+          date_deleted: new Date()
+        }
+      });
+
+      return new NextResponse("Success", { status: 200 });
+
+    } catch (error) {
+      // IF NOT SUCCESFUL
+      return new NextResponse("Internal Error", { status: 500 });
+    }
+  }
+
+
+
+
 //   // try {
 //     // const data = req.query;
 //     // const user = await currentUser();

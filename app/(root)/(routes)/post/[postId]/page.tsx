@@ -93,8 +93,11 @@ const user = await prismadb.user.findFirst({
 
 });
 
+let post
+try {
+  
 // get post
-const post = await prismadb.post.findFirst({
+ post = await prismadb.post.findFirst({
   include: {
     poster: true,
     originalPost: {
@@ -104,10 +107,12 @@ const post = await prismadb.post.findFirst({
     },
   },
   where: {
-    id: params.postId
+    id: params.postId,
 }});
 
-console.log(post)
+} catch (error) {
+  console.log(error)
+}
 
 // await prismadb.post.findMany({
   // take: 30,

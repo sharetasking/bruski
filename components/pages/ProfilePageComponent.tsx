@@ -40,24 +40,42 @@ const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
 
 
 
-  useEffect(() => {
+
+
+// INITIAL FETCH
+useEffect(() => {
+  fetchPosts({ take: 4 }).then((res) => {
+    try{
+      setPosts(res);
+    }
+    catch(error){
+      console.error(error);
+    }
+  }).catch((error) => {
+    console.error('Failed to fetch posts:', error);
+  });
+
+
+
+    // SET MIXPANEL USER
+    mixpanel.identify(user?.id);
+    mixpanel.people.set({
+      $email: user?.email,
+      // ... other user properties
+    });
+  
+    mixpanel.track("profile_view", {
+      // Optionally include properties about the page
+      page_name: "ProfilePage",
+      url: window.location.pathname,
+      profile_id: profile?.id,
+
 
     
-    // SET MIXPANEL USER
-  mixpanel.identify(user?.id);
-  mixpanel.people.set({
-    $email: user?.email,
-    // ... other user properties
-  });
+    });
+},); 
 
-  mixpanel.track("profile_view", {
-    // Optionally include properties about the page
-    page_name: "ProfilePage",
-    url: window.location.pathname,
-    profile_id: profile?.id,
-  });
 
-});
 
 
     const [posts, setPosts] = useState<Post[]>([]);
@@ -78,81 +96,59 @@ const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
             setGenerating(false)
           });
     }
-    
-  // FUNCTION: LOAD MORE POSTS
-//   const loadMorePosts = async ({page}:{page:number}) => {
-
-//     setPosts((prev) => [...prev, ...data ])
-// //     fetchPosts({ take: 4, page:page }).then((res) => {
-// //       try{
-// //         setPosts((prev) => [...prev, ...res ])
-// //       }
-// //       catch(error){
-// //         console.error(error);
-// //       }
-// //       console.log(posts)
-// //     }
-// //     ).catch((error) => {
-// //       console.error('Failed to fetch posts:', error);
-// //     });
-//   }
-
-
-
-
-
+   
 
 
 
 
 
   // FUNCTION: ADD COMMENT 
-  const addPost = async (newComment:string, mediaType:MediaType) => {
-    const tempId = new Date().getTime().toString();
+  // const addPost = async (newComment:string, mediaType:MediaType) => {
+  //   const tempId = new Date().getTime().toString();
 
-    let comment = {
-        id: tempId,
-        body: newComment,
-        mediaType: mediaType,
-        poster: user?.profiles?.[0], //TODO: fix this
-        saving: true,
-      };
+  //   let comment = {
+  //       id: tempId,
+  //       body: newComment,
+  //       mediaType: mediaType,
+  //       poster: user?.profiles?.[0], //TODO: fix this
+  //       saving: true,
+  //     };
     
-    if(comment.poster)
-      comment.poster.isFollowed = false;
+  //   if(comment.poster)
+  //     comment.poster.isFollowed = false;
 
 
-    setPosts(prevComments => [comment, ...prevComments]);
+  //   setPosts(prevComments => [comment, ...prevComments]);
 
 
-    try {
-      // Replace this with your actual API call logic to submit the comment
-      const response = await fetch(`/api/posts?media_type=${mediaType}`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ body: newComment, poster: user?.profiles?.[0] }),
-      });
+  //   try {
+  //     // Replace this with your actual API call logic to submit the comment
+  //     const response = await fetch(`/api/posts?media_type=${mediaType}`, {
+  //         method: 'POST',
+  //         headers: {
+  //             'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({ body: newComment, poster: user?.profiles?.[0] }),
+  //     });
 
-      if (!response.ok) {
-          throw new Error('Network response was not ok');
-      }
+  //     if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //     }
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      // Update the state with the permanent ID received from the server
-      setPosts(prevComments => prevComments.map(comment => 
-          comment.id === tempId ? { ...comment, id: data.id, saving:false } : comment
-      ));
-  } catch (error) {
-      console.error('Failed to submit comment:', error);
-      toast.error('Failed to submit comment');
-      // Optionally remove the temporary comment from the state
-      setPosts(prevComments => prevComments.filter(comment => comment.id !== tempId));
-  }
+  //     // Update the state with the permanent ID received from the server
+  //     setPosts(prevComments => prevComments.map(comment => 
+  //         comment.id === tempId ? { ...comment, id: data.id, saving:false } : comment
+  //     ));
+  // } catch (error) {
+  //     console.error('Failed to submit comment:', error);
+  //     toast.error('Failed to submit comment');
+  //     // Optionally remove the temporary comment from the state
+  //     setPosts(prevComments => prevComments.filter(comment => comment.id !== tempId));
+  // }
     
-  };
+  // };
 
 
   // FUNCTION: LOAD MORE POSTS
@@ -186,20 +182,6 @@ const fetchPosts = async ({ take, page=1 }:{ take:number, page?:number }) => {
   return data;
 };
 
-
-// INITIAL FETCH
-useEffect(() => {
-  fetchPosts({ take: 4 }).then((res) => {
-    try{
-      setPosts(res);
-    }
-    catch(error){
-      console.error(error);
-    }
-  }).catch((error) => {
-    console.error('Failed to fetch posts:', error);
-  });
-}); 
 
 
 

@@ -162,7 +162,7 @@ export async function GET(request: NextRequest, { params }: { params: { postId: 
 
   const postId = request.nextUrl.searchParams.get("postId");
   
-  console.log("params", postId)
+  
   try {
     const post = await prismadb.post.findMany({
       where: {

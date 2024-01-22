@@ -100,14 +100,6 @@ const InitPage = async () => {
           return redirect("/")
       }
 
-      // GET THE UPDATED USER OBJECT AND PROFILE
-      bruskiUser = await prismadb.user.findUnique({
-        where: { clerkUserId: id },
-        include: {
-          profiles: true,
-        },
-      });
-
       console.log(bruskiUser)
   
   
@@ -260,15 +252,6 @@ if(updatedUser?.id)
 
 }
 
-  // GET THE NEW USER WITH THE PROFILE
-  bruskiUser = await prismadb.user.findUnique({
-    where: { clerkUserId: id },
-    include: {
-      profiles: true,
-    },
-  });
-
-
 
 
 
@@ -279,8 +262,23 @@ if(updatedUser?.id)
   }
 
 
+  // GET THE NEW USER WITH THE PROFILE
+  bruskiUser = await prismadb.user.findUnique({
+    where: { clerkUserId: id },
+    include: {
+      profiles: true,
+      companions: true,
+    },
+  });
 
 
+
+
+
+
+
+  if(!bruskiUser)
+    return redirect("/")
 
   
   return (

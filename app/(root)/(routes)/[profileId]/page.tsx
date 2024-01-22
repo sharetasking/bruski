@@ -130,7 +130,7 @@ try{
     };
   }
   
-  console.log(profile)
+  console.log(profile) 
 
                       //get the user's profile
                       // const followerProfile = await prismadb.profile.findFirst({

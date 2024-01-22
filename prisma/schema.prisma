@@ -56,6 +56,9 @@ model Profile {
   listOfProfilesFollowedByViewedProfile Follower[] @relation("listOfProfilesFollowedByViewedProfile")
 
 
+  postTagsCreated                PostTag[] @relation("initiatorProfile")
+  postsTaggedIn                  PostTag[] @relation("targetProfile")
+
   notifications             Notification[] @relation("targetProfile")
   notificationsCreated      Notification[] @relation("initiator")
 
@@ -280,7 +283,6 @@ model User {
   updatedAt       DateTime  @updatedAt
   companions    Companion[]  @relation("owner")    
 
-  postTags                PostTag[]
   
   num_notifications     Int    @default(0)
   profiles              Profile[] //Profile?  @relation(fields: [profileId], references: [id])
@@ -444,11 +446,13 @@ model PostHashtag {
 model PostTag {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   postId String    @db.ObjectId // Foreign key to the Post model
-  userId String    @db.ObjectId// Foreign key to the User model
+  targetProfileId String    @db.ObjectId
+  initiatorProfileId String   @db.ObjectId
 
-  user   User   @relation(fields: [userId], references: [id])
+  initiator   Profile  @relation("initiatorProfile", fields: [initiatorProfileId], references: [id])
+  target      Profile  @relation("targetProfile", fields: [targetProfileId], references: [id])
   post   Post   @relation(fields: [postId], references: [id])
 
   
-  @@unique([postId, userId])
+  @@unique([postId, targetProfileId, initiatorProfileId])
 }

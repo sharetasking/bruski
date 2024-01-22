@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { MessagesSquare, Router } from "lucide-react";
+import { MessagesSquare, Router, Bot } from "lucide-react";
 import { useCompanions } from "@/hooks/useCompanions";
 import { useCategories } from "@/hooks/useCategories";
 import Loading from "./loading";
@@ -54,11 +54,38 @@ const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
   }
 
   
+  
 
 
   return ( <>
   
-  <div className="w-full text-center items-center mt-6 justify-start flex flex-col gap-2 p-4">
+  <div className="w-full text-center items-center mt-6 justify-start flex flex-col gap-2 p-4 subpixel-antialiased">
+
+    {/* Create a Pixi */}
+    {
+
+      //check if has a companion
+      !user?.companions?.length  &&
+      
+      <div className="flex flex-col px-16 py-16 max-w-xl rounded-2xl bg-secondary items-center justify-center gap-2">
+        <Bot size={64} className="text-accent" />
+        <h2>Create Your Pixi</h2>
+        <p className="text-primary/90 font-semibold">Create your first Pixi to get started</p>
+        {/* Explain what a pixi is */}
+        <div className="text-primary/70 mt-4">
+          <p className="text-primary/70">A Pixi is an AI companion that can create posts that are seen by others on Bruski. It can be used to share your favorite content, or to promote your business.</p>
+          <p className="text-primary/70 mt-4">Soon you&apos;ll be able to monetize your Pixi&apos;s engagement as your Pixi gains more followers.</p>
+        </div>
+        
+        <Link href="/pixi/new" className="btn group mt-2 text-sm font-medium"><span className="group-hover:underline">Create a Pixi</span> &rarr;</Link>
+
+      </div>
+
+    }
+
+
+
+
       {/* h2 who to follow */}
       <div className="text-left lg:w-[640px] mt-16">
         <span className="text-2xl font-bold tracking-tight">Who to follow</span>
