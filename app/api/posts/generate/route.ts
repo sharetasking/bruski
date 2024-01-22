@@ -160,7 +160,7 @@ queryGPT3(prompt).then(async(response) => {
     }
   });
 
-  return postResult; 
+  return postResult ?? null; 
 
 
 
