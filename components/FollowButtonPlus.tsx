@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { useCallback, useMemo } from 'react';
 import useLoginModal from '@/hooks/useLoginModal';
 import useBruskiUser from '@/hooks/useBruskiUser';
+import mixpanel from '../utils/mixpanel';
 import { cn } from "@/lib/utils";
 
 interface FollowButtonType
@@ -27,10 +28,22 @@ const FollowButtonPlus = ({settings}: {settings: FollowButtonType}) => {
   
   const loginModal = useLoginModal();
   const { data: currentUser } = useBruskiUser();
+
+
   const handleFollow = useCallback(async (e: any) => {
     e.preventDefault()
     e.stopPropagation()
 
+
+    // if trying to follow, log in mixpanel
+    if (!isFollowing) {
+      mixpanel.track("follow", {
+        // Optionally include properties about the page
+        followed_user: profileId,
+        url: window.location.pathname
+      });
+
+    }
 
 
     // if (!currentUser) {

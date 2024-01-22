@@ -12,7 +12,7 @@ datasource db {
 
 model Profile {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  display_name String?
+  display_name String
   username  String @unique
   url       String @unique //will be the same as username, but stylized
   bio       String?
@@ -42,6 +42,7 @@ model Profile {
   bookmarks_received Int @default(0)
   num_notifications Int @default(0)
   date_deleted DateTime?
+  visibility VisibilitySettings @default(PUBLIC)
 
   // Relations
   userId String? @db.ObjectId
@@ -70,6 +71,38 @@ model Profile {
   rebrewsReceivedList Post[] @relation("RebrewsReceivedByProfile")
 }
 
+
+model ReportPost {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  targetPostId String   @map("_targetPostId") @db.ObjectId
+  initiatorId  String   @map("_initiatorId") @db.ObjectId
+
+  // Assuming you have a Post model to which this ID refers
+  targetPost   Post    @relation(fields: [targetPostId], references: [id])
+
+  // Assuming you have a User model to which this ID refers
+  initiator    User    @relation(fields: [initiatorId], references: [id])
+
+  // Any additional fields such as timestamps
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model BlockUser {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  blockedById  String   @map("_blockedById") @db.ObjectId
+  blockedUserId String  @map("_blockedUserId") @db.ObjectId
+
+  // Assuming a relationship to a User model for the person doing the blocking
+  blockedBy    User    @relation("blockedBy", fields: [blockedById], references: [id])
+
+  // Assuming a relationship to a User model for the person being blocked
+  blockedUser  User    @relation("blockedUser", fields: [blockedUserId], references: [id])
+
+  // Any additional fields such as timestamps
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
 
 
 model Follower {
@@ -210,6 +243,12 @@ model UserSubscription {
   updatedAt            DateTime  @updatedAt
 }
 
+enum VisibilitySettings {
+  PUBLIC
+  PRIVATE_BROWSABLE_AND_SEARCHABLE
+  PRIVATE_SEARCHABLE //search by email or phone
+  PRIVATE_NOT_SEARCHABLE //direct handle required to find
+}
 enum AccountType {
   SAAS_OWNER
   SAAS_ADMIN
@@ -241,11 +280,18 @@ model User {
   updatedAt       DateTime  @updatedAt
   companions    Companion[]  @relation("owner")    
 
-  postTags PostTag[]
+  postTags                PostTag[]
   
   num_notifications     Int    @default(0)
-  profiles  Profile[] //Profile?  @relation(fields: [profileId], references: [id])
-  logins LoginActivity[]
+  profiles              Profile[] //Profile?  @relation(fields: [profileId], references: [id])
+  logins        LoginActivity[]
+
+
+  // Relations
+  reportedPosts ReportPost[] 
+  blockedUsers BlockUser[]  @relation("blockedBy")
+  blockedByUsers BlockUser[] @relation("blockedUser")
+
 
   // Other relations (if any)
 }
@@ -294,7 +340,9 @@ model Post {
   originalPostByProfile Profile?  @relation("RebrewsReceivedByProfile", fields: [originalPostById], references: [id])
   originalPostById      String?   @db.ObjectId
 
-
+ 
+  // Relation
+  reports     ReportPost[]
 }
 
 

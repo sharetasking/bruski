@@ -36,10 +36,6 @@ const InitPage = async () => {
   if(localUser)
   {
     
-console.log('updating user')
-
-
-
 
     try
     {

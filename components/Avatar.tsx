@@ -14,20 +14,13 @@ interface AvatarProps {
   className?: string;
   profileId?: string;
   // isLarge?: boolean;
+  onClick?: (event: any) => void;
 }
 
-const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className }) => {
+const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className, onClick }) => {
   const router = useRouter();
 
   const _img = img+"" ?? '/images/placeholder.png';
-  const onClick = useCallback((event: any) => {
-    event.stopPropagation();
-
-    // const url = `/${url}`;
-
-    // router.push((url ?? ""));
-  }, []);
-
   return (
     <div
       className={`
@@ -45,8 +38,9 @@ const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className }) 
         shrink-0
 
       `+className}
+      onClick={onClick}
     >
-      <Link href={url ?? ""} onClick={onClick}>
+      
         <Image
           style={{
             objectFit: 'cover',
@@ -60,7 +54,7 @@ const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className }) 
           // onClick={onClick}
           src={_img ?? '/images/placeholder.png'}
         />
-      </Link>
+      {/* </Link> */}
     </div>
   );
 }

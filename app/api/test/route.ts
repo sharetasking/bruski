@@ -11,7 +11,8 @@ export async function POST(req: NextRequest) {
   if (BRUSKI_MASTER_API_KEY != process.env.BRUSKI_MASTER_API_KEY) {return new NextResponse(JSON.stringify({error: "Invalid API Key"}), { status: 401 })}
 
 
-  results = await getProfiles();//getUsers();
+  results = await getUsers();
+  // results = await getProfiles();
 
   return new NextResponse(JSON.stringify(results), { status: 200 })
 }

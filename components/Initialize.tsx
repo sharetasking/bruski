@@ -17,12 +17,29 @@ import useBruskiUser from "@/hooks/useBruskiUser";
 import prismadb from "@/lib/prismadb";
 import { User } from "@prisma/client";
 import { BruskiUser } from "@/hooks/useBruskiUser"
+import mixpanel from "@/utils/mixpanel";
+import { useEffect } from "react";
 
 
 const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
 
-
   console.log(user)
+
+  useEffect(() => {
+      // SET MIXPANEL USER
+    mixpanel.identify(user?.id);
+    mixpanel.people.set({
+      $email: user?.email,
+      // ... other user properties
+    });
+    mixpanel.track("page_view", {
+      // Optionally include properties about the page
+      page_name: "InitializePage",
+      url: window.location.pathname
+    });
+  });
+  
+  
   const router = useRouter();
   const {data: profiles, isLoading} = useProfiles({profileId:"", take:4});
   const {data: categories} = useCategories();

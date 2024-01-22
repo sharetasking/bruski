@@ -27,6 +27,7 @@ import { toast } from "react-hot-toast";
 import { usePosts } from "@/hooks/usePosts";
 import { profile } from "console";
 import ProfileIdPage from "@/app/(root)/(routes)/[profileId]/page";
+import mixpanel from "@/utils/mixpanel";
 
 interface Post{
   body: string;
@@ -45,6 +46,26 @@ export const Homepage = ({user}: {user: any}) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   
+
+  
+  useEffect(() => {
+
+      
+      // SET MIXPANEL USER
+    mixpanel.identify(user?.id);
+    mixpanel.people.set({
+      $email: user?.email,
+      // ... other user properties
+    });
+    
+    mixpanel.track("page_view", {
+      // Optionally include properties about the page
+      page_name: "Homepage",
+      url: window.location.pathname
+    });
+  });
+
+
 
   // FUNCTION: ADD COMMENT 
   const addPost = async (newComment:string, mediaType:MediaType) => {
