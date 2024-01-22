@@ -33,8 +33,8 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
   // CLICKING USER
   const goToUser = useCallback((ev: any) => {
     ev.stopPropagation();
-    router.push(`/${post?.poster?.id}`)
-  }, [router, post?.poster?.id]);
+    router.push(`/${post?.poster?.url}`)
+  }, [router, post?.poster?.url]);
 
   // // CLICKING POST
   // const goToPost = useCallback(() => {
@@ -73,7 +73,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
 
 <div>
         {/* AVATAR IMAGE */}
-        <Avatar img={post.poster?.img ?? "/images/placeholder.png"} url={"/"+post.poster.id ?? ""} size={12} hasBorder={false}/>
+        <Avatar img={post.poster?.img ?? "/images/placeholder.png"} url={"/"+post.poster.url ?? ""} size={12} hasBorder={false}/>
        
       <h2 className="user_name text-base" onClick={goToUser}>{post.poster?.display_name}</h2>
   
@@ -100,7 +100,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
           
           <div className="flex flex-row gap-4">
            <div>
-              <Avatar img={user.profiles?.[0]?.img} url={"/"+user.profiles?.[0]?.id ?? ""} size={12} hasBorder={false}/>
+              <Avatar img={user.profiles?.[0]?.img} url={"/"+user.profiles?.[0]?.url ?? ""} size={12} hasBorder={false}/>
            </div>
            <div className="w-full">
              <textarea

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
+import Link from "next/link";
 
 
 interface AvatarProps {
@@ -24,8 +25,8 @@ const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className }) 
 
     // const url = `/${url}`;
 
-    router.push((url ?? ""));
-  }, [router, url]);
+    // router.push((url ?? ""));
+  }, []);
 
   return (
     <div
@@ -45,19 +46,21 @@ const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className }) 
 
       `+className}
     >
-      <Image
-        style={{
-          objectFit: 'cover',
-          borderRadius: '100%'
-        }}
-        fill
-        className="rounded-full flex inset-0 m-auto"
-        sizes="96px"
-        // sizes={size ? ''+size+'px' : '96px'}
-        alt="Avatar"
-        onClick={onClick}
-        src={_img ?? '/images/placeholder.png'}
-      />
+      <Link href={url ?? ""} onClick={onClick}>
+        <Image
+          style={{
+            objectFit: 'cover',
+            borderRadius: '100%'
+          }}
+          fill
+          className="rounded-full flex inset-0 m-auto"
+          sizes="96px"
+          // sizes={size ? ''+size+'px' : '96px'}
+          alt="Avatar"
+          // onClick={onClick}
+          src={_img ?? '/images/placeholder.png'}
+        />
+      </Link>
     </div>
   );
 }

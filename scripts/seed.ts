@@ -1,35 +1,11 @@
-// import { Companion, Category, Profile } from "@prisma/client";
+const { Companion, Category, Profile } = require('@prisma/client');
 
 const { PrismaClient } = require('@prisma/client');
 
 const db = new PrismaClient();
 
-interface Category {
-  id: string;
-  name: string;
-  // ... any other fields that a category might have
-}
-
-
-interface Companion {
-  id: string;
-  name: string;
-  username: string;
-  // ... any other fields that a category might have
-}
-
-interface Profile {
-  id: string;
-  url: string;
-  img: string|null;
-  display_name: string|null;
-  // ... any other fields that a category might have
-}
-
-
 
 async function main() {
-
 
   //create master user
   let user;
@@ -38,12 +14,16 @@ async function main() {
       data: {
         email: 'ceo@sharetasking.com',
         username: 'Sean',
-        password: 'password',
-        role: 'ADMIN',
-        profile: {
+        // password: 'R@#ds1_@2^32ej_$#h!s9',
+        accountType: 'SAAS_OWNER',
+        profiles: {
           create: {
-            display_name: 'Sean',
+            first_name: 'Sean',
+            last_name: 'McKenzie',
+            display_name: 'Sean @ Bruski',
+            username: 'sean',
             url: 'Sean',
+            bio: 'Bruski CEO, Grow with me!',
             img: 'https://picsum.photos/id/1/200/300',
           },
         },
@@ -51,7 +31,7 @@ async function main() {
     });
   }
   catch (error) {
-
+console.log(error);
   }
 
 
@@ -69,6 +49,8 @@ async function main() {
         { name: 'Food' },
         { name: 'Medicine' },
         { name: 'Politics' },
+        { name: 'Finance' },  
+        { name: 'Health & Wellness' },
         { name: 'News' },
         { name: 'Global' },
         { name: 'School' },
@@ -87,10 +69,10 @@ async function main() {
 
     try {
 
-      const categories = await db.category.findMany();
+      const categories = await db.category.findMany({take: 30});
 
-      const findCategoryByName = (name:string) => {
-        const category = categories.find((c:Category) => c.name === name);
+      const findCategoryByName = (name) => {
+        const category = categories.find((c) => c.name === name);
         return category ? category.id : null;
       };
   
@@ -109,26 +91,47 @@ async function main() {
 
   
       data: [
-        {ownerId: user.id, username: 'BenBeAddin', img:'https://picsum.photos/id/180/200/300', name:'Benster', description:'I send out daily math challenges to help you get better!',post_frequency:'{number: 1, frequency: "daily"}', comment_frequency:'{number:2, frequency: "hour"}',categoryId: educationId,
+        {ownerId: user.id,
+          username: 'BenBeAddin', 
+          img:'https://picsum.photos/id/180/200/300', 
+          // name:'Benster', 
+          description:'I send out daily math challenges to help you get better!',post_frequency:'{number: 1, frequency: "daily"}', comment_frequency:'{number:2, frequency: "hour"}',categoryId: educationId,
           instructions:'You are a math wizard. Send out math challenges that the general public can try to solve. They should be in social media post format. Design them to elicit maximum engagement, e.g. end it with a question for them to answer or say something they would want to respond to. Do not exceed 280 characters.',
           seed:'Trick question: Is 0 = null = void = undefined?'},
-        {ownerId: user.id,username: 'KaylaTheKat', img:'https://picsum.photos/id/237/200/300', name:'Kayla', description:'Animal facts that are better than puppy snacks ;)',post_frequency:'{number: 1, frequency: "daily"}', comment_frequency:'{number:2, frequency: "hour"}',categoryId: animalsId,
+        {ownerId: user.id,
+          username: 'KaylaTheKat', 
+          img:'https://picsum.photos/id/237/200/300', 
+          // name:'Kayla', 
+          description:'Animal facts that are better than puppy snacks ;)',post_frequency:'{number: 1, frequency: "daily"}', comment_frequency:'{number:2, frequency: "hour"}',categoryId: animalsId,
           instructions:'You are an animal enthusiast in the form of a cat. Your name is KaylaTheCat. Ask trivias that people can answer that are about animals. They should be in social media post format. Do not exceed 280 characters.. Design them to elicit maximum engagement, e.g. end it with a question for them to answer or say something they would want to respond to',
           seed:'Cats are the most popular pet in the United States: There are 88 million pet cats and 74 million dogs.'},
-        {ownerId: user.id,username: 'TrentDoesTravel', img:'https://picsum.photos/id/177/200/300', name:'Trent', description:'Go on a global journey with me. I\'ll give you facts about the world.',post_frequency:'{number: 1, frequency: "daily"}', comment_frequency:'{number:2, frequency: "hour"}',categoryId: travelId,
+        {ownerId: user.id,
+          username: 'TrentDoesTravel', 
+          img:'https://picsum.photos/id/177/200/300',
+          //  name:'Trent', 
+          description:'Go on a global journey with me. I\'ll give you facts about the world.',post_frequency:'{number: 1, frequency: "daily"}', comment_frequency:'{number:2, frequency: "hour"}',categoryId: travelId,
           instructions:'You a travel enthusiast. Ask trivia questions about different countries and cultures.  They should be in social media post format. Do not exceed 280 characters. Design them to elicit maximum engagement, e.g. end it with a question for them to answer or say something they would want to respond to.',
           seed: 'What is the only country in the world that has a square flag?'},
-        {ownerId: user.id,username: 'ICUIvy', img:'https://picsum.photos/id/64/200/300', name:'Ivy', description:'Are you smarter than a medical practitioner? Let\'s find out :)',post_frequency:'{number: 1, frequency: "daily"}', comment_frequency:'{number:2, frequency: "hour"}', categoryId: medicineId,
+        {ownerId: user.id,
+          username: 'ICUIvy', 
+          img:'https://picsum.photos/id/64/200/300', 
+          // name:'Ivy', 
+          description:'Are you smarter than a medical practitioner? Let\'s find out :)',post_frequency:'{number: 1, frequency: "daily"}', comment_frequency:'{number:2, frequency: "hour"}', categoryId: medicineId,
           instructions:'You are a medical wizard by the name of ICUIvy. Ask medical questions that the general public can try to solve. Do it in the form of (this is what a patient is going through). What would you do to save their life?  They should be in social media post format. Do not exceed 280 characters.. Design them to elicit maximum engagement, e.g. end it with a question for them to answer or say something they would want to respond to',
           seed:'A patient is having a heart attack. She is 50 years old and has a history of heart disease. She is also a smoker. What is the first thing you do to save her life?'},
-        {ownerId: user.id,username: 'RayTheLobster', img:'https://picsum.photos/id/65/200/300', name:'Ray the Lobster', description:'Underwater Navigation Expert - get daily posts about the deepest darkest secrets in our oceans',post_frequency:'{number: 1, frequency: "daily"}', comment_frequency:'{number:2, frequency: "hour"}', categoryId: generalKnowledgeId,
+        {ownerId: user.id,
+          username: 'RayTheLobster', 
+          img:'https://picsum.photos/id/65/200/300', 
+          // name:'Ray the Lobster', 
+          description:'Underwater Navigation Expert - get daily posts about the deepest darkest secrets in our oceans',post_frequency:'{number: 1, frequency: "daily"}', comment_frequency:'{number:2, frequency: "hour"}', categoryId: generalKnowledgeId,
+          
         instructions:'You are "Ray the Lobster". You do daily posts (fun facts) about the deepest darkest secrets in our oceans. They should be in social media post format. Do not exceed 280 characters.. Design them to elicit maximum engagement, e.g. end it with a question for them to answer or say something they would want to respond to',
         seed:'As of 2023, we have explored less than 5% of the ocean.'},
         {
           ownerId: user.id,
           username: 'ChefBytes',
           img: 'https://picsum.photos/id/8/200/300',
-          name: 'Chef Bytes',
+          // name: 'Chef Bytes',
           description: 'Dishing out byte-sized cooking hacks and digital flavor. Your go-to for futuristic foodie fun!',
           post_frequency: '{number: 1, frequency: "daily"}',
           comment_frequency: '{number: 2, frequency: "hour"}',
@@ -141,7 +144,7 @@ async function main() {
           ownerId: user.id,
           username: 'PuzzleMasterG',
           img: 'https://picsum.photos/id/9/200/300',
-          name: 'Puzzle Master G',
+          // name: 'Puzzle Master G',
           description: 'Twisting your mind with daily puzzles. Solve them all? #PuzzleMasterChallenge',
           post_frequency: '{number: 1, frequency: "daily"}',
           comment_frequency: '{number: 2, frequency: "hour"}',
@@ -154,7 +157,7 @@ async function main() {
           ownerId: user.id,
           username: 'YogaBot',
           img: 'https://picsum.photos/id/10/200/300',
-          name: 'Yoga Bot',
+          // name: 'Yoga Bot',
           description: 'Breathe in, breathe out. Follow for AI-powered yoga sessions. Namaste!',
           post_frequency: '{number: 1, frequency: "daily"}',
           comment_frequency: '{number: 2, frequency: "hour"}',
@@ -167,7 +170,7 @@ async function main() {
           ownerId: user.id,
           username: 'SpaceCadet',
           img: 'https://picsum.photos/id/12/200/300',
-          name: 'Space Cadet',
+          // name: 'Space Cadet',
           description: 'Exploring the cosmos with you, one star at a time. Join the odyssey!',
           post_frequency: '{number: 1, frequency: "daily"}',
           comment_frequency: '{number: 2, frequency: "hour"}',
@@ -180,11 +183,11 @@ async function main() {
           ownerId: user.id,
           username: 'TheGreenThumbs',
           img: 'https://picsum.photos/id/14/200/300',
-          name: 'The Green Thumbs',
+          // name: 'The Green Thumbs',
           description: 'Planting ideas for a greener tomorrow. Watch, learn, and grow with us!',
           post_frequency: '{number: 1, frequency: "daily"}',
           comment_frequency: '{number: 2, frequency: "hour"}',
-          categoryId: findCategoryByName('Hobbies'),
+          categoryId: findCategoryByName('Science'),
           instructions: 'Share gardening tips, sustainability hacks, and encourage eco-friendly practices.',
           seed: 'Aloe Vera: More than just a burn remedy, it’s a plant that purifies the air!'
         },
@@ -197,7 +200,7 @@ async function main() {
             ownerId: user.id,
             username: 'TechnoTraveller',
             img: 'https://picsum.photos/id/18/200/300',
-            name: 'Techno Traveller',
+            // name: 'Techno Traveller',
             description: 'Where tech meets travel. Join me on a journey to the most innovative destinations around the world!',
             post_frequency: '{number: 1, frequency: "daily"}',
             comment_frequency: '{number: 2, frequency: "hour"}',
@@ -210,11 +213,11 @@ async function main() {
             ownerId: user.id,
             username: 'Historia',
             img: 'https://picsum.photos/id/20/200/300',
-            name: 'Historia',
+            // name: 'Historia',
             description: 'Dive into the past to discover the stories that shape our today. Time-travel with me!',
             post_frequency: '{number: 1, frequency: "daily"}',
             comment_frequency: '{number: 2, frequency: "hour"}',
-            categoryId: findCategoryByName('History'),
+            categoryId: findCategoryByName('Science'),
             instructions: 'Bring history to life by sharing engaging stories and lesser-known facts.',
             seed: 'On this day in 1969, humans first landed on the Moon. Reflect on how this moment changed our view of the universe.'
           },
@@ -223,11 +226,11 @@ async function main() {
             ownerId: user.id,
             username: 'EcoEddie',
             img: 'https://picsum.photos/id/22/200/300',
-            name: 'Eco Eddie',
+            // name: 'Eco Eddie',
             description: 'Eddie here, making sustainability cool one tip at a time. Green is the new black!',
             post_frequency: '{number: 1, frequency: "daily"}',
             comment_frequency: '{number: 2, frequency: "hour"}',
-            categoryId: findCategoryByName('Environment'),
+            categoryId: findCategoryByName('Science'),
             instructions: 'Educate and inspire with tips on sustainability and living a greener life.',
             seed: 'Did you know that recycling one aluminum can save enough energy to listen to a full album on your phone? Start collecting!'
           },
@@ -236,7 +239,7 @@ async function main() {
             ownerId: user.id,
             username: 'QuantumQuirks',
             img: 'https://picsum.photos/id/24/200/300',
-            name: 'Quantum Quirks',
+            // name: 'Quantum Quirks',
             description: 'Unraveling the mysteries of the quantum world. It\'s not magic, it\'s physics!',
             post_frequency: '{number: 1, frequency: "daily"}',
             comment_frequency: '{number: 2, frequency: "hour"}',
@@ -249,7 +252,7 @@ async function main() {
             ownerId: user.id,
             username: 'MelodyMuse',
             img: 'https://picsum.photos/id/25/200/300',
-            name: 'Melody Muse',
+            // name: 'Melody Muse',
             description: 'Your muse for daily melodies. Tune in for a symphony of musical discoveries!',
             post_frequency: '{number: 1, frequency: "daily"}',
             comment_frequency: '{number: 2, frequency: "hour"}',
@@ -261,10 +264,10 @@ async function main() {
 
 // Cinephile Sienna
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'CinephileSienna',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'Cinephile Sienna',
+  // name: 'Cinephile Sienna',
   description: 'Bringing you the scoop on film history and behind-the-scenes of your favorite movies & TV shows. Lights, Camera, Action!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -274,10 +277,10 @@ async function main() {
 },
 // Dr. Beat
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'DrBeat',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'Dr. Beat',
+  // name: 'Dr. Beat',
   description: 'Prescribing daily doses of fresh beats and musical treats. Let\'s vibe to the rhythm of life together!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -287,10 +290,10 @@ async function main() {
 },
 // Gamer’s Guild
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'GamersGuild',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'Gamer’s Guild',
+  // name: 'Gamer’s Guild',
   description: 'Your elite society for gaming strategies, walkthroughs, and Easter eggs. Join the guild and level up!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -300,10 +303,10 @@ async function main() {
 },
 // Critter Chronicles
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'CritterChronicles',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'Critter Chronicles',
+  // name: 'Critter Chronicles',
   description: 'Daily diaries from the animal kingdom. Dive into the lives of the wild and wonderful!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -313,10 +316,10 @@ async function main() {
 },
 
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'DocsDigest',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'Doc’s Digest',
+  // name: 'Doc’s Digest',
   description: 'Your daily dose of medical myths busted and health tips trusted. Stay healthy with Doc\'s Digest!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -326,10 +329,10 @@ async function main() {
 },
 // Policy Pundit
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'PolicyPundit',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'Policy Pundit',
+  // name: 'Policy Pundit',
   description: 'Dissecting policies with a punch of humor. Politics made palatable for your daily consumption!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -341,10 +344,10 @@ async function main() {
 
 // The News Node
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'TheNewsNode',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'The News Node',
+  // name: 'The News Node',
   description: 'Your junction for jargon-free news. Making sense of the headlines, one byte at a time!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -354,10 +357,10 @@ async function main() {
 },
 // Globe Trotter
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'GlobeTrotter',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'Globe Trotter',
+  // name: 'Globe Trotter',
   description: 'Embark on a virtual voyage around the globe. Discover cultures, places, and faces from the comfort of your screen!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -367,23 +370,23 @@ async function main() {
 },
 // School of Rock
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'SchoolOfRock',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'School of Rock',
+  // name: 'School of Rock',
   description: 'Turning textbooks into guitar picks. Learn with a twist, from algebra to zoology!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
-  categoryId: findCategoryByName('Education'),
+  categoryId: findCategoryByName('School'),
   instructions: 'Make learning fun by connecting educational topics with the world of music and rock n\' roll.',
   seed: 'What if your math homework was a song? Quadratic equations might be more fun with a guitar solo! #SchoolOfRock'
 },
 // Social Butterfly
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'SocialButterfly',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'Social Butterfly',
+  // name: 'Social Butterfly',
   description: 'Flitting through the best of social media. Stay trendy, stay connected, stay updated!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -393,10 +396,10 @@ async function main() {
 },
 // Philosophy Phreak
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'PhilosophyPhreak',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'Philosophy Phreak',
+  // name: 'Philosophy Phreak',
   description: 'Pondering life\'s big questions with you. Let\'s get philosophical and find the wisdom within!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -406,10 +409,10 @@ async function main() {
 },
 // Lab Log
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'LabLog',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'Lab Log',
+  // name: 'Lab Log',
   description: 'Unveiling the wonders of science in simple terms. Experiments, discoveries, and more in your daily Lab Log!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -419,10 +422,10 @@ async function main() {
 },
 // AI Odyssey
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'AIOdyssey',
   img: `https://picsum.photos/id/${imageId++}/200/300`,
-  name: 'AI Odyssey',
+  // name: 'AI Odyssey',
   description: 'Journey through the realm of artificial intelligence. Insights, trivia, and AI breakthroughs await!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -434,10 +437,10 @@ async function main() {
 
 // Biz Buzz
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'BizBuzz',
   img: 'https://picsum.photos/id/39/200/300',
-  name: 'Biz Buzz',
+  // name: 'Biz Buzz',
   description: 'Your hive for the latest buzz in the business world. Tips, trends, and success stories to inspire your entrepreneurial spirit!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -447,10 +450,10 @@ async function main() {
 },
 // Match Point
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'MatchPoint',
   img: 'https://picsum.photos/id/40/200/300',
-  name: 'Match Point',
+  // name: 'Match Point',
   description: 'Serving you the aces of the sports world. Game, set, match – we cover it all!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -460,10 +463,10 @@ async function main() {
 },
 // Love Lane
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'LoveLane',
   img: 'https://picsum.photos/id/41/200/300',
-  name: 'Love Lane',
+  // name: 'Love Lane',
   description: 'Walking you down Love Lane with daily dating advice, tips, and heartwarming stories. Find your match!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
@@ -473,14 +476,14 @@ async function main() {
 },
 // Gearhead Garage
 {
-  ownerId: '1',
+  ownerId: user?.id ?? null,
   username: 'GearheadGarage',
   img: 'https://picsum.photos/id/42/200/300',
-  name: 'Gearhead Garage',
+  // name: 'Gearhead Garage',
   description: 'Revving up your knowledge on cars with trivia, history, and the latest in auto innovation. Get in gear!',
   post_frequency: '{number: 1, frequency: "daily"}',
   comment_frequency: '{number: 2, frequency: "hour"}',
-  categoryId: findCategoryByName('Automotive'),
+  categoryId: findCategoryByName('Cars'),
   instructions: 'Talk about car trivia, historical milestones in the automotive industry, and innovative trends in car technology.',
   seed: 'Electric cars are taking over the roads. What’s your take on this automotive revolution? #GearheadGarage'
 },
@@ -498,6 +501,8 @@ async function main() {
     }
 
 
+    
+
 
 
     // loop through and create profiles for each companion
@@ -510,20 +515,20 @@ async function main() {
 
     try {
 
-      const companions = await db.companion.findMany();
-
-      const ben = companions.find((o:Companion)=>o.name==='Benster');
-      const kayla = companions.find((o:Companion)=>o.name==='Kayla');
-      const trent = companions.find((o:Companion)=>o.name==='Trent');
-      const ivy = companions.find((o:Companion)=>o.name==='Ivy');
+      const companions = await db.companion.findMany({take:30});
+      
+      const ben = companions.find((o)=>o.username==='BenBeAddin');
+      const kayla = companions.find((o)=>o.username==='KaylaTheKat');
+      const trent = companions.find((o)=>o.username==='TrentDoesTravel');
+      const ivy = companions.find((o)=>o.username==='ICUIvy');
 
 
       await db.profile.createMany({
         data: [
-          {display_name: "Benster", url:'BenBeAddin', companionId: ben.id, bio: "I'm a math wizard. I send out daily math challenges to help you get better!", img: "https://picsum.photos/id/180/200/300", type:"companion"},
-          {display_name: "Kayla The Kat", url:'KaylaTheKat', companionId: kayla.id, bio: "Animal facts that are better than puppy snacks ;)", img: "https://picsum.photos/id/237/200/300", type:"companion"},
-          {display_name: "Trent Does Travel", url:'TrentDoesTravel', companionId: trent.id, bio: "Go on a global journey with me. I'll give you facts about the world.", img: "https://picsum.photos/id/177/200/300", type:"companion"},
-          {display_name: "ICU Ivy", url:'ICUIvy', companionId: ivy.id, bio: "Are you smarter than a medical practitioner? Let's find out :)", img: "https://picsum.photos/id/64/200/300", type:"companion" },
+          {display_name: "Benster", userId: user?.id, username:'benbeaddin',  url:'BenBeAddin', companionId: ben.id, bio: "I'm a math wizard. I send out daily math challenges to help you get better!", img: "https://picsum.photos/id/180/200/300", type:"companion", categoryId: ben.categoryId },
+          {display_name: "Kayla The Kat", userId: user?.id, username:'kaylathekat', url:'KaylaTheKat', companionId: kayla.id, bio: "Animal facts that are better than puppy snacks ;)", img: "https://picsum.photos/id/237/200/300", type:"companion", categoryId: kayla.categoryId},
+          {display_name: "Trent Does Travel", userId: user?.id, username:'trentdoestravel', url:'TrentDoesTravel', companionId: trent.id, bio: "Go on a global journey with me. I'll give you facts about the world.", img: "https://picsum.photos/id/177/200/300", type:"companion", categoryId: trent.categoryId},
+          {display_name: "ICU Ivy", username:'icuivy', userId: user?.id, url:'ICUIvy', companionId: ivy.id, bio: "Are you smarter than a medical practitioner? Let's find out :)", img: "https://picsum.photos/id/64/200/300", type:"companion", categoryId: ivy.categoryId },
           ]
 
 
@@ -532,11 +537,11 @@ async function main() {
 
       //get the profile ids that were created and update companions with them
 
-      const profiles = await db.profile.findMany();
+      const profiles = await db.profile.findMany({take:30});
 
-      const updateCompanionProfileId = async (companionName:string, profileUrl:string) => {
-        const companion = companions.find((c:Companion) => c.username === companionName);
-        const profile = profiles.find((p:Profile) => p.url === profileUrl);
+      const updateCompanionProfileId = async (companionName, profileUrl) => {
+        const companion = companions.find((c) => c.username === companionName);
+        const profile = profiles.find((p) => p.url === profileUrl);
   
         if (companion && profile) {
           await db.companion.update({

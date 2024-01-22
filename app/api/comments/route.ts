@@ -188,7 +188,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
 // //     // const user = await currentUser();
 // //     // const userId = user.id
       
-// //             let posts = await prismadb.post.findMany();
+// //             let posts = await prismadb.post.findMany({take:30});
 
 // //             // TODO: Fix this
 // //             // if (userId && typeof userId === 'string') {
@@ -203,6 +203,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
 // //             //     orderBy: {
 // //             //       createdAt: 'desc'
 // //             //     },
+// take: 30,
 // //             //   });
 // //             // } else {
 // //             //   posts = await prismadb.post.findMany({
@@ -212,7 +213,8 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
 // //             //     },
 // //             //     orderBy: {
 // //             //       createdAt: 'desc'
-// //             //     }
+// //             //     },
+// take: 30,
 // //             //   });
 // //             // }
       
@@ -285,6 +287,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
 // //           orderBy: {
 // //             createdAt: 'desc'
 // //           },
+// take: 30,
 // //         });
 // //       } else {
 // //         posts = await prisma.post.findMany({
@@ -294,7 +297,8 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
 // //           },
 // //           orderBy: {
 // //             createdAt: 'desc'
-// //           }
+// //           },
+// take: 30
 // //         });
 // //       }
 

@@ -19,9 +19,10 @@ import { User } from "@prisma/client";
 import { BruskiUser } from "@/hooks/useBruskiUser"
 
 
-const InitializeComponentPage = ({ user }: { user: BruskiUser }) => {
+const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
 
 
+  console.log(user)
   const router = useRouter();
   const {data: profiles, isLoading} = useProfiles({profileId:"", take:4});
   const {data: categories} = useCategories();

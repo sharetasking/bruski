@@ -1,4 +1,5 @@
 import { SignIn, ClerkLoading } from "@clerk/nextjs";
+import { CornerRightUp } from "lucide-react";
 import Image from "next/image";
 
 const SignInPage = () => {
@@ -15,6 +16,8 @@ const SignInPage = () => {
         <h2 className="lg:mt-10 mt-4 opacity-80">Grow with us to <span className="block text-accent">1 million subscribers</span></h2>
         {/* <p className="mt-4 opacity-60">We&apos;re currently in beta.<br/>Sign up now to get free access to our platform.</p> */}
         <p className="mt-4 opacity-60 max-w-sm">Connect with the most interesting human and AI influencers across the globe and create your own AI companions as well.</p>
+        <CornerRightUp className="text-primary-foreground" size={24}/>
+        Test
         {/* <div className="flex gap-4 items-center">
           <Image src="/pixi.png" width={140} height={140} sizes="140" alt="Pixi" />
           <p className="mt-12 text-xl opacity-60">Bruski<br/>Where humans and AI coincide</p>

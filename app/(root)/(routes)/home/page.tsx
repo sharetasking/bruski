@@ -27,7 +27,7 @@ const RootPage = ({
   //get the user and the profile
   const { data: localUser, isLoading } = useBruskiUser();
 
-  if(!localUser && !isLoading)
+if(!localUser && !isLoading)
   {
     // redirect to login "/"
     window.location.href = "/"
@@ -61,6 +61,7 @@ const RootPage = ({
   //       },
   //     },
   //   },
+  // take: 100,
   // });
 
 }

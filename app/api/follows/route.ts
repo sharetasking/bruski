@@ -11,6 +11,7 @@ export async function POST( request: NextRequest)
   // GET PARAMS (target profile id)
   const { profileId } = await request.json()
   
+  
   // GET USER
   const user = await currentUser();
 
@@ -36,7 +37,7 @@ export async function POST( request: NextRequest)
   }
 
   // CONFIRM NOT FOLLOWING SELF
-  if(localUser.profiles?.[0].id === profileId)
+  if(localUser.profiles?.[0]?.id === profileId)
   {
     throw new Error('Cannot follow yourself');
   }
@@ -44,7 +45,7 @@ export async function POST( request: NextRequest)
   // CHECK IF ALREADY FOLLOWING
   const existingFollow = await prismadb.follower.findFirst({
     where: {
-      followerId: localUser.profiles[0].id,
+      followerId: localUser.profiles?.[0]?.id,
       followeeId: profileId
     }
   });
@@ -59,18 +60,15 @@ export async function POST( request: NextRequest)
   // IF NOT FOLLOWING - Create a new follow relationship
   else
   {
+    console.log(localUser.profiles?.[0]?.id,profileId )
+    // if either profile id doesn't exist, return
+    if(!localUser.profiles?.[0]?.id || !profileId)
+      return NextResponse.json({following: false, increment: false})
+
     const follow = await prismadb.follower.create({
       data: {
-        follower: {
-          connect: {
-            id: localUser.profiles[0].id
-          }
-        },
-        followee: {
-          connect: {
-            id: profileId
-          }
-        }
+        followerId: localUser.profiles?.[0]?.id,
+        followeeId: profileId
         
       }
     });
@@ -93,7 +91,7 @@ export async function POST( request: NextRequest)
     //Following
     await prismadb.profile.update({
       where: {
-        id: localUser.profiles[0].id // ID of the follower's profile
+        id: localUser.profiles?.[0]?.id // ID of the follower's profile
       },
       data: {
         num_following: {
@@ -119,7 +117,7 @@ export async function POST( request: NextRequest)
               targetProfileId: profileId,
               targetObjectId: profileId,
               type: "FOLLOW",
-              initiatorId: localUser.profiles[0].id,
+              initiatorId: localUser.profiles?.[0]?.id,
               body: ""
 
             }
@@ -308,7 +306,7 @@ export async function DELETE( request: NextRequest ) {
 
     await prismadb.profile.update({
       where: {
-        id: localUser.profiles[0].id // ID of the follower's profile
+        id: localUser.profiles?.[0]?.id // ID of the follower's profile
       },
       data: {
         num_following: {

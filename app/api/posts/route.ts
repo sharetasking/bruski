@@ -141,6 +141,7 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
         orderBy: {
           createdAt: 'desc'
         },
+        take: 30,
       });
     }
 
@@ -158,7 +159,7 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
         },
         orderBy: {
           createdAt: 'desc'
-        }
+        },
       });
     }
     
@@ -336,6 +337,7 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
     //     orderBy: {
     //       createdAt: 'desc'
     //     },
+    // take: 30
     //   });
     // }
     

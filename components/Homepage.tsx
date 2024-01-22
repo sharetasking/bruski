@@ -226,13 +226,13 @@ useEffect(() => {
                 <div key={profile.id} className={cn("text-sm p-4 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " bordder-b bordder-primary/5": "")}>
                   <div className="flex items-center gap-2">
                     <div className="relative">
-                      <Avatar url={profile?.id} img={profile.img ?? "/images/placeholder.png"} size={8} hasBorder={true} />
+                      <Avatar url={profile?.url} img={profile.img ?? "/images/placeholder.png"} size={8} hasBorder={true} />
                       
-                      <FollowButtonPlus settings={{profileId:profile.id, follows:profile.isFollowedByUser??false, followersCount:Math.max(profile.numFollowers, 0)}}  />
+                      <FollowButtonPlus settings={{profileId:profile.id, follows:(profile.isFollowedByUser || profile.id == user?.profiles?.[0]?.id)??false, followersCount:Math.max(profile.numFollowers, 0)}}  />
                     </div>
                     
                     
-                    <Link className="line-clamp-1 text-medium text-sm text-left " href={"/"+profile.id}>{profile?.display_name}</Link>
+                    <Link className="line-clamp-1 text-medium text-sm text-left " href={"/"+profile.url}>{profile?.display_name}</Link>
                   </div>
                   
                   <div className="font-normal text-sm text-primary/50 line-clamp-3 text-left">{profile.bio}</div>

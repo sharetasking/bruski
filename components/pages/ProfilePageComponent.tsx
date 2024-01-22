@@ -232,9 +232,9 @@ useEffect(() => {
                         <div className="mt-6 flex flex-col gap-2 items-center justify-center">
                             {/* <a href="#" className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a> */}
                             
-                            {(profile && profile?.id != user?.profiles?.[0].id) && <FollowButton settings={{profileId: profile?.id, follows:!!profile?.listOfProfilesFollowingViewedProfile?.length, followersCount:profile?.num_followers}} /> }
+                            {(profile && profile?.id != user?.profiles?.[0]?.id) && <FollowButton settings={{profileId: profile?.id, follows:!!profile?.listOfProfilesFollowingViewedProfile?.length, followersCount:profile?.num_followers}} /> }
                             
-                            {(profile?.companion?.ownerId == user?.id ) && <button className="btn-beautified" onClick={generatePost}>{!generating ? "Generate Post" :"Generating..."}</button>}
+                            {(user?.id && profile?.companion?.ownerId == user?.id ) && <button className="btn-beautified" onClick={generatePost}>{!generating ? "Generate Post" :"Generating..."}</button>}
                             
                         </div>
                     </div>

@@ -6,6 +6,7 @@ export async function GET() {
   
 
   const data = await prismadb.companion.findMany({
+    take: 30,
   });
 
 

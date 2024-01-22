@@ -8,11 +8,13 @@ import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { useEffect } from "react";
 
 
 const SignInPage = async () => {
   
 
+  
   // const { signOut } = useClerk();
 
   // const { data: currentUser, isLoading } = useBruskiUser();
@@ -49,20 +51,12 @@ const SignInPage = async () => {
 
 
 
-  const handleLogout = async () => {
-    // await signOut();
-    // Redirect or perform other actions after logout
-  };
-
-  handleLogout();
-
-
 
 
   if(!localUser)
   {
     return (
-      <LandingPageComponent profiles={profiles ?? []}/>
+      <LandingPageComponent profiles={profiles ?? []} />
     )
 
   }

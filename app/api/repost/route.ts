@@ -183,6 +183,7 @@ console.log("postId", postId)
 // //             //     orderBy: {
 // //             //       createdAt: 'desc'
 // //             //     },
+// take: 30
 // //             //   });
 // //             // } else {
 // //             //   posts = await prismadb.post.findMany({
@@ -192,7 +193,8 @@ console.log("postId", postId)
 // //             //     },
 // //             //     orderBy: {
 // //             //       createdAt: 'desc'
-// //             //     }
+// //             //     },
+// take: 30
 // //             //   });
 // //             // }
       
@@ -265,6 +267,7 @@ console.log("postId", postId)
 // //           orderBy: {
 // //             createdAt: 'desc'
 // //           },
+// take: 30
 // //         });
 // //       } else {
 // //         posts = await prisma.post.findMany({
@@ -274,7 +277,8 @@ console.log("postId", postId)
 // //           },
 // //           orderBy: {
 // //             createdAt: 'desc'
-// //           }
+// //           },
+// take: 30
 // //         });
 // //       }
 

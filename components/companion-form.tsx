@@ -15,7 +15,9 @@ import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/image-upload";
 import { useToast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
+import CheckUsernameField from "@/components/CheckUsernameField";
 import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@/components/ui/select";
+import { toast } from "react-hot-toast";
 
 const PREAMBLE = `You are Cristiano Ronaldo. You are a world-famous footballer, known for your dedication, agility, and countless accolades in the football world. Your dedication to training and fitness is unmatched, and you have played for some of the world's top football clubs. Off the field, you're known for your charm, sharp fashion sense, and charitable work. Your passion for the sport is evident every time you step onto the pitch. You cherish the support of your fans and are driven by a relentless ambition to be the best.`;
 
@@ -58,7 +60,7 @@ export const CompanionForm = ({
   categories,
   initialData
 }: CompanionFormProps) => {
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -77,6 +79,8 @@ export const CompanionForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      toast.success("Submitting.")
+
       if (initialData) {
         // edit
         await axios.patch(`/api/companion/${initialData.id}`, values);
@@ -85,20 +89,13 @@ export const CompanionForm = ({
         await axios.post("/api/companion", values);
       }
       
-      toast({
-        description:  "Success.",
-        duration: 3000,
-      });
+      toast.success("Success")
 
       router.refresh();
       router.push("/home");
     } catch (error) {
       console.log(error)
-      toast({
-        variant: "destructive",
-        description: "Something went wrong ",
-        duration: 3000,
-      });
+      toast.error("Something went wrong.")
     }
   };
 
@@ -160,6 +157,12 @@ export const CompanionForm = ({
                 </FormItem>
               )}
             />
+
+
+              {/* <p><CheckUsernameField /></p> */}
+
+
+
             <FormField
               control={form.control}
               name="categoryId"
@@ -230,7 +233,7 @@ export const CompanionForm = ({
           />
           <div className="w-full flex justify-center">
             <Button size="lg" disabled={isLoading}>
-              {initialData ? "Edit your companion" : "Create your companion"}
+              {initialData ? "Edit your Pixi" : "Create your Pixi"}
               <Wand2 className="w-4 h-4 ml-2" />
             </Button>
           </div>

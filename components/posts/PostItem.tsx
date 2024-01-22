@@ -59,8 +59,8 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
   const goToUser = useCallback((ev: any) => {
     ev.stopPropagation();
     ev.preventDefault();
-    router.push(`/${data?.poster?.id}`)
-  }, [router, data?.poster?.id]);
+    router.push(`/${data?.poster?.url}`)
+  }, [router, data?.poster?.url]);
 
   // CLICKING POST
   const goToPost = useCallback((ev: any) => {
@@ -153,7 +153,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
         {/* AVATAR IMAGE */}
         {/* <Avatar img={data.poster?.img} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} /> */}
         <div className="relative">
-          <Avatar img={data.poster?.img} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} />
+          <Avatar img={data.poster?.img} url={"/"+data.poster.url ?? ""} size={10} hasBorder={false} />
           
           {/* FOLLOW BUTTON */}
           {(data.poster?.id != signedInUserProfileId) && 
@@ -249,9 +249,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               {/* {JSON.stringify(data.originalPost)} */}
               <div className="flex gap-2 items-center ">
-                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className=''>
+                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className=''>
 
-                <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
+                <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.url ?? ""} hasBorder={false} />
                   {/* <div className="relative">
                     <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
                     <FollowButtonPlus settings={{profileId:data.id, follows:data.isFollowedByUser??false, followersCount:Math.max(data.numFollowers, 0)}}  />
@@ -260,7 +260,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
 
                   
                 </div>
-                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline text-base font-medium '>{data.originalPost?.poster?.display_name} </div>
+                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className='hover:underline text-base font-medium '>{data.originalPost?.poster?.display_name} </div>
               </div>
               <div className='font-normal text-2xl line-clamp-6 text-center items-center justify-center px-4 flex h-grow w-full min-h-[240px] whitespace-pre-wrap break-words'>{data.originalPost?.body}</div>
               <div className="ml-8 text-xs mt-1 border border-primary/10 text-primary/80 py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.originalPost?.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.originalPost?.num_comments)}</span></div>
@@ -275,10 +275,10 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               {/* {JSON.stringify(data.originalPost)} */}
               <div className="flex gap-2 items-center ">
-                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className=''>
-                  <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
+                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className=''>
+                  <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.url ?? ""} hasBorder={false} />
                 </div>
-                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.id)} className='hover:underline text-base'>{data.originalPost?.poster?.display_name} </div>
+                <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className='hover:underline text-base'>{data.originalPost?.poster?.display_name} </div>
               </div>
               <div className='ml-8 font-normal text-sm line-clamp-6 opacity-70 whitespace-pre-wrap break-words'>{data.originalPost?.body}</div>
             </div>

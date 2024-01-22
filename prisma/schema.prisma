@@ -13,7 +13,8 @@ datasource db {
 model Profile {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   display_name String?
-  url       String @unique
+  username  String @unique
+  url       String @unique //will be the same as username, but stylized
   bio       String?
   img       String?
   type       ProfileType?
@@ -142,15 +143,15 @@ model LoginActivity {
 model Companion {
   id                   String    @id @default(auto()) @map("_id") @db.ObjectId
   ownerId              String    @db.ObjectId
-  username             String
+  username                 String    @unique
   img                  String
-  name                 String
   model_type           String?
   description          String
   instructions         String
   profileId            String?   @db.ObjectId
   categoryId           String    @db.ObjectId 
   seed                 String
+  functionalities      Json?
   post_frequency       Json @default("\"{number:1, frequency: 'daily'}\"")
   comment_frequency    Json @default("\"{number:2, frequency: 'hour'}\"")
   bookmarks_received   Int @default(0)
@@ -164,7 +165,6 @@ model Companion {
 
 
   @@index([categoryId])
-  @@fulltext([name])
 }
 
 enum ProfileType {
@@ -210,10 +210,19 @@ model UserSubscription {
   updatedAt            DateTime  @updatedAt
 }
 
+enum AccountType {
+  SAAS_OWNER
+  SAAS_ADMIN
+  AGENCY_OWNER
+  AGENCY_ADMIN
+  AGENCY_USER
+  INDIVIDUAL_USER
+}
 model User {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   first_name            String?
   last_name            String?
+  accountType    AccountType
   username        String?   @unique
   bio             String?
   email           String?   @unique

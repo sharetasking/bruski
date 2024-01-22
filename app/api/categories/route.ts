@@ -13,6 +13,7 @@ export async function GET() {
         },
       },
     },
+    take: 30,
   });
 
 

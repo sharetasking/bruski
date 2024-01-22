@@ -8,14 +8,20 @@ import { ExtendedProfile } from '@/hooks/useProfiles';
 
 import { User } from '@prisma/client';
 import { BruskiUser } from '@/hooks/useBruskiUser';
+import Link from "next/link"
 
 
 const BrowsePageComponent = ({profiles, user}:{profiles:ExtendedProfile[]|null, user:BruskiUser|null}) => {
 
   const router = useRouter();
 
-  const goToUser = (url:string) => {
-    router.push('/'+url)
+  // const goToUser = (url:string) => {
+  //   router.push('/'+url)
+  // }
+
+  const handleClick = (e) =>
+  {
+    e.stopPropagation();
   }
 
   if(!profiles)
@@ -31,13 +37,13 @@ const BrowsePageComponent = ({profiles, user}:{profiles:ExtendedProfile[]|null, 
   
       <div className="flex md:grid cursor-pointer flex-col md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 subpixel-antialiased ">
         {profiles?.map((profile) => (
+          <Link href={profile.url} key={profile.id} onClick={handleClick}>
           <div
-            onClick={()=>goToUser(profile.url ?? profile.id)}
             style={{
               minHeight:'400px'
             }}
             key={profile.id} className='min-h-60 pb-14 relative bg-secondary hover:bg-primary/5 active:bg-primary/20 rounded-2xl p-8'>
-            <Avatar img={profile.img ?? ""}/>
+            <Avatar img={profile.img ?? ""} url={profile.url} />
             <h2 className="text-xl font-semibold mt-2 truncate">{profile.display_name}</h2>
             <p className="text-primary/60 text-sm truncate">{profile.url}</p>
             <hr className="mt-4"/>
@@ -47,7 +53,7 @@ const BrowsePageComponent = ({profiles, user}:{profiles:ExtendedProfile[]|null, 
             {(profile.id != user?.profiles?.[0]?.id) && <FollowButton settings={{profileId:profile.id, follows:profile.isFollowedByUser ?? false}} /> }
             </div>
           </div>
-        
+          </Link>
         ))}
       </div>
       

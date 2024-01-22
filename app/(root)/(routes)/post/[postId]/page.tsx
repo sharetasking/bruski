@@ -122,13 +122,15 @@ const comments = await prismadb.post.findMany({
   },
   orderBy: {
     createdAt: 'desc'
-  }
+  },
+  take: 30
 });
 
 
 
 
 // await prismadb.post.findMany({
+  // take: 30,
 //   where: {
 //     isAReplyToId: params.postId
 // }});

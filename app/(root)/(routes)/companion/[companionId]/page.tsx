@@ -4,7 +4,7 @@ import { auth, redirectToSignIn } from "@clerk/nextjs";
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 
-import { CompanionForm } from "./components/companion-form";
+import { CompanionForm } from "@/components/companion-form";
 
 interface CompanionIdPageProps {
   params: {
@@ -34,10 +34,19 @@ const CompanionIdPage = async ({
     where: {
       id: params.companionId,
       ownerId: userId ?? "",
+    },
+    include: {
+      profiles: true,
     }
   });
 
-  const categories = await prismadb.category.findMany();
+  // update the name
+  if(companion)
+    companion.name = companion?.profiles?.[0]?.display_name ?? "";
+
+  const categories = await prismadb.category.findMany({
+    take: 30,
+  });
 
   return ( 
     <CompanionForm initialData={companion} categories={categories} />
