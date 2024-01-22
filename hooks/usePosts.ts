@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import fetcher from '@/lib/fetcher';
-export function usePosts (params?:{profileId?: string, take?: number, skip?: number, orderBy?: string, fresh?: boolean, page?:number}) {
+export function usePosts (params?:{profileId?: string, take?: number, skip?: number, orderBy?: string, target?: string, fresh?: boolean, page?:number}) {
 
   
   
@@ -26,12 +26,37 @@ export function usePosts (params?:{profileId?: string, take?: number, skip?: num
   //       fresh,
   //       page=1} = params;
 
+  let queries = [];
 
 
-  const url = profileId ? `/api/posts?profileId=${profileId}` : '/api/posts';
+  let base_url = '/api/posts';
+
+  if(params?.target)
+    base_url = `/api/posts/${params?.target}`;
+
+
+
+  if(profileId) 
+    queries.push(`profileId=${profileId}`);
+  if(take)
+    queries.push(`take=${take}`);
+  if(skip)
+    queries.push(`skip=${skip}`);
+  if(page)
+    queries.push(`page=${page}`);
+  if(params?.orderBy)
+    queries.push(`orderBy=${params?.orderBy}`);
+  if(params?.target)
+    queries.push(`target=${params?.target}`);
+  if(params?.fresh)
+    queries.push(`fresh=${params?.fresh}`);
+
+  let url = base_url+'?'+queries.join('&');
+
+
+  const { data, error, mutate } = useSWR(url, fetcher)
   
-  const { data, error, isLoading, mutate } = useSWR(url, fetcher)
-  
+  const isLoading = !data && !error;
  
   return {
     data,

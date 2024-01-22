@@ -158,6 +158,52 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
   }
 };
 
+export async function GET(request: NextRequest, { params }: { params: { postId: string } }) {
+
+  const postId = request.nextUrl.searchParams.get("postId");
+  
+  console.log("params", postId)
+  try {
+    const post = await prismadb.post.findMany({
+      where: {
+        originalPostId: postId,
+        postType: "COMMENT"}
+      ,
+      include: {
+        poster: {
+          include: {
+            user: true
+          }
+        },
+        originalPost: {
+          include: {
+            poster: {
+              include: {
+                user: true
+              }
+            }
+          }
+
+        },
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+    });
+    if (!post) {
+      console.log('No post found with ID:', params.postId);
+      return new NextResponse('Not Found', { status: 404 });
+    }
+
+    return new NextResponse(JSON.stringify(post), { status: 200 });
+
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
+
+
+}
 
 // // export async function GET() {
 //   export async function GET(request: Request, { params }: { params: { postId: string } }) {

@@ -107,28 +107,7 @@ const post = await prismadb.post.findFirst({
     id: params.postId
 }});
 
-const comments = await prismadb.post.findMany({
-  where: {
-    postType: 'COMMENT',
-    originalPostId: params.postId
-  },
-  include: {
-    poster: true,
-    // comments: true,
-    originalPost: {
-      include: {
-        poster: true,
-      }
-    },
-  },
-  orderBy: {
-    createdAt: 'desc'
-  },
-  take: 30
-});
-
-
-
+console.log(post)
 
 // await prismadb.post.findMany({
   // take: 30,
@@ -143,7 +122,7 @@ if(!post) {
 }
 else
 {
-  return <PostPage user={user} post={post} comments={comments} />
+  return <PostPage user={user} post={post}/>
 
 }
 

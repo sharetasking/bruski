@@ -15,18 +15,26 @@ import PostItem from "../posts/PostItem";
 import { BruskiPost } from "@/hooks/usePost";
 import { useEffect } from "react";
 import mixpanel from "@/utils/mixpanel";
+import { usePosts } from "@/hooks/usePosts";
+import { useComments } from "@/hooks/useComments";
 
 export interface PostPageProps {
   user: BruskiUser|null;
   post: Post|null;
-  comments: Comment[]|null;
+  mutateComments: () => void;
 
 }
-const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost, comments:Post[]|null}) => {
-
+const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => {
   const router = useRouter();
+  
+  
+  
+
+  const {data:comments, isLoading:comments_isLoading, isError:comments_isError, mutate:mutateComments} = useComments({take: 30, postId: post?.id});
 
 
+  const {data:posts, isLoading, isError, mutate} = usePosts({take: 30, target: post?.id});
+console.log(posts)
 
 
       useEffect(() => {
@@ -49,11 +57,34 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
     });
 
 
+    const placeholder = "What's your take on things?"
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [body, setBody] = useState('');
+  
+    const onSubmit = useCallback(async (event: FormEvent) => {
+      try {
+        
+        setIsSubmitting(true);
+        setBody('');
+  
+        const isComment = true;
+        const url = isComment ? `/api/comments?postId=${post?.id}` : '/api/posts';
+  
+        const results = await axios.post(url, { body });
+        if(results.data) { toast.success('Success');}
+
+        mutateComments();
+  
+      } catch (error) {
+        toast.error('Something went wrong');
+      } finally {
+        setIsSubmitting(false);
+      }
+    }, [body, post?.id]);
+
+    
 
 
-  const placeholder = "What's your take on things?"
-  const [isLoading, setIsLoading] = useState(false);
-  const [body, setBody] = useState('');
 
   // CLICKING USER
   const goToUser = useCallback((ev: any) => {
@@ -67,28 +98,10 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
   // }, [router, data.id]);
 
 
-  const onSubmit = useCallback(async (event: FormEvent) => {
-    try {
-      
-      setIsLoading(true);
-      setBody('');
+  
 
-      const isComment = true;
-      const url = isComment ? `/api/comments?postId=${post?.id}` : '/api/posts';
 
-      const results = await axios.post(url, { body });
-      if(results.data) { toast.success('Success');}
-      // console.log(results)
-
-      // mutatePosts();
-      // mutatePost();
-    } catch (error) {
-      toast.error('Something went wrong');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [body, post?.id]);
-
+  if(!post) return null;  
 
 
 
@@ -129,7 +142,7 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
            </div>
            <div className="w-full">
              <textarea
-              disabled={isLoading}
+              disabled={false} /*isLoading*/
               onChange={(event) => setBody(event.target.value)}
               onKeyDown={(e) => {
               if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
@@ -233,10 +246,13 @@ const PostPage = ({user, post, comments}:{user:BruskiUser|null, post:BruskiPost,
   <div>
 
   </div>
-  {comments?.map((comment) =>  
-      (<div key={comment?.id}>
+  {comments && comments?.map((comment) =>  
+      (
+      <div key={comment?.id}>
         <PostItem data={comment} user={user} />
-        </div>))
+      </div>
+        
+        ))
     }
 
   <div>

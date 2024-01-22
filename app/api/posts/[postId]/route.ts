@@ -1,18 +1,18 @@
 import { auth, currentUser } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 import { log } from "console";
 
-export async function POST(request: Request, { params }: { params: { postId: string, body:string } }) {
+export async function POST(request: NextRequest, { params }: { params: { postId: string, body:string } }) {
   
   try {
     const body = params.body;
     const user = await currentUser();
-
+    
+    console.log(body, user, "body, user")
 
     if (!user || !user.id || !user.firstName) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -59,11 +59,11 @@ export async function POST(request: Request, { params }: { params: { postId: str
 
 
 // export async function GET() {
-  export async function GET(request: Request, { params }: { params: { postId: string } }) {
+  export async function GET(request: NextRequest, { params }: { params: { postId: string, take:number, target:string, page:number } }) {
     let _post;
     console.log(params,"paramsyyyyyyyyyy")
     try {
-      console.log('Fetching post:', params.postId );
+      console.log('Fetching post:', params );
       const post = await prismadb.post.findFirst({
         where: { id: params.postId },
         include: {

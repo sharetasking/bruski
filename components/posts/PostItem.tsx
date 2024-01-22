@@ -151,9 +151,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
         <div className='w-10 h-10 flex-0 shrink-0 grow-0 flex relative rounded-full'>
 
         {/* AVATAR IMAGE */}
-        {/* <Avatar img={data.poster?.img} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} /> */}
+        {/* <Avatar img={data.poster?.img ?? "/placeholder.svg"} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} /> */}
         <div className="relative">
-          <Avatar img={data.poster?.img} url={"/"+data.poster.url ?? ""} size={10} hasBorder={false} />
+          <Avatar img={data.poster?.img ?? "/placeholder.svg"} url={"/"+data.poster.url ?? ""} size={10} hasBorder={false} />
           
           {/* FOLLOW BUTTON */}
           {(data.poster?.id != signedInUserProfileId) && 
@@ -251,9 +251,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
               <div className="flex gap-2 items-center ">
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className=''>
 
-                <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.url ?? ""} hasBorder={false} />
+                <Avatar size={6} img={data.originalPost?.poster?.img ?? "/placeholder.svg"} url={"/"+data.originalPost?.poster?.url ?? ""} hasBorder={false} />
                   {/* <div className="relative">
-                    <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
+                    <Avatar size={6} img={data.originalPost?.poster?.img ?? "/placeholder.svg"} url={"/"+data.originalPost?.poster?.id ?? ""} hasBorder={false} />
                     <FollowButtonPlus settings={{profileId:data.id, follows:data.isFollowedByUser??false, followersCount:Math.max(data.numFollowers, 0)}}  />
                   </div> */}
 
@@ -276,7 +276,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
               {/* {JSON.stringify(data.originalPost)} */}
               <div className="flex gap-2 items-center ">
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className=''>
-                  <Avatar size={6} img={data.originalPost?.poster?.img} url={"/"+data.originalPost?.poster?.url ?? ""} hasBorder={false} />
+                  <Avatar size={6} img={data.originalPost?.poster?.img ?? "/placeholder.svg"} url={"/"+data.originalPost?.poster?.url ?? ""} hasBorder={false} />
                 </div>
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className='hover:underline text-base'>{data.originalPost?.poster?.display_name} </div>
               </div>
