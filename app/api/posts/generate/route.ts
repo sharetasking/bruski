@@ -166,7 +166,11 @@ queryGPT3(prompt).then(async(response) => {
 
 
   
-}).catch(error => 'Error querying GPT-3:' + error);
+}).catch(error => {
+ console.log( 'Error querying GPT-3:' + error)
+ return null;
+ 
+});
 ;
 
 
