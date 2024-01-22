@@ -80,7 +80,7 @@ console.log(posts)
       } finally {
         setIsSubmitting(false);
       }
-    }, [body, post?.id]);
+    }, [body, post?.id, mutateComments]);
 
     
 
@@ -246,7 +246,7 @@ console.log(posts)
   <div>
 
   </div>
-  {comments && comments?.map((comment) =>  
+  {comments && comments?.map((comment:Post) =>  
       (
       <div key={comment?.id}>
         <PostItem data={comment} user={user} />
