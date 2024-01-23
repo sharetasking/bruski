@@ -28,13 +28,6 @@ interface ProfilePageProps {
 }
 
 
-interface Post{
-    body: string;
-    createdAt?: Date;
-    id?: string;
-    comments?: any[];
-    poster: {id:string, display_name:string, img:string};
-  }
   
 
 const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
@@ -44,7 +37,7 @@ const [generating, setGenerating] = useState<boolean>(false);
 
 
 // State to track all posts
-const [allPosts, setAllPosts] = useState<Post[]>([]);
+const [allPosts, setAllPosts] = useState<BruskiPost[]>([]);
 
 // State to track current page
 const [currentPage, setCurrentPage] = useState<number>(1);
