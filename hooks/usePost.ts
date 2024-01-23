@@ -34,15 +34,17 @@ export interface BruskiPost {
   rebrewedById?: string|null;
   originalPostByProfile?: Profile|null;
   originalPostById?: string|null;
+  isLiked?: boolean|null;
 }
 
 export function usePost (postId: string) {
 
 
   const url = '/api/posts/'+postId;
-  const { data, error, isLoading, mutate } = useSWR(url, fetcher)
+  const { data, error, mutate } = useSWR(url, fetcher)
 
- 
+  const isLoading = !data && !error
+
   return {
     data,
     isLoading,

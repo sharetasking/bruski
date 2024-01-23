@@ -71,7 +71,7 @@ const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
         <Bot size={64} className="text-accent" />
         <h2>Create Your Pixi</h2>
         <div className="text-primary/90 font-semibold">Create your first Pixi to get started</div>
-        <div class="text-orange-600">(Personalized Interactive eXperience Interface)</div>
+        <div className="text-orange-600">(Personalized Interactive eXperience Interface)</div>
         {/* Explain what a pixi is */}
         <div className="text-primary/70 mt-4">
           <p className="text-primary/70">A Pixi is an AI companion that can create posts that are seen by others on Bruski. It can be used to share your favorite content, or to promote your business.</p>

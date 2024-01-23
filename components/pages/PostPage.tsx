@@ -17,7 +17,9 @@ import { useEffect } from "react";
 import mixpanel from "@/utils/mixpanel";
 import { usePosts } from "@/hooks/usePosts";
 import { useComments } from "@/hooks/useComments";
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, } from 'lucide-react';
+import { AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineLike, AiOutlineDislike,AiOutlineUserAdd, AiOutlineUserDelete } from 'react-icons/ai';
+import LikeButton from "@/components/LikeButton";
 import {
   Popover,
   PopoverContent,
@@ -167,7 +169,7 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
 
                 <PopoverContent className="top-0 right-0 absolute z-50">
                   
-                  Coming Soon
+                  _
                   {/* TODO: Delete post */}
                   {
                   //   post.poster?.id == user?.profiles?.[0]?.id &&
@@ -203,9 +205,12 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
           </div>
 }
   { post.mediaType != "CHALLENGE" && <div className="p-8 subpixel-antialiased whitespace-pre-line">{post?.body}</div> }
-  <div className="flex items-center gap-2 justify-end text-sm text-primary/50">
-    <div><span className="font-medium text-primary">{post?.num_likes ?? 0}</span> likes</div>
-    <div><span className="font-medium text-primary">{post?.num_comments ?? 0}</span> comments</div>
+  <div className="flex items-center gap-4 justify-end text-sm text-primary/50 my-4">
+    {/* <div className="w-fit flex items-center font-medium text-primary gap-1"><AiFillHeart color={true ? 'red' : ''} size={20} /><span className="font-medium text-primary">{post?.num_likes ?? 0}</span></div> */}
+    <LikeButton post={post} user={user} />
+    <div><span className="w-fit flex items-center font-medium text-primary gap-1"> <AiOutlineMessage size={18} /> {post?.num_comments ?? 0}</span></div>
+    
+    
     {/* TODO: Readd <div><span className="font-medium text-primary">{post?.num_bookmarks ?? 0}</span> bookmarks</div> */}
   </div>
 

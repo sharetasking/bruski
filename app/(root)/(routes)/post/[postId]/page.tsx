@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { currentUser } from "@clerk/nextjs";
 import PostPage from "@/components/pages/PostPage";
 import { redirect } from "next/navigation";
+import { BruskiPost } from "@/hooks/usePost";
 
 interface PostPageProps {
   params: {
@@ -93,7 +94,8 @@ const user = await prismadb.user.findFirst({
 
 });
 
-let post
+let post:BruskiPost|null = null;
+
 try {
   
 // get post
@@ -113,6 +115,29 @@ try {
 } catch (error) {
   console.log(error)
 }
+
+// mark if liked
+// mark isliked as true if the user has liked the post
+if (user && user.id) {
+  if (user) {
+    const like = await prismadb.postLike.findFirst({
+      where: {
+        targetPostId: post?.id ?? "",
+        likerId: user.profiles[0].id,
+      }
+    });
+
+    
+    if (like && post) {
+        post.id = post.id ?? ""
+        post = {...post,isLiked: true};
+    }
+
+    
+  }
+}
+
+
 
 // await prismadb.post.findMany({
   // take: 30,

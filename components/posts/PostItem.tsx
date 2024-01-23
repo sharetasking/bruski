@@ -241,7 +241,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           <div className="flex flex-col bg-secondary text-primary rounded-3xl w-full min-h-[260px] p-4 lg:p-8 text-lg leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div className=" min-h-[200px] items-center text-center justify-center flex whitespace-pre-wrap break-words">{data.body}</div>
             <div className="text-xs mt-2 border border-primary/20 text-primary  py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.num_comments)}</span></div>
-            <button className='mt-4 btn active:bg-opacity-90 flex items-center gap-2 justify-center'><Reply size={16}/>Answer2</button>
+            <button className='mt-4 btn active:bg-opacity-90 flex items-center gap-2 justify-center'><Reply size={16}/>Answer</button>
           </div>
           }
 
@@ -263,11 +263,11 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
               
               <div className='font-normal text-sm line-clamp-6 text-left items-center justify-center px-4 py-4 flex h-grow w-full min-h-[60px] whitespace-pre-wrap break-words'>{data.originalPost?.body}</div>
               <div className="text-xs bordder border-primary/10 text-primary/80 py-1 text-right w-full rounded-2xl"><span className="font-medium">{data.originalPost?.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.originalPost?.num_comments)}</span></div>
-              <div className="flex items-center justify-between gap-4 mt-4 ">
+              <div className="flex flex-wrap items-center justify-between gap-4 mt-4 ">
 
 
 
-              <div className="flex gap-2 items-center ">
+              <div className="flex flex-wrap gap-2 items-center ">
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className=''>
 
                 <Avatar size={6} img={data.originalPost?.poster?.img ?? "/placeholder.svg"} url={"/"+data.originalPost?.poster?.url ?? ""} hasBorder={false} />
