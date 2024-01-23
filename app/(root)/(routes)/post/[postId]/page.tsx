@@ -114,6 +114,9 @@ try {
 
 } catch (error) {
   console.log(error)
+  return (<div className="flex items-center justify-center h-full w-full grow inset-0 flex-1 text-xl text-primary/50 p-40">
+    Post not found
+  </div>);
 }
 
 // mark if liked
