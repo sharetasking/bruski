@@ -11,10 +11,7 @@ const NotificationsFeed = () => {
   const { data: currentUser, mutate: mutateCurrentUser } = useBruskiUser();
   const { isLoading = true, data: fetchedNotifications = [] } = useNotifications(currentUser?.id);
 
-
-  // useEffect(() => {
-  //   mutateCurrentUser();
-  // }, [mutateCurrentUser]);
+  
 
   if (fetchedNotifications.length === 0 && !isLoading) {
     return (

@@ -17,8 +17,12 @@ import { SearchInput } from "@/components/search-input";
 import { useUser } from "@clerk/clerk-react";
 import { BruskiUser } from "@/hooks/useBruskiUser";
 import { useState } from "react";
+import { useEffect } from "react";
+import ReactGA from "react-ga";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const font = Poppins({ weight: "600", subsets: ["latin"] });
+
 
 interface NavbarProps {
   user: BruskiUser|null;
@@ -32,6 +36,11 @@ export const Navbar = ({
   const proModal = useProModal();
 
   const [num_notifications, setNumNotifications] = useState(user?.num_notifications || 0);
+
+
+
+
+
 
   function countTo(to: number) {
     let i = num_notifications;

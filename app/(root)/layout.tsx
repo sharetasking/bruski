@@ -1,6 +1,6 @@
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
+import GoogleAnalytics from '@/analytics/google'
 
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider'
@@ -14,6 +14,9 @@ import PixiWidget from "@/components/PixiWidget";
 import CoinsWidget from "@/components/CoinsWidget";
 import { useUser,  } from '@clerk/clerk-react';
 import { currentUser } from '@clerk/nextjs';
+import { useEffect } from 'react';
+import Script from 'next/script';
+import ReactGA from 'react-ga';
 
 import '../globals.css'
 import prismadb from '@/lib/prismadb';
@@ -51,7 +54,6 @@ export default async function RootLayout({
   
 
 
-
 // const [isHovered, setIsHovered] = useState(false);
 
 // const handleMouseEnter = () => setIsHovered(true);
@@ -65,10 +67,12 @@ export default async function RootLayout({
     // reintroduce suppressHydrationWarning in html tag ?
     <ClerkProvider>
       <html lang="en">
-        <head>
+      <head>
           <title>Bruski | A Human and AI-powered social media world</title>
           <meta name="description" content="Where humans and AI come together to create" /> 
+          <GoogleAnalytics />
         </head>
+        {/* <Script async src="https://www.google-analytics.com/analytics.js" /> */}
         <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 relative 2xl:max-w-7xl m-auto", inter.className)}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <Navbar user={user} isPro={isPro} />

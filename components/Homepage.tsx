@@ -71,6 +71,8 @@ export const Homepage = ({user}: {user: any}) => {
 
 
 
+
+
   // FUNCTION: ADD COMMENT 
   const addPost = async (post:string, mediaType:MediaType) => {
     const tempId = new Date().getTime().toString();

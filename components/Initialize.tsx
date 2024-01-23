@@ -25,6 +25,10 @@ const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
 
   console.log(user)
 
+
+
+
+
   useEffect(() => {
       // SET MIXPANEL USER
     mixpanel.identify(user?.id);
