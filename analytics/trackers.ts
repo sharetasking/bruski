@@ -37,7 +37,7 @@ const Trackers = () => {
 
 
     /* Track a Google Analytics page view */
-    analytics.page()
+    // analytics.page()
 
   });
   
