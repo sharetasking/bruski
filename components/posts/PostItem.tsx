@@ -161,7 +161,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
         {/* AVATAR IMAGE */}
         {/* <Avatar img={data.poster?.img ?? "/placeholder.svg"} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} /> */}
         <div className="relative">
-          <Avatar img={data.poster?.img ?? "/placeholder.svg"} url={"/"+data.poster.url ?? ""} size={10} hasBorder={false} />
+          <Avatar img={data.poster?.img ?? "/placeholder.svg"} url={"/"+data.poster?.url ?? ""} size={10} hasBorder={false} />
           
           {/* FOLLOW BUTTON */}
           {(data.poster?.id != signedInUserProfileId) && 

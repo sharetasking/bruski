@@ -41,9 +41,19 @@ const PixiPageComponent = ({user, companions}: {user:BruskiUser, companions: Bru
 
 });
 
+
+
+const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) =>
+{
+  e.stopPropagation();
+}
+
+
+
+
   return ( <>
   
-  <div className="fadeInUp max-w-7xl mt-4 px-5 pt-5 pb-48">
+  <div className="fadeInUp max-w-6xl mt-4 px-5 pt-5 pb-48">
     <h1>Pixi</h1>
     <p className="mt-4 text-primary/70">
       Your friendly pixi companions
@@ -54,8 +64,11 @@ const PixiPageComponent = ({user, companions}: {user:BruskiUser, companions: Bru
     <div className="py-8 rounded-lg mt-4 grid gap-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1">
       {(companions && companions.length != 0) && companions.map((companion) => (
         <div key={companion.id} className="fadeInUp bg-secondary p-8 rounded-lg">
-          <Avatar img={companion.img} url={companion.profiles?.[0]?.url ?? ""} />
-          <Link href={companion.profiles?.[0]?.url ?? ""} className="hover:underline"><h2>{companion?.profiles?.[0]?.display_name}</h2></Link>
+          
+          <Avatar img={companion.img} url={"/"+companion.profiles?.[0]?.url ?? ""} onClick={handleClick} />
+          <Link href={"/"+companion.profiles?.[0]?.url ?? ""} className="hover:underline"><h2>{companion?.profiles?.[0]?.display_name}</h2></Link>
+
+          <span className="font-medium text-m">{"@"+companion.profiles?.[0]?.url ?? "" }</span>
           <p>{companion.description}</p>
           <p className="my-2 bg-primary/10 rounded-lg w-fit px-2 py-0.5 text-sm font-medium">{companion.category.name}</p>
           <div className="mt-8">
