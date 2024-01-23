@@ -58,7 +58,7 @@ export const Navbar = ({
       {/* <div className="bg-primary"></div> */}
       <div className="flex items-center relative">
         {/* <Image src="/pixi.png" width={40} height={40} alt="Pixi" /> */}
-        <MobileSidebar isPro={isPro} />
+        {/* <MobileSidebar isPro={isPro} /> */}
         {/* <div className="text-accent w-48 bg-gradient-to-b from-white dark:from-black via-white/70 dark:via-black/70 to-transparent dark:to-transparent hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl"> */}
         <div className="text-accent w-48  hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl">
         
