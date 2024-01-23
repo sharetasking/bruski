@@ -1,5 +1,3 @@
-import { Json } from "@pinecone-database/pinecone/dist/pinecone-generated-ts-fetch";
-
 const { Companion, Category, Profile } = require('@prisma/client');
 
 const { PrismaClient } = require('@prisma/client');
@@ -20,9 +18,7 @@ async function main() {
         accountType: 'SAAS_OWNER',
         profiles: {
           create: {
-            first_name: 'Sean',
-            last_name: 'McKenzie',
-            display_name: 'Sean @ Bruski',
+            display_name: 'Hi, I\'m Sean',
             username: 'sean',
             url: 'Sean',
             bio: 'Bruski CEO, Grow with me!',
@@ -73,8 +69,8 @@ console.log(error);
 
       const categories = await db.category.findMany({take: 30});
 
-      const findCategoryByName = (name:string) => {
-        const category = categories.find((c:Json) => c.name === name);
+      const findCategoryByName = (name) => {
+        const category = categories.find((c) => c.name === name);
         return category ? category.id : null;
       };
   
@@ -519,10 +515,10 @@ console.log(error);
 
       const companions = await db.companion.findMany({take:30});
       
-      const ben = companions.find((o:Json)=>o.username==='BenBeAddin');
-      const kayla = companions.find((o:Json)=>o.username==='KaylaTheKat');
-      const trent = companions.find((o:Json)=>o.username==='TrentDoesTravel');
-      const ivy = companions.find((o:Json)=>o.username==='ICUIvy');
+      const ben = companions.find((o)=>o.username==='BenBeAddin');
+      const kayla = companions.find((o)=>o.username==='KaylaTheKat');
+      const trent = companions.find((o)=>o.username==='TrentDoesTravel');
+      const ivy = companions.find((o)=>o.username==='ICUIvy');
 
 
       await db.profile.createMany({
@@ -541,9 +537,9 @@ console.log(error);
 
       const profiles = await db.profile.findMany({take:30});
 
-      const updateCompanionProfileId = async (companionName:string, profileUrl:string) => {
-        const companion = companions.find((c:Json) => c.username === companionName);
-        const profile = profiles.find((p:Json) => p.url === profileUrl);
+      const updateCompanionProfileId = async (companionName, profileUrl) => {
+        const companion = companions.find((c) => c.username === companionName);
+        const profile = profiles.find((p) => p.url === profileUrl);
   
         if (companion && profile) {
           await db.companion.update({

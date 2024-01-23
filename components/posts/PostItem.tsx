@@ -7,7 +7,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import Avatar from "@/components/Avatar"
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, MessageSquareReply, Reply } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
@@ -241,7 +241,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           <div className="flex flex-col bg-secondary text-primary rounded-lg w-full min-h-[260px] p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div className=" min-h-[200px] items-center text-center justify-center flex whitespace-pre-wrap break-words">{data.body}</div>
             <div className="text-xs mt-2 border border-primary/20 text-primary  py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.num_comments)}</span></div>
-            <button className='mt-4 btn active:bg-opacity-90'>Answer</button>
+            <button className='mt-4 btn active:bg-opacity-90 flex items-center gap-2 justify-center'><Reply size={16}/>Answer</button>
           </div>
           }
 
@@ -255,9 +255,18 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           }
 
           
-          {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId && <span className="flex flex-col bg-secondary w-full hover:bg-primary/10 active:bg-primary/20 text-primary rounded-2xl min-h-[260px] p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
+          {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId &&
+          
+          <span className="flex flex-col bg-secondary w-full hover:bg-primary/10 active:bg-primary/20 text-primary rounded-2xl min-h-[260px] p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
-              {/* {JSON.stringify(data.originalPost)} */}
+              
+              
+              <div className='font-normal text-sm line-clamp-6 text-left items-center justify-center px-4 py-4 flex h-grow w-full min-h-[140px] whitespace-pre-wrap break-words'>{data.originalPost?.body}</div>
+
+              <div className="flex items-center justify-between gap-4 mt-4 ">
+
+
+
               <div className="flex gap-2 items-center ">
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className=''>
 
@@ -272,10 +281,20 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                 </div>
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className='hover:underline text-base font-medium '>{data.originalPost?.poster?.display_name} </div>
               </div>
-              <div className='font-normal text-2xl line-clamp-6 text-center items-center justify-center px-4 flex h-grow w-full min-h-[240px] whitespace-pre-wrap break-words'>{data.originalPost?.body}</div>
-              <div className="ml-8 text-xs mt-1 border border-primary/10 text-primary/80 py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.originalPost?.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.originalPost?.num_comments)}</span></div>
 
-              <button className='mt-4 btn active:bg-opacity-90'>Answer</button>
+
+
+                
+                
+
+                  <div className="flex items-center gap-4">
+                  <div className="ml-4 text-xs border border-primary/10 text-primary/80 py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.originalPost?.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.originalPost?.num_comments)}</span></div>
+                  <button className='btn active:bg-opacity-90 flex items-center justify-center gap-2 w-fit'><Reply size={16}/>Answer</button>
+                  </div>
+                
+
+
+              </div>
             </div>
             
           </span>}
