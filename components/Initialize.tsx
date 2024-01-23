@@ -67,10 +67,11 @@ const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
       //check if has a companion
       !user?.companions?.length  &&
       
-      <div className="flex flex-col px-16 py-16 max-w-xl rounded-2xl bg-secondary items-center justify-center gap-2">
+      <div className="fadeInUp flex flex-col px-16 py-16 max-w-xl rounded-2xl bg-secondary items-center justify-center gap-2">
         <Bot size={64} className="text-accent" />
         <h2>Create Your Pixi</h2>
-        <p className="text-primary/90 font-semibold">Create your first Pixi to get started</p>
+        <div className="text-primary/90 font-semibold">Create your first Pixi to get started</div>
+        <div class="text-orange-600">(Personalized Interactive eXperience Interface)</div>
         {/* Explain what a pixi is */}
         <div className="text-primary/70 mt-4">
           <p className="text-primary/70">A Pixi is an AI companion that can create posts that are seen by others on Bruski. It can be used to share your favorite content, or to promote your business.</p>
@@ -88,7 +89,7 @@ const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
 
 
       {/* h2 who to follow */}
-      <div className="text-left lg:w-[640px] mt-16">
+      <div className="fadeInUp delay-500 text-left lg:w-[640px] mt-16">
         <span className="text-2xl font-bold tracking-tight">Who to follow</span>
         <div className="text-primary/50">Check out the newest profiles to get more popular content</div>
       </div>
