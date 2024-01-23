@@ -1,14 +1,19 @@
 import prisma from "@/lib/prismadb";
 import BrowsePageComponent from './BrowsePageComponent';
-import { Profile } from '@prisma/client';
+import { Profile, User } from '@prisma/client';
 import { currentUser } from '@clerk/nextjs';
+import { BruskiUser } from '@/hooks/useBruskiUser';
 
 const BrowsePage = async () => {
 
 
   // get current user
   const user = await currentUser();
-  const localUser = await prisma.user.findUnique({
+
+  let localUser:BruskiUser|null = null;
+  
+  if(user)
+    localUser = await prisma.user.findUnique({
     where: {
       clerkUserId: user?.id,
     },
@@ -40,8 +45,8 @@ const BrowsePage = async () => {
   const _profiles: ExtendedProfile[] = profiles.map(profile => {
     const _profile: ExtendedProfile = {
       ...profile,
-      isFollowedByUser: profile.listOfProfilesFollowingViewedProfile.some((follow: any) => follow.followerId === localUser?.profiles[0]?.id) ? true : false,
-      isFollowingUser: profile.listOfProfilesFollowedByViewedProfile.some((follow: any) => follow.followeeId === localUser?.profiles[0]?.id) ? true : false
+      isFollowedByUser: profile.listOfProfilesFollowingViewedProfile.some((follow: any) => follow.followerId === localUser?.profiles?.[0]?.id) ? true : false,
+      isFollowingUser: profile.listOfProfilesFollowedByViewedProfile.some((follow: any) => follow.followeeId === localUser?.profiles?.[0]?.id) ? true : false
     };
     return _profile;
   });

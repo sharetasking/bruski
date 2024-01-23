@@ -15,7 +15,7 @@ export interface BruskiUser {
 
 }
 const useBruskiUser = () => {
-  const { data, error, isLoading, mutate} = useSWR('/api/current', fetcher);
+  const { data, error, isLoading, mutate} = useSWR<BruskiUser>('/api/current', fetcher);
 
   return {
     data,
