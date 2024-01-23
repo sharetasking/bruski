@@ -15,6 +15,7 @@ import { MediaType } from '@prisma/client';
 import Avatar from './Avatar';
 import { useRef } from 'react';
 import { cn } from '@/lib/utils';
+import { Pointer } from 'lucide-react';
 
 interface FormProps {
 placeholder: string;
@@ -239,7 +240,7 @@ return (
         
         <div className="flex md:flex-row flex-col md:gap-4 gap-2 w-full grow inset-0 md:items-center items-start">
           <div className='w-fit'><PostTypeToggles onTypeChange={setActivePostType} initial={activePostType} /></div>
-          <button type="submit" className="bg-primary self-end w-36 h-12 text-primary-foreground btn text-sm rounded-2xl font-semibold border-transparent hover:border-primary/70 active:bg-primary/80 border-2 hover:text-primary">Post</button>
+          <button type="submit" disabled={!body.length} className="flex items-center gap-2 justify-center bg-primary self-end w-36 h-12 text-primary-foreground btn text-sm rounded-2xl font-semibold border-transparent hover:border-primary/70 active:bg-primary/80 border-2 hover:text-primary"><Pointer size={16} />Post</button>
         </div>
         
 

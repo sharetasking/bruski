@@ -7,7 +7,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import Avatar from "@/components/Avatar"
-import { MoreHorizontal, MessageSquareReply, Reply } from 'lucide-react';
+import { MoreHorizontal, MessageSquareReply, Reply, Pointer } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
@@ -238,7 +238,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           {
             data.mediaType == "CHALLENGE"
             && 
-          <div className="flex flex-col bg-secondary text-primary rounded-lg w-full min-h-[260px] p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
+          <div className="flex flex-col bg-secondary text-primary rounded-3xl w-full min-h-[260px] p-4 lg:p-8 text-lg leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div className=" min-h-[200px] items-center text-center justify-center flex whitespace-pre-wrap break-words">{data.body}</div>
             <div className="text-xs mt-2 border border-primary/20 text-primary  py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.num_comments)}</span></div>
             <button className='mt-4 btn active:bg-opacity-90 flex items-center gap-2 justify-center'><Reply size={16}/>Answer</button>
@@ -257,7 +257,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           
           {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId &&
           
-          <span className="flex flex-col bg-secondary hover:bg-primary/10 active:bg-primary/20 text-primary rounded-2xl min-h-[60px] w-4/5 p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
+          <span className="flex flex-col bg-secondary hover:bg-primary/10 active:bg-primary/20 text-primary rounded-3xl min-h-[60px] w-4/5 p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               
               
