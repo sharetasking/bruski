@@ -39,23 +39,36 @@ interface Post{
 const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
 
 
+  const [_posts, setPosts] = useState<Post[]>([]);
+  const [generating, setGenerating] = useState<boolean>(false);
 
+  const [following, setFollowing] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>();
+
+
+  
+  const {data:posts, mutate:mutatePosts, isLoading, isError} = usePosts({ take: 4, page:page });
+
+  console.log(posts)
 
 
 // INITIAL FETCH
 useEffect(() => {
-  fetchPosts({ take: 4 }).then((res) => {
-    try{
-      setPosts(res);
-    }
-    catch(error){
-      console.error(error);
-    }
-  }).catch((error) => {
-    console.error('Failed to fetch posts:', error);
-  });
+  // TODO: Switch to hook and SWR
+  // fetchPosts({ take: 4 }).then((res) => {
+  //   try{
+  //     setPosts(res);
+  //   }
+  //   catch(error){
+  //     console.error(error);
+  //   }
+  // }).catch((error) => {
+  //   console.error('Failed to fetch posts:', error);
+  // });
 
 
+    
 
     // SET MIXPANEL USER
     mixpanel.identify(user?.id);
@@ -69,20 +82,12 @@ useEffect(() => {
       page_name: "ProfilePage",
       url: window.location.pathname,
       profile_id: profile?.id,
-
-
-    
     });
-},); 
+}); 
 
 
 
 
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [generating, setGenerating] = useState<boolean>(false);
-    
-    const {data} = usePosts({ take: 4, page:page });
-    console.log(data)
     const generatePost = () =>
     {
         setGenerating(true)
@@ -153,17 +158,25 @@ useEffect(() => {
 
   // FUNCTION: LOAD MORE POSTS
   const loadMorePosts = ({page}:{page:number}) => {
-    fetchPosts({ take: 4, page:page }).then((res) => {
-      try{
-        setPosts((prev) => [...prev, ...res ])
-      }
-      catch(error){
-        console.error(error);
-      }
-    }
-    ).catch((error) => {
-      console.error('Failed to fetch posts:', error);
-    });
+    
+    page = 4;
+    mutatePosts();
+
+    // const _posts = usePosts({ take: 4, page:page }
+    //   )
+
+    // setPosts((prev) => [...prev, ...res ])
+    // fetchPosts({ take: 4, page:page }).then((res) => {
+    //   try{
+    //     setPosts((prev) => [...prev, ...res ])
+    //   }
+    //   catch(error){
+    //     console.error(error);
+    //   }
+    // }
+    // ).catch((error) => {
+    //   console.error('Failed to fetch posts:', error);
+    // });
   }
 
   
@@ -198,9 +211,6 @@ const fetchPosts = async ({ take, page=1 }:{ take:number, page?:number }) => {
 
     //   const [user, setUser] = useState<User>();
 //   const [profile, setProfile] = useState<Profile>();
-  const [following, setFollowing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>();
 
 //   const profile = useProfile(profile?.id);
   
