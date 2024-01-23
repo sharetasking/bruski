@@ -18,7 +18,7 @@ export interface BruskiPost {
   date_deleted?: Date|null;
   
   // Assuming Profile, Category, PostType, PostLike, Bookmark are defined elsewhere
-  poster: Profile;
+  poster: Profile & { isFollowed?: boolean };
   category?: Category|null;
   // postType: PostType;
   originalPostId?: string|null;

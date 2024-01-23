@@ -21,7 +21,7 @@ interface FormProps {
 placeholder: string;
 isComment?: boolean;
 postId?: string;
-onPostSubmit: (comment: string, mediaType: MediaType) => void;
+onPostSubmit: (post: string, mediaType: MediaType) => void;
 
 }
 

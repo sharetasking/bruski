@@ -1,33 +1,21 @@
 "use client"
 
-import { PostCreator } from "./post-creator";
 import { PostFeed } from "@/components/PostFeed";
-import { Test } from "@/components/test";
-import { Categories } from "@/components/categories";
-import { MediaType, Profile } from "@prisma/client";
+import { MediaType } from "@prisma/client";
 import { useEffect } from "react";
-import { Companions } from "@/components/companions";
-import Image from "next/image";
+import { PostCreator } from "./post-creator";
 // import { useRouter } from "next/navigation"
-import { SearchInput } from "@/components/search-input";
 // import PostItem from "@/components/posts/postItem";
-import { Button } from "@/components/ui/button";
-import { useUser } from "@clerk/nextjs"
-import { auth, currentUser } from "@clerk/nextjs";
-import prismadb from "@/lib/prismadb";
-import PixiWidget from "@/components/PixiWidget";
-import BottomBar from "@/components/BottomBar";
-import useProfiles, {ExtendedProfile} from "@/hooks/useProfiles";
-import Link from "next/link";
-import Avatar from "@/components/Avatar"
-import FollowButtonPlus from "@/components/FollowButtonPlus"
+import Avatar from "@/components/Avatar";
+import FollowButtonPlus from "@/components/FollowButtonPlus";
+import useProfiles, { ExtendedProfile } from "@/hooks/useProfiles";
 import { cn } from "@/lib/utils";
+import mixpanel from "@/utils/mixpanel";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { usePosts } from "@/hooks/usePosts";
-import { profile } from "console";
-import ProfileIdPage from "@/app/(root)/(routes)/[profileId]/page";
-import mixpanel from "@/utils/mixpanel";
+import { BruskiPost } from "@/hooks/usePost";
 
 interface Post{
   body: string;
@@ -41,16 +29,32 @@ interface Post{
 // CLASS
 export const Homepage = ({user}: {user: any}) => {
   
+  // PROFILE STATE
   const { data: profiles } = useProfiles({ take: 4, fresh: true });
-  const [comments, setComments] = useState<Post[]>([]);
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+
+  // POSTS COMMENT? STATE
+  // const [posts, setPosts] = useState<Post[]>([]);
+  
+  // CURRENT POSTS PAGE STATE
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+
+
+  // ALL POSTS STATE
+  const [allPosts, setAllPosts] = useState<BruskiPost[]>([]);
+
+
+
+  // FETCH POSTS
+  const { data: newPosts, isLoading: loadingNewPosts, isError: isErrorNewPosts } = usePosts({
+    take: 4,
+    page: currentPage,
+  });
   
 
-  
+
+  // SET UP MIXPANEL
   useEffect(() => {
-
-      
       // SET MIXPANEL USER
     mixpanel.identify(user?.id);
     mixpanel.people.set({
@@ -68,24 +72,41 @@ export const Homepage = ({user}: {user: any}) => {
 
 
   // FUNCTION: ADD COMMENT 
-  const addPost = async (newComment:string, mediaType:MediaType) => {
+  const addPost = async (post:string, mediaType:MediaType) => {
     const tempId = new Date().getTime().toString();
-
-    let comment = {
+    
+    let newPostObj = {
         id: tempId,
-        body: newComment,
+        body: post,
         mediaType: mediaType,
+        media: [post],
         poster: user?.profiles?.[0], //TODO: fix this
         saving: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        comments: [],
+        num_comments: 0,
+        num_likes: 0,
+        num_reposts: 0,
+        num_shares: 0,
+        num_views: 0,
+        liked: false,
+        reposted: false,
+        shared: false,
+        viewed: false,
+        profileId: user?.profiles?.[0]?.id,
+        num_bookmarks: 0,
+
+        
       };
     
-    if(comment.poster)
-      comment.poster.isFollowed = false;
+    if(newPostObj.poster)
+      newPostObj.poster.isFollowed = false;
 
 
-    setPosts(prevComments => [comment, ...prevComments]);
+    setAllPosts(prevPosts => [newPostObj, ...prevPosts]);
 
-
+      
     try {
       // Replace this with your actual API call logic to submit the comment
       const response = await fetch(`/api/posts?media_type=${mediaType}`, {
@@ -93,7 +114,7 @@ export const Homepage = ({user}: {user: any}) => {
           headers: {
               'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ body: newComment, poster: user?.profiles?.[0] }),
+          body: JSON.stringify({ body: newPostObj, poster: user?.profiles?.[0] }),
       });
 
       if (!response.ok) {
@@ -103,65 +124,65 @@ export const Homepage = ({user}: {user: any}) => {
       const data = await response.json();
 
       // Update the state with the permanent ID received from the server
-      setPosts(prevComments => prevComments.map(comment => 
-          comment.id === tempId ? { ...comment, id: data.id, saving:false } : comment
+      setAllPosts(prevPosts => prevPosts.map(post => 
+          post.id === tempId ? { ...post, id: data.id, saving:false } : post
       ));
+
+      toast.success('Success');
   } catch (error) {
-      console.error('Failed to submit comment:', error);
-      toast.error('Failed to submit comment');
+      console.log('Failed to submit post:', error);
+      toast.error('Failed to submit post');
+
       // Optionally remove the temporary comment from the state
-      setPosts(prevComments => prevComments.filter(comment => comment.id !== tempId));
+      setAllPosts(prevPosts => prevPosts.filter(post => post.id !== tempId));
   }
     
   };
 
 
-  // FUNCTION: LOAD MORE POSTS
-  const loadMorePosts = ({page}:{page:number}) => {
-    fetchPosts({ take: 4, page:page }).then((res) => {
-      try{
-        setPosts((prev) => [...prev, ...res ])
-      }
-      catch(error){
-        console.error(error);
-      }
-      console.log(posts)
+
+
+
+
+
+
+
+
+
+
+
+// ************************INFINITE SCROLL************************
+
+// UPDATE ALL POSTS WHEN NEW POSTS ARE FETCHED (CHECK TO ENSURE THEY AREN'T ALREADY IN ALL POSTS)
+useEffect(() => {
+  if (!loadingNewPosts && !isErrorNewPosts && newPosts) {
+    const newUniquePosts = newPosts.filter(
+      (newPost:BruskiPost) => Array.isArray(allPosts) && !allPosts.some((post) => post.id === newPost.id)
+    );
+    if (newUniquePosts.length > 0) {
+      setAllPosts((currentPosts) => [...currentPosts, ...newUniquePosts]);
     }
-    ).catch((error) => {
-      console.error('Failed to fetch posts:', error);
-    });
   }
+}, [newPosts, allPosts, loadingNewPosts, isErrorNewPosts]);
 
-  
-// function: fetch posts
-const fetchPosts = async ({ take, page=1 }:{ take:number, page?:number }) => {
-  const profileId = null;
 
-  setLoading(true);
-  page = page <= 0 ? 1 : page;
-
-  const url = profileId ? `/api/posts?page=${page}&size=${4}&profileId=${profileId}` : `/api/posts?page=${page}&size=${4}`;
-  console.log(url)
-  const response = await fetch(url);
-  const data = await response.json();
-  setLoading(false);
-  return data;
+// TRIGGER MORE LOADS BY INCREMENTING CURRENT PAGE
+const loadMorePosts = () => {
+  // Increment current page to fetch next set of posts
+  setCurrentPage(prevPage => prevPage + 1);
 };
 
 
-// INITIAL FETCH
-useEffect(() => {
-  fetchPosts({ take: 4 }).then((res) => {
-    try{
-      setPosts(res);
-    }
-    catch(error){
-      console.error(error);
-    }
-  }).catch((error) => {
-    console.error('Failed to fetch posts:', error);
-  });
-}, []); 
+// RESET STATE WHEN PROFILE CHANGES
+// useEffect(() => {
+//   setAllPosts([]);
+//   setCurrentPage(1);
+// }, []);
+
+// ************************END INFINITE SCROLL************************
+
+
+
 
 
   return (
@@ -224,7 +245,7 @@ useEffect(() => {
         <div className="lg:col-span-2 w-full flex flex-col items-center mx-auto grow-0">
           <PostCreator onPostSubmit={addPost} placeholder="What's going on in your world today?" />
           
-          <PostFeed user={user} _posts={posts} onScrollEnd={loadMorePosts} />
+          <PostFeed user={user} _posts={allPosts} onScrollEnd={loadMorePosts} />
         </div>
 
 

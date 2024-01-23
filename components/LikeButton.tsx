@@ -4,21 +4,18 @@ import useLike from "@/hooks/useLike";
 import toast from "react-hot-toast";
 import { useCallback } from "react";
 import { BruskiUser } from "@/hooks/useBruskiUser";
+import { usePosts } from "@/hooks/usePosts";
 
 
 const LikeButton = ({post, user}:{post:BruskiPost, user:BruskiUser|null}) => {
 
-  console.log(post)
-  console.log(user)
-  
+  const {mutate: mutatePosts} = usePosts();
   
   
   const { hasLiked, numLikes, toggleLike } = useLike({ postId: post.id, liked: !!post.isLiked, likesCount: post.num_likes});
 
   // LIKE ICON
   const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
-
-  console.log(post)
 
 
   // LIKE POST
@@ -31,8 +28,10 @@ const LikeButton = ({post, user}:{post:BruskiPost, user:BruskiUser|null}) => {
     //   return loginModal.onOpen();
     }
 
-    toggleLike();
-  }, [toggleLike, user]);
+    await toggleLike();
+    mutatePosts();
+    
+  }, [toggleLike, user, mutatePosts]);
 
 
 

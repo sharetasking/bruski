@@ -13,7 +13,8 @@ export async function POST( req: NextRequest, { params }: { params: { profileId:
     const data = await req.json();
     const user = await currentUser();
     const media_type = req.nextUrl.searchParams.get("media_type");
-    const { body } = data;
+    const { body } = data?.body ?? "";
+    
 
     if (!user || !user.id) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -49,6 +50,7 @@ export async function POST( req: NextRequest, { params }: { params: { profileId:
     console.log(localUser.profiles[0].id, "localUser.profiles[0].id")
 const profileId = localUser.profiles[0].id;
 let post;
+
     //create the post
     try {
       post = await prismadb.post.create({

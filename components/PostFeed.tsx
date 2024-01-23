@@ -15,7 +15,7 @@ import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { BruskiUser } from "@/hooks/useBruskiUser";
-// import { Post } from "@prisma/client";
+import { BruskiPost } from "@/hooks/usePost";
 
 interface Post{
   body: string;
@@ -28,7 +28,7 @@ interface Post{
 interface PostFeedProps {
   user?: BruskiUser|null,
   profileId?: string
-  _posts?: Post[],
+  _posts?: BruskiPost[],
   onScrollEnd: ({ page }: { page: number }) => void;
 }
 
@@ -178,7 +178,7 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId,_posts, onScro
     return(
       <>
       {/* SHOW POSTS IF AVAILABLE */}
-      {_posts && _posts.map((post: Record<string,any>, index) => (
+      {_posts && _posts.map((post: BruskiPost, index) => (
           
           <div key={post.id} className="fadeInUp gap-2 flex break-words break-all max-w-xl grow w-full 
           subpixel-antialiased text-[16px] ">

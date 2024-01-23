@@ -39,7 +39,7 @@ interface Post{
 
 const ProfilePageComponent = ({profile, user, page=1}: ProfilePageProps) => {
 
-
+// NOTE IF PIXI IS GERERATING POSTS
 const [generating, setGenerating] = useState<boolean>(false);
 
 
@@ -49,6 +49,8 @@ const [allPosts, setAllPosts] = useState<Post[]>([]);
 // State to track current page
 const [currentPage, setCurrentPage] = useState<number>(1);
 
+
+// FETCH POSTS
 const { data: newPosts, isLoading: loadingNewPosts, isError: isErrorNewPosts } = usePosts({
   profileId: profile?.id,
   take: 4,
@@ -58,7 +60,33 @@ const { data: newPosts, isLoading: loadingNewPosts, isError: isErrorNewPosts } =
 
 
 
-// This effect updates allPosts when newPosts changes and are not already included in allPosts
+
+
+// INITIALIZE MIXPANEL
+useEffect(() => {
+
+  // SET MIXPANEL USER
+  mixpanel.identify(user?.id);
+  mixpanel.people.set({
+    $email: user?.email,
+    // ... other user properties
+  });
+
+  mixpanel.track("profile_view", {
+    // Optionally include properties about the page
+    page_name: "ProfilePage",
+    url: window.location.pathname,
+    profile_id: profile?.id,
+  });
+}); 
+
+
+
+
+
+// ************************INFINITE SCROLL************************
+
+// UPDATE ALL POSTS WHEN NEW POSTS ARE FETCHED (CHECK TO ENSURE THEY AREN'T ALREADY IN ALL POSTS)
 useEffect(() => {
   if (!loadingNewPosts && !isErrorNewPosts && newPosts) {
     const newUniquePosts = newPosts.filter(
@@ -71,40 +99,26 @@ useEffect(() => {
 }, [newPosts, allPosts, loadingNewPosts, isErrorNewPosts]);
 
 
-
-// Load more posts when the page changes
+// TRIGGER MORE LOADS BY INCREMENTING CURRENT PAGE
 const loadMorePosts = () => {
   // Increment current page to fetch next set of posts
   setCurrentPage(prevPage => prevPage + 1);
 };
 
-// Don't forget to reset the state when the profile changes
+
+// RESET STATE WHEN PROFILE CHANGES
 useEffect(() => {
   setAllPosts([]);
   setCurrentPage(1);
 }, [profile?.id]);
 
+// ************************END INFINITE SCROLL************************
 
 
 
 
-// MIXPANEL
-useEffect(() => {
 
-    // SET MIXPANEL USER
-    mixpanel.identify(user?.id);
-    mixpanel.people.set({
-      $email: user?.email,
-      // ... other user properties
-    });
-  
-    mixpanel.track("profile_view", {
-      // Optionally include properties about the page
-      page_name: "ProfilePage",
-      url: window.location.pathname,
-      profile_id: profile?.id,
-    });
-}); 
+
 
 
 

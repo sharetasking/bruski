@@ -336,7 +336,7 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
   <div>
 
   </div>
-  {comments && comments?.map((comment:Post) =>  
+  {comments && comments?.map((comment:BruskiPost) =>  
       (
       <div key={comment?.id}>
         <PostItem data={comment} user={user} />

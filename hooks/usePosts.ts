@@ -1,18 +1,9 @@
 import useSWR from 'swr';
 import fetcher from '@/lib/fetcher';
+import { BruskiPost } from './usePost';
 export function usePosts (params?:{profileId?: string, take?: number, skip?: number, orderBy?: string, target?: string, fresh?: boolean, page?:number}) {
 
   
-  
-  interface Post {
-    id: string;
-    profileId: string;
-    content: string;
-    createdAt: Date;
-    updatedAt?: Date;
-    [key: string]: any;
-
-  }
 
   const profileId = params?.profileId ?? null;
   const take = params?.take ?? null;
@@ -54,12 +45,12 @@ export function usePosts (params?:{profileId?: string, take?: number, skip?: num
   let url = base_url+'?'+queries.join('&');
 
 
-  const { data, error, mutate } = useSWR(url, fetcher)
+  const { data, error, mutate } = useSWR<BruskiPost[]>(url, fetcher)
   
   const isLoading = !data && !error;
  
   return {
-    data,
+    data:data as BruskiPost[],
     isLoading,
     isError: error,
     mutate

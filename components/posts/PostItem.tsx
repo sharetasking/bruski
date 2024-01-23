@@ -1,42 +1,33 @@
 "use client"
 
-import { useRouter } from 'next/navigation'; 
+import Avatar from "@/components/Avatar";
+import { Reply } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
-import { AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineLike, AiOutlineDislike,AiOutlineUserAdd, AiOutlineUserDelete } from 'react-icons/ai';
-import { formatDistanceToNowStrict } from 'date-fns';
-import { toast } from "react-hot-toast";
-import { Button } from "@/components/ui/button";
-import Avatar from "@/components/Avatar"
-import { MoreHorizontal, MessageSquareReply, Reply, Pointer } from 'lucide-react';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from 'react-icons/ai';
 
 
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
-import useLoginModal from '@/hooks/useLoginModal';
 import useBruskiUser, { BruskiUser } from '@/hooks/useBruskiUser';
-import useLike from '@/hooks/useLike';
 import useFollow from '@/hooks/useFollow';
-import Link from 'next/link';
-import { timeAgo } from '@/lib/utils';
+import useLike from '@/hooks/useLike';
+import useLoginModal from '@/hooks/useLoginModal';
+import { cn, timeAgo } from '@/lib/utils';
 
+import { BruskiPost } from '@/hooks/usePost';
 import FollowButtonPlus from '../FollowButtonPlus';
 import LikeButton from '../LikeButton';
 
 interface PostItemProps {
-  data: Record<string, any>;
+  data: BruskiPost & {saving?: false};
   user: BruskiUser|null;
   isComment?: boolean;
 }
 
-const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }) => {
+const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => {
+
 
   const signedInUserProfileId = user?.profiles?.[0]?.id;
-  
+
   const profileId = data?.profileId;
 
   const plurify = (word: string, count: number|string) => {
@@ -52,7 +43,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
   const { data: currentUser } = useBruskiUser();
   const { hasLiked, numLikes, toggleLike } = useLike({ postId: data.id, profileId, liked: !!data.isLiked, likesCount: data.num_likes});
   // const { hasLiked, numLikes, toggleLike } = useEcho({ postId: data.id, profileId, liked: !!data.isLiked, likesCount: data.num_likes});
-  const { isFollowing, toggleFollow, } = useFollow({ profileId, following: data.poster?.isFollowed ?? false, followersCount: data.num_follows});
+  const { isFollowing, toggleFollow, } = useFollow({ profileId, following: data.poster?.isFollowed ?? false, followersCount: data.poster?.num_followers});
 
   const goToLink = useCallback((ev: any, link: string) =>
   {
@@ -165,7 +156,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           
           {/* FOLLOW BUTTON */}
           {(data.poster?.id != signedInUserProfileId) && 
-            <FollowButtonPlus settings={{profileId:data.poster?.id, follows:isFollowing??false, followersCount:Math.max(data.numFollowers, 0)}}  />
+            <FollowButtonPlus settings={{profileId:data.poster?.id, follows:isFollowing??false, followersCount:Math.max(data.poster?.num_followers, 0)}}  />
           }
         </div>
 
@@ -330,28 +321,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
 
 
               {/* Like */}
-              <div
-                onClick={onLike}
-                className="
-                  flex 
-                  flex-row 
-                  items-center 
-                  text-neutral-500 
-                  gap-1 
-                  cursor-pointer 
-                  hover:bg-primary/5
-                  active:bg-primary/10
-                  rounded-full
-                  h-14 w-14
-                  justify-center
-                  transition 
-                  hover:text-red-500
-              ">
-                <LikeIcon color={hasLiked ? 'red' : ''} size={20} />
-                <p className="text-xs">
-                  {Math.max(numLikes, 0) }
-                </p>
-              </div>
+              <LikeButton post={data} user={user} />
               
 
               {/* Message */}
@@ -374,7 +344,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
               ">
                 <AiOutlineMessage size={20} />
                 <p>
-                  {data.comments?.length || 0}
+                  {data.num_comments || 0}
                 </p>
               </div>
 
