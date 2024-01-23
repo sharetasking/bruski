@@ -69,7 +69,7 @@ console.log(error);
 
       const categories = await db.category.findMany({take: 30});
 
-      const findCategoryByName = (name:string) => {
+      const findCategoryByName = (name) => {
         const category = categories.find((c) => c.name === name);
         return category ? category.id : null;
       };
