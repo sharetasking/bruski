@@ -1,3 +1,4 @@
+import Trackers from '@/analytics/trackers';
 import { Toaster } from 'react-hot-toast';
 
 const AuthLayout = ({
@@ -7,6 +8,7 @@ const AuthLayout = ({
 }) => {
   return ( 
     <div className="flex justify-center items-center w-full h-full">
+      <Trackers />
       {children}
 
       <Toaster />
