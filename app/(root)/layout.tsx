@@ -1,12 +1,13 @@
 import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
-import GoogleAnalytics from '@/analytics/google'
+// import GoogleAnalytics from '@/analytics/google'
 
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from 'react-hot-toast';
 import { ProModal } from '@/components/pro-modal';
 import { Navbar } from '@/components/navbar';
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 
 import BottomBar from "@/components/BottomBar";
@@ -73,11 +74,12 @@ export default async function RootLayout({
           <meta name="description" content="Where humans and AI come together to create" /> 
 
           <Trackers />
-          <GoogleAnalytics />
+          {/* <GoogleAnalytics /> */}
         </head>
         {/* <Script async src="https://www.google-analytics.com/analytics.js" /> */}
         <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 relative 2xl:max-w-7xl m-auto", inter.className)}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+
             <Navbar user={user} isPro={isPro} />
             <ProModal />
             <div className="flex grow flex-1 w-full pt-16">

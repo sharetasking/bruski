@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import Analytics from 'analytics'
 // import googleAnalytics from '@analytics/google-analytics'
 import useBruskiUser from '@/hooks/useBruskiUser';
+import { GoogleAnalytics } from "nextjs-google-analytics";
+
 
 const siteId = 3837404;
 const hotjarVersion = 6;
@@ -20,7 +22,7 @@ const hotjarVersion = 6;
 // })
 
 
-const Trackers = () => {
+const Trackers: React.FC = () => {
 
   // const {data:user} = useBruskiUser();
   useEffect(() => {
@@ -40,7 +42,9 @@ const Trackers = () => {
 
   });
   
-  return null;
+  return (<>
+  <GoogleAnalytics trackPageViews gaMeasurementId="G-71ME0MPZPE" />
+  </>)
 }
  
 
