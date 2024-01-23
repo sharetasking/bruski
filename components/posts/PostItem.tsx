@@ -257,12 +257,12 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           
           {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId &&
           
-          <span className="flex flex-col bg-secondary w-full hover:bg-primary/10 active:bg-primary/20 text-primary rounded-2xl min-h-[260px] p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
+          <span className="flex flex-col bg-secondary hover:bg-primary/10 active:bg-primary/20 text-primary rounded-2xl min-h-[60px] w-4/5 p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               
               
-              <div className='font-normal text-sm line-clamp-6 text-left items-center justify-center px-4 py-4 flex h-grow w-full min-h-[140px] whitespace-pre-wrap break-words'>{data.originalPost?.body}</div>
-
+              <div className='font-normal text-sm line-clamp-6 text-left items-center justify-center px-4 py-4 flex h-grow w-full min-h-[60px] whitespace-pre-wrap break-words'>{data.originalPost?.body}</div>
+              <div className="text-xs bordder border-primary/10 text-primary/80 py-1 text-right w-full rounded-2xl"><span className="font-medium">{data.originalPost?.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.originalPost?.num_comments)}</span></div>
               <div className="flex items-center justify-between gap-4 mt-4 ">
 
 
@@ -287,9 +287,10 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                 
                 
 
-                  <div className="flex items-center gap-4">
-                  <div className="ml-4 text-xs border border-primary/10 text-primary/80 py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.originalPost?.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.originalPost?.num_comments)}</span></div>
-                  <button className='btn active:bg-opacity-90 flex items-center justify-center gap-2 w-fit'><Reply size={16}/>Answer</button>
+                  <div className="flex flex-col items-center gap-1">
+                  
+                    <button className='btn active:bg-opacity-90 flex items-center justify-center gap-2 w-fit'><Reply size={16}/>Answer</button>
+                    
                   </div>
                 
 
