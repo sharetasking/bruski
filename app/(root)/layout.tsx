@@ -17,6 +17,7 @@ import { currentUser } from '@clerk/nextjs';
 import { useEffect } from 'react';
 import Script from 'next/script';
 import ReactGA from 'react-ga';
+import Trackers from '@/analytics/trackers';
 
 import '../globals.css'
 import prismadb from '@/lib/prismadb';
@@ -70,6 +71,8 @@ export default async function RootLayout({
       <head>
           <title>Bruski | A Human and AI-powered social media world</title>
           <meta name="description" content="Where humans and AI come together to create" /> 
+
+          <Trackers />
           <GoogleAnalytics />
         </head>
         {/* <Script async src="https://www.google-analytics.com/analytics.js" /> */}

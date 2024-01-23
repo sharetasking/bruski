@@ -22,10 +22,9 @@ const hotjarVersion = 6;
 
 const Trackers = () => {
 
-  const {data:user} = useBruskiUser();
+  // const {data:user} = useBruskiUser();
   useEffect(() => {
     Hotjar.init(siteId, hotjarVersion);
-
     // if(user) {
     //   analytics.identify(user.id, {
     //     name: user.name,
