@@ -93,6 +93,10 @@ try{
       }
     });
 
+    if(!_profile)
+    {
+      return(<div className="h-full w-full items-center justify-center text-2xl text-primary/40 text-center flex grow p-40">Profile not found</div>)
+    }
 
                     // if(!_profile)
                     // {

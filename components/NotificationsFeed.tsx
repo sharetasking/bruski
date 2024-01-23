@@ -37,7 +37,7 @@ const NotificationsFeed = () => {
           <div key={notification.id} className="flex flex-row items-center p-6 gap-4 border-b-[1px] border-secondary">
             <Bell className="text-primary" size={32} />
             <p className="">
-              <Link className="font-semibold hover:underline" href={"/"+notification?.initiator?.id}>{notification?.initiator?.display_name}</Link>
+              <Link className="font-semibold hover:underline" href={"/"+notification?.initiator?.url}>{notification?.initiator?.display_name}</Link>
                 &nbsp;<span className="text-primary/80">{notification.type=="COMMENT" ? "commented on your" : (notification.type=="LIKE" ? "liked your" : "followed you")}</span>{
 
                 notification.type != "FOLLOW" && ( <>&nbsp;

@@ -205,7 +205,7 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
           </div>
 }
   { post.mediaType != "CHALLENGE" && <div className="p-8 subpixel-antialiased whitespace-pre-line">{post?.body}</div> }
-  <div className="flex items-center gap-4 justify-end text-sm text-primary/50 my-4">
+  <div className="flex items-center gap-4 justify-start text-sm text-primary/50 my-4">
     {/* <div className="w-fit flex items-center font-medium text-primary gap-1"><AiFillHeart color={true ? 'red' : ''} size={20} /><span className="font-medium text-primary">{post?.num_likes ?? 0}</span></div> */}
     <LikeButton post={post} user={user} />
     <div><span className="w-fit flex items-center font-medium text-primary gap-1"> <AiOutlineMessage size={18} /> {post?.num_comments ?? 0}</span></div>

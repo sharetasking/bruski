@@ -25,6 +25,7 @@ import Link from 'next/link';
 import { timeAgo } from '@/lib/utils';
 
 import FollowButtonPlus from '../FollowButtonPlus';
+import LikeButton from '../LikeButton';
 
 interface PostItemProps {
   data: Record<string, any>;
@@ -324,29 +325,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
           <div className="flex flex-row justify-between items-center mt-3 gap-10">
             {/* LEFT BUTTONS (BOTTOM) */}
             <div className="flex items-center gap-1">
-              {/* Message */}
-              <div 
-                className="
-                  flex 
-                  flex-row 
-                  items-center 
-                  text-neutral-500 
-                  gap-1 
-                  cursor-pointer 
-                  hover:bg-primary/5
-                  active:bg-primary/10
-                  rounded-full
-                  h-14 w-14
-                  justify-center
-                  transition 
-                  hover:text-sky-500
-                  text-xs
-              ">
-                <AiOutlineMessage size={20} />
-                <p>
-                  {data.comments?.length || 0}
-                </p>
-              </div>
+
+
+
 
               {/* Like */}
               <div
@@ -371,6 +352,36 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, user, isComment =false }
                   {Math.max(numLikes, 0) }
                 </p>
               </div>
+              
+
+              {/* Message */}
+              <div 
+                className="
+                  flex 
+                  flex-row 
+                  items-center 
+                  text-neutral-500 
+                  gap-1 
+                  cursor-pointer 
+                  hover:bg-primary/5
+                  active:bg-primary/10
+                  rounded-full
+                  h-14 w-14
+                  justify-center
+                  transition 
+                  hover:text-sky-500
+                  text-xs
+              ">
+                <AiOutlineMessage size={20} />
+                <p>
+                  {data.comments?.length || 0}
+                </p>
+              </div>
+
+
+
+
+
 
               {/* Num Echos */}
               {/* <div 
