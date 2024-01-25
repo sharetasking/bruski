@@ -34,7 +34,7 @@ const LandingPageComponent = ({profiles, providers}:{profiles:Profile[], provide
 
 
   return (
-  <div className="bg-primary mt-2 h-full w-screen rounded-2xl justify-center p-2 md:px-12 md:pt-12 md:pb-6 md:flex-row flex gap-4 items-start flex-col">
+  <div className="bg-primary -mt-2 h-full w-screen rounded-2xl justify-center p-2 md:px-12 md:pt-12 md:pb-6 md:flex-row flex gap-4 items-start flex-col">
         <div className="max-w-6xl w-full flex md:flex-row flex-col items-centedr justify-center">
 
           <div className="flex-1 text-primary-foreground lg:-mt-12 lg:py-12 p-2 px-4">

@@ -144,7 +144,7 @@ const SignUpForm = ({providers, switchLoginMode}:{providers:Provider[], switchLo
                     </div>
 
                     <div className="mx-auto">
-                      <div className="flex gap-4 my-4">
+                      <div className="flex lg:flex-row flex-col gap-4 my-4">
                         <input
                           value={firstName}
                           onChange={(e) => setFirstName(e.target.value)}
