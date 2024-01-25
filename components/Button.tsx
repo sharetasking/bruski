@@ -1,5 +1,6 @@
 interface ButtonProps {
   label: string;
+  className?: string;
   secondary?: boolean;
   fullWidth?: boolean;
   large?: boolean;
@@ -10,6 +11,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ 
   label, 
+  className,
   secondary, 
   fullWidth, 
   onClick, 
@@ -39,6 +41,7 @@ const Button: React.FC<ButtonProps> = ({
         ${outline ? 'bg-transparent' : ''}
         ${outline ? 'border-white' : ''}
         ${outline ? 'text-white' : ''}
+        ${className}
       `}
     >
       {label}

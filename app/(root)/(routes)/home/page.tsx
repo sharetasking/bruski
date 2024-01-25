@@ -29,6 +29,7 @@ const RootPage = async ({
   const session = await getServerSession(authConfig);
   const sessionUser = session?.user;
 
+
   if(!sessionUser?.email)
   {
     // redirect to login "/"

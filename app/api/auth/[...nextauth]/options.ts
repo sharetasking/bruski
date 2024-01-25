@@ -36,34 +36,34 @@ declare module "next-auth" {
 
 export const authConfig: NextAuthOptions = {
   providers: [
-    CredentialsProvider({
-      name: 'email',
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
-      },
-      async authorize (credentials, req) {
-        try {
-          if (typeof credentials !== "undefined") {
-            const res = await authenticate(credentials.email, credentials.password)
-            if (typeof res !== "undefined" && res !== null) {
-              console.log("Res: ", res)
-              return { ...res.user, apiToken: res.token }
-            } else {
-              console.log("Res: ", res)
-              return null
-            }
-          } else {
-            console.log("Credentials: ", credentials) 
-            return null
-          }
-        } catch (error) {
-          console.log(error)
-          return null
-        }
+    // CredentialsProvider({
+    //   name: 'email',
+    //   credentials: {
+    //     email: { label: "Email", type: "text" },
+    //     password: { label: "Password", type: "password" }
+    //   },
+    //   async authorize (credentials, req) {
+    //     try {
+    //       if (typeof credentials !== "undefined") {
+    //         const res = await authenticate(credentials.email, credentials.password)
+    //         if (typeof res !== "undefined" && res !== null) {
+    //           console.log("Res: ", res)
+    //           return { ...res.user, apiToken: res.token }
+    //         } else {
+    //           console.log("Res: ", res)
+    //           return null
+    //         }
+    //       } else {
+    //         console.log("Credentials: ", credentials) 
+    //         return null
+    //       }
+    //     } catch (error) {
+    //       console.log(error)
+    //       return null
+    //     }
         
-      }
-    }),
+    //   }
+    // }),
     
 
     //TODO: Reinstate

@@ -1,6 +1,7 @@
 import { getProviders, signIn, getSession, getCsrfToken } from "next-auth/react";
-// import { Button } from "shadcn-ui-react";
-import Button from "@/components/Button";
+import { BsGoogle } from "react-icons/bs";
+import { Button } from "./ui/button";
+// import Button from "@/components/Button";
 type Provider = {
   id: string;
   name: string;
@@ -12,22 +13,22 @@ function signin({ providers }: { providers: Provider[]}) {
   const secondary = [ true, false]
   const outline = [ false, false,]
   return (
-    <div className="flex flex-col gap-4 py-8 my-8 max-w-sm bg-secondary rounded-xl px-4">
-      <h1 className="text-3xl font-bold text-center">Log In /Sign Up</h1>
-      <div> </div>
+    <>
       {Object.values(providers).map((provider, index) => {
         return (
-          // <div key={index}>{JSON.stringify(provider)}</div>
-          <Button
-          onClick={() => signIn(provider.id)}
-          key={index}
-          secondary={secondary[index % 2 === 0 ? 0 : 1]}
-          outline={outline[index % 2 === 0 ? 0 : 1]}
-          label={"Sign in with " + (provider.name == "Credentials" ? "Email" : provider.name)}
-        />
+          <>
+         { provider.name == "Google" && 
+          <Button key={index}
+              onClick={() => signIn(provider.id)}
+              className="bg-red-500 gap-4 hover:bg-red-600 text-white font-bold py-8 px-8 rounded inline-flex items-center mb-4">
+            { provider.name == "Google" && <BsGoogle /> }
+            Continue with Google
+          </Button>
+          }
+           </>
         );
       })}
-    </div>
+      </>
   );
 }
 

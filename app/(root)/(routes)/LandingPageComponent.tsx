@@ -94,7 +94,64 @@ if(!profiles)
 
 
 
-              <div className="fadeInUp delay-1000 opacity-0"><SignIn providers={providers} /></div>
+
+
+
+
+
+
+
+
+
+
+
+
+              <div className="fadeInUp delay-200 bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+                <div id="error-message" className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 hidden" role="alert">
+                  <strong className="font-bold">Error!</strong>
+                  <span className="block sm:inline">Unable to complete action at this time. If the problem persists please contact support.</span>
+                </div>
+
+                <div className="fadeInUp delay-1000 opacity-0 py-12">
+                  <h2 className="text-2xl font-semibold">Sign in to Bruski</h2>
+                  <p className="text-lg font-medium mt-0 opacity-50 mb-4">Join here free</p>
+                  <SignIn providers={providers} />
+                </div>
+
+
+                {/* <div className="mb-4">or</div> */}
+                {/* <form id="auth-form">
+                  <div id="signup-fields" className="hidden">
+                    <input type="text" placeholder="First name" className="mb-4 p-2 w-full border rounded">
+                    <input type="text" placeholder="Last name" className="mb-4 p-2 w-full border rounded">
+                  </div>
+                  <input type="email" placeholder="Email address" className="mb-4 p-2 w-full border rounded">
+                  <input type="password" placeholder="Password" className="mb-4 p-2 w-full border rounded">
+                  <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">CONTINUE</button>
+                </form> */}
+                {/* <div className="text-center mt-4">
+                  <a href="#" id="toggle-form" className="text-blue-500 hover:text-blue-700">Sign up</a>
+                </div> */}
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              {/* <div className="fadeInUp delay-1000 opacity-0"><SignIn providers={providers} /></div> */}
 
                     
 
@@ -110,9 +167,9 @@ if(!profiles)
 
 
 
-              <div className="fadeInUp delay-200 opacity-0 z-50">
+              {/* <div className="fadeInUp delay-200 -mt-8 opacity-0 z-50">
                 <span className="rounded-full text-sm h-36 w-36 p-8 w-s16  flex items-center justify-center text-white bg-orange-700 font-bold grow-0 shrink-0 text-center gap-2">JOIN HERE<span className="block text-2xl border-l border-white pl-2">FREE</span></span>
-              </div>
+              </div> */}
           </div>
 
 

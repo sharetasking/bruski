@@ -14,7 +14,7 @@ import BottomBar from "@/components/BottomBar";
 import prismadb from '@/lib/prismadb';
 import '../globals.css';
 import ClientProviders from '@/components/ClientProviders';
-import { authConfig } from '../api/auth/[...nextauth]/options';
+import { authConfig } from '@/app/api/auth/[...nextauth]/options';
 import { getServerSession } from 'next-auth'
 
 // const inter = Inter({ subsets: ['latin'] })

@@ -17,6 +17,7 @@ const SignInPage = async () => {
 
   // GET PROVIDERS FOR USE IN THE LOGIN COMPONENT
   const providers = await getProviders() ?? null;
+  console.log(providers)  
 
 
   // GET SESSION
