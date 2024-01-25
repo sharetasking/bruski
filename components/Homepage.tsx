@@ -212,7 +212,7 @@ const loadMorePosts = () => {
                 { index < 3 &&
                 <div key={profile.id} className={cn("text-sm p-4 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " ": "")}>
                   <div className="flex items-center gap-2 relative">
-                    <Avatar url={profile?.id} img={profile.img ?? "/images/placeholder.png"} className="followable  " size={8} hasBorder={true} />
+                    <Avatar url={profile?.id} img={profile.img ?? "/img/placeholder.svg"} className="followable  " size={8} hasBorder={true} />
                     <Link className="line-clamp-1 text-medium text-sm text-left " href={"/"+profile.id}>{profile?.display_name}</Link>
                   </div>
                 </div>
@@ -270,7 +270,7 @@ const loadMorePosts = () => {
                 <div key={profile.id} className={cn("text-sm p-4 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " bordder-b bordder-primary/5": "")}>
                   <div className="flex items-center gap-2">
                     <div className="relative">
-                      <Avatar url={profile?.url} img={profile.img ?? "/placeholder.svg"} size={8} hasBorder={true} />
+                      <Avatar url={profile?.url} img={profile.img ?? "/img/placeholder.svg"} size={8} hasBorder={true} />
                       
                       <FollowButtonPlus settings={{profileId:profile.id, follows:(profile.isFollowedByUser || profile.id == user?.profiles?.[0]?.id)??false, followersCount:Math.max(profile.numFollowers, 0)}}  />
                     </div>
@@ -362,7 +362,6 @@ const loadMorePosts = () => {
 // import Link from "next/link";
 // import Image from 'next/image';
 
-// import { auth, currentUser } from "@clerk/nextjs";
 
 // import usePosts from '@/hooks/usePosts';
 // import usePost from '@/hooks/usePost';

@@ -2,7 +2,9 @@ import { SubscriptionButton } from "@/components/subscription-button";
 import { checkSubscription } from "@/lib/subscription";
 
 const SettingsPage = async () => {
+  console.log("SettingsPage");
   const isPro = await checkSubscription();
+  console.log("isPro", isPro);
 
   return ( 
     <div className="h-full fadeInUp grow max-w-5xl p-4 space-y-2">

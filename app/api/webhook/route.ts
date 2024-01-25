@@ -6,9 +6,10 @@ import prismadb from "@/lib/prismadb"
 import { stripe } from "@/lib/stripe"
 
 export async function POST(req: Request) {
+  console.log("[STRIPE] POST")
   const body = await req.text()
   const signature = headers().get("Stripe-Signature") as string
-
+console.log("[STRIPE] body", body);
   let event: Stripe.Event
 
   try {
@@ -18,9 +19,11 @@ export async function POST(req: Request) {
       process.env.STRIPE_WEBHOOK_SECRET!
     )
   } catch (error: any) {
+    console.log("[STRIPE] error", error);
     return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 })
   }
 
+  console.log("[STRIPE] event", event)
   const session = event.data.object as Stripe.Checkout.Session
 
   if (event.type === "checkout.session.completed") {
@@ -44,7 +47,7 @@ export async function POST(req: Request) {
       },
     })
   }
-
+console.log("[STRIPE] event.type", event.type);
   if (event.type === "invoice.payment_succeeded") {
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string
@@ -63,5 +66,6 @@ export async function POST(req: Request) {
     })
   }
 
+  console.log("[STRIPE] event.type", event.type);
   return new NextResponse(null, { status: 200 })
 };

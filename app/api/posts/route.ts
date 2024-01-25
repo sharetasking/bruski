@@ -1,22 +1,35 @@
-import { auth, currentUser } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 import { MediaType } from "@prisma/client";
 
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
+
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/app/api/auth/[...nextauth]/options";
+
 import { log } from "console";
 
 export async function POST( req: NextRequest, { params }: { params: { profileId: string, media_type: string } }) {
   
+
+
+  // GET SESSION
+  const session = await getServerSession(authConfig)
+
+  if (!session) {
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
+
   try {
     const data = await req.json();
-    const user = await currentUser();
+
+    const user = await session?.user;
     const media_type = req.nextUrl.searchParams.get("media_type");
     const { body } = data?.body ?? "";
     
 
-    if (!user || !user.id) {
+    if (!user || !user.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -36,7 +49,7 @@ export async function POST( req: NextRequest, { params }: { params: { profileId:
     //find corresponding db user
     const localUser = await prismadb.user.findFirst({
       where: {
-        clerkUserId: user.id
+        email: user.email
       },
       include: {
         profiles: true // Include the related Profile records
@@ -47,6 +60,13 @@ export async function POST( req: NextRequest, { params }: { params: { profileId:
     if (!localUser) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+
+    // if no profiles
+    if (!localUser.profiles || localUser.profiles.length === 0) {
+      return new NextResponse("Active profile required", { status: 401 });
+    }
+
+
     console.log(localUser.profiles[0].id, "localUser.profiles[0].id")
 const profileId = localUser.profiles[0].id;
 let post;
@@ -79,35 +99,25 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
 
   try {
     // CURRENT PAGE AND NUM POSTS TO PULL
-    // const { page, size } = params; //TODO: code this
-    console.log(req.nextUrl.searchParams.get("page"), "req.nextUrl.searchParams.get(page)")
     const page = parseInt(req.nextUrl.searchParams.get("page") ?? "1") ?? 1;
     const size = parseInt(req.nextUrl.searchParams.get("size") ?? "3") ?? 3;
-    console.log(page, size, "page, size")
+
     const profileId = req.nextUrl.searchParams.get("profileId");
 
     const offset = (page - 1) * size; // Calculate the offset based on the page number and size
 
-    const user = await currentUser();
+    // GET SESSION
+    const session = await getServerSession(authConfig)
+    const user = await session?.user;
 
-    //check if logged in
-    const localUser = await prismadb.user.findFirst({
-      where: {
-        clerkUserId: user?.id
-      },
-      include: {
-        profiles: true // Include the related Profile records
-      }
-    });
     
-    let results;
     // [ GET POSTS ]
+    let results;
 
     // IF NOT LOGGED IN (Select but don't include follow status)
-    if(!localUser || !localUser.id) results = await fetchPostsForGuest(profileId??"", page, offset, size)
-    else results = await fetchPostsForUser(profileId ?? "", localUser?.profiles[0].id, page, offset, size);
+    if(!user || !user.id) results = await fetchPostsForGuest(profileId??"", page, offset, size)
+    else results = await fetchPostsForUser(profileId ?? "", user?.profiles[0].id, page, offset, size);
 
-    // console.log(results)
 
     return NextResponse.json(results);
 
@@ -285,7 +295,6 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
             },
             isLiked
           }
-          console.log(results)
 
       }catch(error)
       {
@@ -293,113 +302,12 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
         return error;
       }
 
-      console.log(results)
       return results;
     });
 
-    //get the list of posters and find out if the user is following them
-    // const posters = posts.map(post => post.poster);
-    // console.log(posters)
-    // const postersWithFollowedFlag = posters.map((poster) => {
-    // const isFollowed = !!poster.followersList.find(follower => follower.followerId === follower)
-    // const results = {
-    //   ...poster,
-    //   isFollowed
-    // };
 
-    
-    
-
-    console.log(updated_posts)
     return updated_posts;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // //SELECTING FOR A SPECIFIC PROFILE
-    // if(profileId) 
-    // {
-    //   posts = await prismadb.post.findMany({
-    //     where: {
-    //       profileId
-    //     },
-    //     include: {
-    //       poster: true,
-    //     },
-    //     orderBy: {
-    //       createdAt: 'desc'
-    //     },
-    // take: 30
-    //   });
-    // }
-    
-    
-    
-
-
-    // else
-    // {
-
-    
-   
-      
-    //   if(localUser)
-    //   {
-
-    //       posts = await prismadb.post.findMany({
-    //         skip: offset,
-    //         take: size,
-    //         include: {
-    //           poster: {
-    //             include: {
-    //               followers: {
-    //                 where: { followerId: requesterId },
-    //                 select: { followerId: true },
-    //               },
-    //             },
-    //           },
-    //           likeList: true
-    //         },
-    //         orderBy: {
-    //           createdAt: 'desc'
-    //         }
-    //       });
-
-
-    //     }
-
-
-    // //loop through posts and add liked and follow status
-
-    //     posts = posts.map(post => {
-          
-    //       const isLiked = post.likeList?.find(like => like.likerId === localUser.profiles[0].id)
-          
-          
-
-    //       const results = {
-    //         ...post,
-    //         isLiked
-    //       }
-
-    //       return results
-    //     })
-    //   }
-
-    // }
-
-
-
 
 
 

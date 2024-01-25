@@ -1,6 +1,6 @@
 // menuItems.ts
 
-import { Home, Plus, Bot, UsersRound, Bell, Navigation, Settings } from "lucide-react"; // Adjust the import path to your icon components
+import { Home, Plus, Bot, UsersRound, Bell, Navigation, Settings, LogOut } from "lucide-react"; // Adjust the import path to your icon components
 
 export const menu_items = [
   {

@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { useUser } from '@clerk/nextjs';
 import { useProModal } from "@/hooks/use-pro-modal";
 import useBruskiUser from './useBruskiUser';
 import useLoginModal from '@/hooks/useLoginModal';

@@ -5,9 +5,13 @@ import { cn } from "@/lib/utils";
 import { useProModal } from "@/hooks/use-pro-modal";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { UserButton } from "@clerk/nextjs";
+import { signOut } from 'next-auth/react';
+
 import { BsDot } from "react-icons/bs";
 import { menu_items } from "@/components/menu-items";
+import Button from "@/components/Button";
+import Avatar from "./Avatar";
+import { LogOut } from "lucide-react";
 
 interface BottomBarProps {
   user: any
@@ -28,6 +32,13 @@ const BottomBar: React.FC<BottomBarProps> = ({alert, user}) => {
 
     return router.push(url);
   }
+
+
+  const handleLogout = async () => {
+    await signOut({ redirect: false }); // Set `redirect: true` if you want to redirect to the sign-out page.
+    window.location.href = "/"
+    // router.push('/')
+  };
 
 
 
@@ -69,8 +80,12 @@ const BottomBar: React.FC<BottomBarProps> = ({alert, user}) => {
       )}
 
 
-          <div className="h-8 w-8 rounded-full flex items-center justify-center bg-primary">
-            <UserButton afterSignOutUrl="/" />
+          <div className="h-11 w-11 rounded-full flex items-center justify-center bg-primary/5
+          clickable text-muted-foreground\ group p-3 relative font-medium cursor-pointer hover:text-primary hover:bg-primary/10 active:bg-primary/30 transition-colors duration-100" onClick={handleLogout}>
+            <div className={cn("flex flex-col gap-y-2 justify-center items-center flex-1 relative")}>
+              <LogOut className="h-5 w-5 rotate-180" />
+            </div>
+            {/* <Avatar img={user?.img} /> */}
           </div>
       
       </div>

@@ -122,7 +122,7 @@ const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
 
                 {/* <Avatar />? */}
                 {/* <Image className="rounded-full h-12 w-12 shrink-0 grow-0" alt="avatar" fill src={item.img} /> */}
-                <Avatar img={item.img ?? "/placeholder.svg"} />
+                <Avatar img={item.img ?? "/img/placeholder.svg"} />
                 <div className="items-start flex flex-col text-left">
                 {/* {item.id}<br/> */}
                 

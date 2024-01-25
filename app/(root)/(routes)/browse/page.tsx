@@ -1,21 +1,22 @@
 import prisma from "@/lib/prismadb";
 import BrowsePageComponent from './BrowsePageComponent';
 import { Profile, User } from '@prisma/client';
-import { currentUser } from '@clerk/nextjs';
 import { BruskiUser } from '@/hooks/useBruskiUser';
+import { authConfig } from '@/app/api/auth/[...nextauth]/options';
+import { getServerSession } from 'next-auth';
 
 const BrowsePage = async () => {
 
 
-  // get current user
-  const user = await currentUser();
+  const session = await getServerSession(authConfig)
+  const sessionUser = session?.user;
 
   let localUser:BruskiUser|null = null;
   
-  if(user)
+  if(sessionUser)
     localUser = await prisma.user.findUnique({
     where: {
-      clerkUserId: user?.id,
+      email: sessionUser.email ?? ""
     },
     include: {
       profiles: true,

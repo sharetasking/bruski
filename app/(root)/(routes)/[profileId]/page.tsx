@@ -1,8 +1,7 @@
-import { currentUser } from "@clerk/nextjs";
+
 
 import Image from "next/image";
 import prismadb from "@/lib/prismadb";
-import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { checkSubscription } from "@/lib/subscription";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -10,11 +9,11 @@ import ProfilePageComponent from "@/components/pages/ProfilePageComponent";
 import { ExtendedProfile } from "@/hooks/useProfiles";
 
 
-
-
-// import { ProfilePage } from "./components/profile-page";
 import { PostFeed } from "@/components/PostFeed";
 import { BruskiUser } from "@/hooks/useBruskiUser";
+import { authConfig } from "@/app/api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth"
+
 
 interface ProfileIdPageProps {
   params: {
@@ -27,25 +26,15 @@ const ProfileIdPage =  async ({
 }: ProfileIdPageProps) => {
 
 
-
+const session = await getServerSession(authConfig)
+const user = session?.user ?? null;
 
 
   // DEFINE PROFILE TO BE SENT BACK TO COMPONENT
   let profile:ExtendedProfile|null = null;
-  let bruskiUser:BruskiUser|null = null;
+  let bruskiUser:BruskiUser|null = user;
 try{
 
-  // GET CLERK USER
-  const user = await currentUser();
-
-
-                // if(!user || !user.id)
-                //   return;
-
-                
-                // if (!user.id) {
-                //   return redirectToSignIn();
-                // }
 
 
 
@@ -54,27 +43,6 @@ try{
 
 
 
-  // IF CLERK USER EXISTS, GET LOCAL USER AND PROFILE
-  if(user && user.id )
-  {
-
-
-
-    bruskiUser = await prismadb.user.findUnique({
-      where: {
-        clerkUserId: user?.id,
-      },
-      include: {
-        profiles: true,
-      },
-    });
-  
-
-
-
-  }
-
-  
 
   
 
@@ -98,34 +66,7 @@ try{
       return(<div className="h-full w-full items-center justify-center text-2xl text-primary/40 text-center flex grow p-40">Profile not found</div>)
     }
 
-                    // if(!_profile)
-                    // {
-                    //   console.log('not found')
-                    //   // if not found, search by url
-                    //   _profile = await prismadb.profile.findUnique({
-                    //     include: {
-                    //       companion: {
-                    //         select: {
-                    //           id: true,
-                    //           ownerId: true,
-                    //           categoryId: true,
-                    //         }
-                    //       },
-                    //       listOfProfilesFollowingViewedProfile: {
-                    //         where: { followerId: bruskiUser?.profiles?.[0]?.id },
-                    //         select: { followerId: true, followeeId: true },
-                    //       },
-                    //     },
-                    //     where: {
-                    //       url: params.profileId,
-                    //     }
-                    //   });
-                    // }
-
-
-  // EXTEND PROFILE TO INCLUDE FOLLOWING STATUS
-  
-
+             
   if(_profile)
   {
     profile = {
@@ -134,35 +75,6 @@ try{
     };
   }
   
-  console.log(profile) 
-
-                      //get the user's profile
-                      // const followerProfile = await prismadb.profile.findFirst({
-                      //   where: {
-                      //     userId: user.id,
-                      //   }
-                      // });
-
-                      // const validSubscription = await checkSubscription();
-
-                      // if (!validSubscription) {
-                      //   return redirect("/home");
-                      // }
-
-                      // let targetProfile =  await prismadb.profile.findFirst({
-                      //   where: {
-                      //     id: params.profileId,
-                      //   }
-                      // });
-
-
-                      // //find out if following
-                      // const isFollowing = await prismadb.follow.findFirst({
-                      //   where: {
-                      //     followerId: followerProfile?.id,
-                      //     followingId: params.profileId,
-                      //   }
-                      // });
 
 }
 catch(e)
@@ -178,34 +90,9 @@ catch(e)
 
 
 
-
-
-
-
-
-    {/*
-    |{isFollowing}|<br/>
-    /{toggleFollow}/ */}
-    {/* ||{isFollowing} results|| */}
-    {/* {user.emailAddresses[0].emailAddress},{user.id}, {user.firstName}, {user.lastName}, {user.username}, {user.phoneNumbers[0].phoneNumber} */}
-    {/* <button onClick={toggleFollow}>Follow</button> */}
-    {/* <ProfilePage profile={profile} user={user}  /> */}
     </>
   );
 
-  // if(params.profileId != "new")
-  //   profile = await prismadb.profile.findUnique({
-  //   where: {
-  //     id: params.profileId,
-  //     userId,
-  //   }
-  // });
-
-  // const categories = await prismadb.category.findMany();
-
-  // return ( 
-  //   <ProfilePage profile={profile}  />
-  // );
 }
  
 export default ProfileIdPage;

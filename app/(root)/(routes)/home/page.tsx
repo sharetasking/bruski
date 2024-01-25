@@ -1,15 +1,17 @@
-"use client"
-
 import prismadb from "@/lib/prismadb"
 import { Categories } from "@/components/categories"
 import { Companions } from "@/components/companions"
 import { Homepage } from "@/components/Homepage"
 import { SearchInput } from "@/components/search-input"
 import toast, { Toaster } from 'react-hot-toast';
-import { currentUser } from "@clerk/nextjs"
 import useBruskiUser from "@/hooks/useBruskiUser"
 import { use } from "react"
 import { useCategories } from "@/hooks/useCategories"
+import { getSession } from "next-auth/react"
+import { authConfig } from "@/app/api/auth/[...nextauth]/options"
+import { getServerSession } from "next-auth"
+import { Test } from "@/components/test"
+import { redirect } from "next/navigation";
 
 interface RootPageProps {
   searchParams: {
@@ -19,37 +21,45 @@ interface RootPageProps {
 };
 
 
-const RootPage = ({
+const RootPage = async ({
   searchParams
 }: RootPageProps) => {
 
 
-  //get the user and the profile
-  const { data: localUser, isLoading } = useBruskiUser();
+  const session = await getServerSession(authConfig);
+  const sessionUser = session?.user;
 
-if(!localUser && !isLoading)
+  if(!sessionUser?.email)
   {
     // redirect to login "/"
-    window.location.href = "/"
+    redirect("/")
+    return;
   }
-  else if(localUser && !isLoading)
+
+  const user = await prismadb.user.findUnique({
+    where: {
+      email: sessionUser?.email ?? ""
+    },
+    include: {
+      profiles: true
+    }
+  })
+
+if(user)
+
   {
-
-
-  // const {data:categories, isLoading:categoryLoading} = useCategories();
-  
   return (
     <>
-      
-      {localUser && <Homepage user={localUser}  /> }
+      {user && <Homepage user={user}  /> }
       <div><Toaster/></div>
     </>
   );
 
   }
-  else //if(!currentUser && isLoading)
+  else
   {
-    return <>Loading...</>
+    
+    redirect("/")
 
   }
 

@@ -144,7 +144,7 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
 
 <div>
         {/* AVATAR IMAGE */}
-        <Avatar img={post.poster?.img ?? "/images/placeholder.png"} url={"/"+post.poster.url ?? ""} size={12} hasBorder={false}/>
+        <Avatar img={post.poster?.img ?? "/img/placeholder.svg"} url={"/"+post.poster.url ?? ""} size={12} hasBorder={false}/>
        
       <h2 className="user_name text-base" onClick={goToUser}>{post.poster?.display_name}</h2>
   

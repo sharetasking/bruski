@@ -1,33 +1,58 @@
-import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
 import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
+import { authConfig } from "../auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
 
 const settingsUrl = absoluteUrl("/settings");
 
 export async function GET() {
+  const session = await getServerSession(authConfig)
+  const sesionUser = session?.user;
+  console.log("[STRIPE] GET");
   try {
-    const { userId } = auth();
-    const user = await currentUser();
 
-    if (!userId || !user) {
+    // CONFIRM USER IS LOGGED IN
+    
+
+
+    // IF NOT LOGGED IN, RETURN UNAUTHORIZED
+    if (!sesionUser || !sesionUser.email) {
+      console.log("[STRIPE] user not logged in");
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const userSubscription = await prismadb.userSubscription.findUnique({
+    // GET USER ID
+    const user = await prismadb.user.findUnique({
       where: {
-        userId
+        email: sesionUser.email ?? ""
+      },
+      include: {
+        subscriptions: true,
       }
-    })
+
+    });
+
+
+    // IF USER ID NOT FOUND, RETURN UNAUTHORIZED
+    if (!user) {
+      console.log("[STRIPE] user not found");
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const userId = user.id;
+
+    // CHECK IF USER HAS A STRIPE CUSTOMER ID
+    const userSubscription = user?.subscriptions[0];
 
     if (userSubscription && userSubscription.stripeCustomerId) {
       const stripeSession = await stripe.billingPortal.sessions.create({
         customer: userSubscription.stripeCustomerId,
         return_url: settingsUrl,
       })
-
+console.log("[STRIPE] stripeSession", stripeSession);
       return new NextResponse(JSON.stringify({ url: stripeSession.url }))
     }
 
@@ -37,7 +62,7 @@ export async function GET() {
       payment_method_types: ["card"],
       mode: "subscription",
       billing_address_collection: "auto",
-      customer_email: user.emailAddresses[0].emailAddress,
+      customer_email: user.email ?? "",
       line_items: [
         {
           price_data: {
@@ -59,6 +84,7 @@ export async function GET() {
       },
     })
 
+    console.log("[STRIPE] stripeSession", stripeSession);
     return new NextResponse(JSON.stringify({ url: stripeSession.url }))
   } catch (error) {
     console.log("[STRIPE]", error);

@@ -1,13 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse, NextRequest } from "next/server";
-import { currentUser } from "@clerk/nextjs"
 
 
 import prismadb from '@/lib/prismadb';
+import { getServerSession } from "next-auth";
+import { authConfig } from "../auth/[...nextauth]/options";
 
 export async function POST( req: NextRequest, { params }: { params: { postId: string } }) {
   
   
+  const session = await getServerSession(authConfig)
+  const sessionUser = session?.user;
 
   // GET PARAMS
   const data = await req.json();
@@ -16,9 +19,6 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
   try {
     
 
-    // GET USER
-    const user = await currentUser();
-
     if (!postId || typeof postId !== 'string') {
       throw new Error('Invalid ID');
     }
@@ -26,7 +26,7 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
       //get localUser
       const localUser = await prismadb.user.findUnique({
         where: {
-          clerkUserId: user?.id
+          email: sessionUser?.email ?? ""
         },
         include: {
           profiles: true // Include the related Profile records
@@ -173,10 +173,11 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
 export async function DELETE(req: NextRequest, { params }: { params: { postId: string } }) {
   const data = await req.json();
   const { postId } = data
+  const session = await getServerSession(authConfig)
+  const sessionUser = session?.user;
 
   try {
     
-    const user = await currentUser();
 
     if (!postId || typeof postId !== 'string') {
       throw new Error('Invalid ID');
@@ -185,7 +186,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { postId: s
       //get localUser
       const localUser = await prismadb.user.findUnique({
         where: {
-          clerkUserId: user?.id
+          email: sessionUser?.email ?? ""
         },
         include: {
           profiles: true // Include the related Profile records

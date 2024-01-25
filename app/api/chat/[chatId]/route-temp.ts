@@ -2,7 +2,6 @@
 // // import dotenv from "dotenv";
 // import { StreamingTextResponse, LangChainStream } from "ai";
 
-// import { auth, currentUser } from "@clerk/nextjs";
 // import { Replicate } from "langchain/llms/replicate";
 // import { CallbackManager } from "langchain/callbacks";
 // import { NextResponse } from "next/server";
@@ -25,7 +24,7 @@
 //     // GET CURRENT USER
 //     const user = await currentUser();
 
-//     if (!user || !user.firstName || !user.id) {
+//     if (!user || !user.first_name || !user.id) {
 //       return new NextResponse("Unauthorized", { status: 401 });
 //     }
 

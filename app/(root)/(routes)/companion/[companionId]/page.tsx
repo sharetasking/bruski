@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
-import { auth, redirectToSignIn } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 
 import { CompanionForm } from "@/components/companion-form";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/app/api/auth/[...nextauth]/options";
 
 interface CompanionIdPageProps {
   params: {
@@ -15,7 +16,10 @@ interface CompanionIdPageProps {
 const CompanionIdPage = async ({
   params
 }: CompanionIdPageProps) => {
-  const { userId } = auth();
+  const session = await getServerSession(authConfig)
+  const sessionUser = session?.user;
+
+  let userId = sessionUser?.id;
 
   // if (!userId) {
   //   return redirectToSignIn();

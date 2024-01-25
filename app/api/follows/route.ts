@@ -1,19 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import prismadb from '@/lib/prismadb';
-import { currentUser } from "@clerk/nextjs"
 import { ConsoleCallbackHandler } from "langchain/callbacks";
+import { authConfig } from "../auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
 
 export async function POST( request: NextRequest)
 {
 
+  const session = await getServerSession(authConfig);
+  const sessionUser = session?.user;
+
+  if(!sessionUser || !sessionUser.email)
+  {
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
 
   // GET PARAMS (target profile id)
   const { profileId } = await request.json()
   
   
-  // GET USER
-  const user = await currentUser();
 
 
   // IF WRONG PROFILE FORMAT
@@ -24,7 +30,7 @@ export async function POST( request: NextRequest)
   //GET LOCAL USER
   const localUser = await prismadb.user.findUnique({
     where: {
-      clerkUserId: user?.id
+      email: sessionUser.email
     },
     include:{
       profiles: true
@@ -220,14 +226,19 @@ export async function POST( request: NextRequest)
 
 export async function DELETE( request: NextRequest ) {
 
+  const session = await getServerSession(authConfig);
+  const sessionUser = session?.user;
+
+  if(!sessionUser || !sessionUser.email)
+  {
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
   
   const profileId = await request.nextUrl?.searchParams.get("profileId");
 
   
   console.log(profileId)
   
-  const user = await currentUser();
-
 
   if (!profileId || typeof profileId !== 'string') {
     // throw new Error('Invalid ID');
@@ -238,7 +249,7 @@ export async function DELETE( request: NextRequest ) {
   console.log(profileId)
   const localUser = await prismadb.user.findUnique({
     where: {
-      clerkUserId: user?.id
+      email: sessionUser.email
     },
     include:{
       profiles: true

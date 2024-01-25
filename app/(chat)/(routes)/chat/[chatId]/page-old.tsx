@@ -1,5 +1,4 @@
 // import { redirect } from "next/navigation";
-// import { auth, redirectToSignIn } from "@clerk/nextjs";
 
 // import prismadb from "@/lib/prismadb";
 

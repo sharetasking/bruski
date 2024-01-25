@@ -1,22 +1,21 @@
-import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
+import { getServerSession } from "next-auth";
+import { authConfig } from "../auth/[...nextauth]/options";
 
 export async function POST(req: Request) {
+  console.log("[COMPANION_POST] req", req)
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
+
   try {
     const body = await req.json();
-    const user = await currentUser();
-    const localUser = await prismadb.user.findFirst({
-      where: {
-        clerkUserId: user?.id
-      }
-    });
 
     const { img, name, description, instructions, seed, categoryId } = body;
 
-    if (!user || !user.id || !user.firstName) {
+    if (!user || !user.id || !user.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     console.log("[COMPANION_POST] user", user)
@@ -25,20 +24,20 @@ export async function POST(req: Request) {
       return new NextResponse("Missing required fields", { status: 400 });
     };
 
-    const isPro = await checkSubscription();
-    console.log("[COMPANION_POST] isPro", isPro)
+    // const isPro = await checkSubscription();
+    // console.log("[COMPANION_POST] isPro", isPro)
     // if (!isPro) { TODO: Reinstate?
     //   return new NextResponse("Pro subscription required", { status: 403 });
     // }
 
-    if(!localUser?.id) 
+    if(!user?.id) 
       return new NextResponse("Unauthorized", { status: 401 });
 
 
     const companion = await prismadb.companion.create({
       data: {
         categoryId,
-        ownerId: localUser?.id,
+        ownerId: user?.id,
         username: name?.replace(" ", "-"),
         img,
         description,

@@ -1,20 +1,24 @@
-import { auth, currentUser } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
-import { log } from "console";
+import { authConfig } from "../../auth/[...nextauth]/options";
+import { getServerSession } from "next-auth"
+
 
 export async function POST(request: NextRequest, { params }: { params: { postId: string, body:string } }) {
   
   try {
+    console.log("POSTING")
     const body = params.body;
-    const user = await currentUser();
+
+    const session = await getServerSession(authConfig)
+    const user = session?.user;
     
     console.log(body, user, "body, user")
 
-    if (!user || !user.id || !user.firstName) {
+    if (!user || !user.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -31,7 +35,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
     //find corresponding db user
     const localUser = await prismadb.user.findFirst({
       where: {
-        clerkUserId: user.id
+        email: user.email
       }
     });
 
@@ -60,6 +64,9 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
 
 // export async function GET() {
   export async function GET(request: NextRequest, { params }: { params: { postId: string, take:number, target:string, page:number } }) {
+
+    const session = await getServerSession(authConfig)
+    const user = session?.user;
     let _post;
     console.log(params,"paramsyyyyyyyyyy")
     try {
@@ -77,11 +84,10 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
       }
       console.log(1)
       // mark isliked as true if the user has liked the post
-      const user = await currentUser();
-      if (user && user.id) {
+      if (user && user.email) {
         const localUser = await prismadb.user.findFirst({
           where: {
-            clerkUserId: user.id
+            email: user.email
           },
           include: {
             profiles: true // Include the related Profile records
@@ -118,21 +124,22 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
 
   export async function DELETE(request: NextRequest, { params }: { params: { postId: string, } }) {
 
+    const session = await getServerSession(authConfig)
+    const user = session?.user;
+
     // GET ID
     const postId = params.postId;
 
-    // GET CLERK USER
-    const clerkUser = await currentUser();
 
     // IF NOT EXISTS
-    if (!clerkUser || !clerkUser.id) {
+    if (!user || !user.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     // GET LOCAL USER
     const localUser = await prismadb.user.findFirst({
       where: {
-        clerkUserId: clerkUser.id
+        email: user.email
       },
       include: {
         profiles: true // Include the related Profile records
@@ -238,7 +245,6 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
 
 // import { NextApiRequest, NextApiResponse } from "next";
 
-// import { auth, redirectToSignIn } from "@clerk/nextjs";
 // import prisma from "@/lib/prismadb"; // ensure the path is correct
 
 

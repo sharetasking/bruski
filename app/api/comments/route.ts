@@ -1,15 +1,21 @@
-import { auth, currentUser } from "@clerk/nextjs";
+
 import { NextResponse, NextRequest } from "next/server";
 
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 import { log } from "console";
+import { authConfig } from "../auth/[...nextauth]/options";
+import { getServerSession } from "next-auth"
+
+
 export async function POST(request: NextRequest, { params }: { params: { postId: string, body:string } }) {
   
   // GET PARAMS
   const { body } = await request.json();
   const submittedTargetPostId = request.nextUrl.searchParams.get("postId");
+  const sessions = await getServerSession(authConfig)
+  const sessionUser = sessions?.user;
 
   if(!submittedTargetPostId) 
   {
@@ -19,8 +25,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
   try {
 
     // GET USER
-    const user = await currentUser();
-    if (!user || !user.id || !user.firstName) {
+    if (!sessionUser || !sessionUser.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -38,9 +43,9 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
           // }
 
     // GET LOCAL USER
-    const localUser = await prismadb.user.findFirst({
+    const user = await prismadb.user.findFirst({
       where: {
-        clerkUserId: user.id
+        email: sessionUser.email
       },
       include: {
         profiles: true
@@ -48,7 +53,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
     });
 
       // if not found
-      if (!localUser) {
+      if (!user) {
         return new NextResponse("Unauthorized", { status: 401 });
       }
 
@@ -57,7 +62,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
     const savedComment = await prismadb.post.create({
       data: {
         body,
-        profileId: localUser.profiles[0].id,
+        profileId: user.profiles[0].id,
         originalPostId: submittedTargetPostId,
         postType: "COMMENT",
       }
@@ -107,7 +112,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
       try {
        
           // if the user is not commenting on their own post
-          if(targetPost?.poster.id != localUser.profiles[0].id)
+          if(targetPost?.poster.id != user.profiles[0].id)
           {
             // GET THE TARGET PROFILE USER ID
             const targetPostOwnerUserId = targetPost?.poster?.user?.id;
@@ -122,7 +127,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
                 targetObjectId: targetPost?.id,
                 createdObjectId: savedComment.id,
                 type: "COMMENT",
-                initiatorId: localUser.profiles[0].id,
+                initiatorId: user.profiles[0].id,
 
               }
             });
@@ -285,7 +290,6 @@ export async function GET(request: NextRequest, { params }: { params: { postId: 
 
 // // import { NextApiRequest, NextApiResponse } from "next";
 
-// // import { auth, redirectToSignIn } from "@clerk/nextjs";
 // // import prisma from "@/lib/prismadb"; // ensure the path is correct
 
 

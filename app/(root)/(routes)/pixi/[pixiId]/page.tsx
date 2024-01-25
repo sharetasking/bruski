@@ -1,12 +1,13 @@
 
 import { redirect } from "next/navigation";
-import { auth, currentUser, redirectToSignIn } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 
 
 import { CompanionForm } from "@/components/companion-form";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/app/api/auth/[...nextauth]/options";
 
 interface CompanionIdPageProps {
   params: {
@@ -17,16 +18,17 @@ interface CompanionIdPageProps {
 
 const PixiEditPage = async ({ params }: CompanionIdPageProps) => {
 
+  const session = await getServerSession(authConfig)
+  const sessionUser = session?.user;
+
   const { pixiId } = params;
 
-  const clerkUser = await currentUser();
-
-  if(!clerkUser)
+  if(!sessionUser || !sessionUser.email)
     return redirect("/")
 
   const user = await prismadb.user.findUnique({
     where: {
-      clerkUserId: clerkUser?.id ?? "",
+      email: sessionUser.email ?? ""
     }
   })
 

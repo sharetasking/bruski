@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
-import { currentUser } from '@clerk/nextjs';
+import { authConfig } from '../auth/[...nextauth]/options';
+import { getServerSession } from 'next-auth'
 
 export async function GET(req: NextRequest) {
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
 
   // GET PARAMS
   const submittedUsername = await req.nextUrl.searchParams.get('username');
@@ -12,17 +15,15 @@ export async function GET(req: NextRequest) {
     return new NextResponse("Username required", { status: 400 });
   }
 
-  // CHECK IF LOGGED IN
-  const clerkUser = await currentUser();
   
   let foundProfile;
   let localUser;
 
   // IF LOGGED IN, GET THE LOCAL USERNAME
-  if (clerkUser) {
+  if (session && user && user.email) {
     localUser = await prisma.user.findUnique({
       where: {
-        clerkUserId: clerkUser.id
+        email: user.email
       },
       include: {
         profiles: true

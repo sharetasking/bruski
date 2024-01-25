@@ -2,12 +2,14 @@ import prisma from "@/lib/prismadb"
 import { truncateSync } from "fs";
 import { NextResponse, NextRequest } from "next/server"
 import { undefined } from "zod";
+import { PrismaClient } from "@prisma/client";
+
+
 export async function POST(req: NextRequest) {
   
-  
-  const BRUSKI_MASTER_API_KEY = await req.nextUrl.searchParams.get("BRUSKI_MASTER_API_KEY")
+  const BRUSKI_MASTER_API_KEY = req.nextUrl.searchParams.get("BRUSKI_MASTER_API_KEY")
   let results;
-  
+
   // CONFIRM API KEY CORRECT
   if (BRUSKI_MASTER_API_KEY != process.env.BRUSKI_MASTER_API_KEY) {return new NextResponse(JSON.stringify({error: "Invalid API Key"}), { status: 401 })}
 
@@ -15,10 +17,40 @@ export async function POST(req: NextRequest) {
   // results = await getPostTags();
   // results = await getUsers();
   // results = await getProfiles();
-  results = await getPosts();
+  // results = await getPosts();
+  // results = await getSubscriptions();
 
   return new NextResponse(JSON.stringify(results), { status: 200 })
 }
+
+async function getSubscriptions(){
+  return await prisma.userSubscription.findMany({
+    // select: {
+    //   id: true,
+    //   stripeSubscriptionId: true,
+    //   stripeCustomerId: true,
+    //   stripePriceId: true,
+    //   stripeCurrentPeriodEnd: true,
+    //   user: {
+    //     select: {
+    //       id: true,
+    //       first_name: true,
+    //       last_name: true,
+    //       email: true,
+    //       profiles: {
+    //         select: {
+    //           display_name: true,
+    //         }
+    //       }
+    //     }
+    //   }
+    // },
+    // take: 30
+
+  })
+
+}
+
 
 async function getPosts(){
   

@@ -1,6 +1,5 @@
 "use client"
 // import { Post as PostType } from "@prisma/client";
-// import { useUser } from "@clerk/nextjs";
 // import { useState, FormEvent } from "react";
 // import DateFormatter from "./date-formatter";
 // import Link from "next/link";
@@ -73,106 +72,6 @@ export const PostFeed:React.FC<PostFeedProps> = ({user, profileId,_posts, onScro
 
   
   
-
-  // useEffect(() => {
-
-
-  // async function getPosts() {
-  //   if(page == 0)
-  //   {
-  //     setLoading(false);
-  //     return;
-  //   }
-  //   else
-  //   {
-  //     setPage(page+1);
-  //     console.log(page)
-  //     onScrollEnd({page:page});
-  //   }
-
-   
-    
-  // }
-
-  //   getPosts();
-    
-  // }, [onScrollEnd, page])
-
-
-
-  // useEffect(()=>{
-
-
-
-
-
-
-  // const handleScroll = () => {
-    
-  //   if(window.innerHeight + document.documentElement.scrollTop +1 >= document.documentElement.scrollHeight)
-  //   {
-  //     setLoading(true);
-  //     setPage(prev => {
-
-  //     setPage(prev+1);
-  //     onScrollEnd({page: prev+1});
-  //       return prev + 1
-  //     });
-      
-  //   }
-  // }
-
-
-  //   window.addEventListener("scroll", handleScroll);
-  //   setPage(1) //do it this way so it doesn't load twice initially
-  //   return () => window.removeEventListener("scroll", handleScroll);
-    
-
-
-  // }, [onScrollEnd])
-
-
-
-
-  
-  
-//   ?.toString() ?? user?.profiles?.[0]?.id?.toString();
-//   function timeAgo(date) {
-//     const currentDate = new Date();
-//     const targetDate = new Date(date);
-
-//     let years = currentDate.getFullYear() - targetDate.getFullYear();
-//     let months = currentDate.getMonth() - targetDate.getMonth();
-
-//     // Adjust for year boundary
-//     if (currentDate < new Date(targetDate.getFullYear() + years, targetDate.getMonth(), targetDate.getDate())) {
-//         years--;
-//     }
-
-//     // Adjust for month boundary
-//     if (months < 0 && years > 0) {
-//         years--;
-//         months += 12; // Add 12 months as we moved one year back
-//     }
-
-//     if (years > 0) return years === 1 ? '1 year ago' : `${years} years ago`;
-
-//     if (months > 0) return months === 1 ? '1 month ago' : `${months} months ago`;
-
-//     let timeDifference = currentDate - targetDate; // Remaining difference in milliseconds
-
-//     const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-//     if (days > 0) return days === 1 ? '1 day ago' : `${days} days ago`;
-
-//     const hours = Math.floor(timeDifference / (1000 * 60 * 60));
-//     if (hours > 0) return hours === 1 ? '1 hr ago' : `${hours} hrs ago`;
-
-//     const minutes = Math.floor(timeDifference / (1000 * 60));
-//     if (minutes > 0) return minutes === 1 ? '1 min ago' : `${minutes} mins ago`;
-
-//     const seconds = Math.floor(timeDifference / 1000);
-//     return seconds === 1 ? '1 sec ago' : `${seconds} secs ago`;
-// }
 
 
     return(

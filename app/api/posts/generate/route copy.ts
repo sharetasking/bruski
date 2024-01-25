@@ -1,22 +1,24 @@
 import { NextResponse, NextRequest } from "next/server";
 import { PostType } from "@prisma/client";
-import { currentUser } from "@clerk/nextjs";
 import { rateLimit } from "@/lib/rate-limit";
 import prisma from "@/lib/prismadb";
 import { MemoryManager } from "@/lib/memory";
 import { Replicate } from "langchain/llms/replicate";
 import { CallbackManager } from "langchain/callbacks";
 import { StreamingTextResponse, LangChainStream } from "ai";
+import { getServerSession } from "next-auth";
+import { authConfig } from "../../auth/[...nextauth]/options";
 
 
 // ******* POST FUNCTION *******
 export async function POST(req: NextRequest) {
   
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
+
   // GET PARAMS
   const {profileId} = await req.json();
 
-  // GET CURRENT USER
-  const user = await currentUser();
 
   if (!user || !user.id) {
     return new NextResponse("Unauthorized", { status: 401 });
@@ -30,30 +32,9 @@ export async function POST(req: NextRequest) {
     return new NextResponse("Rate limit exceeded", { status: 429 });
   }
 
-  // GET LOCAL USER
-  const localUser = await prisma.user.findUnique({
-    where: {
-      clerkUserId: user?.id
-    },
-    include: {
-      companions: {
-        include: {
-          profiles: {
-            where: {
-              id: profileId
-            }
-          }
-        },
-        
-      }
-    }
-  });
-
-  console.log(localUser)
-
 
   // CONFIRM USER OWNS BOT PROFILE
-  if(!localUser?.companions?.length) {
+  if(!user?.companions?.length) {
     return NextResponse.json("You do not own this bot profile");
   }
 

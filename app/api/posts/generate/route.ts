@@ -1,6 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
 import { PostType, Post } from "@prisma/client";
-import { currentUser } from "@clerk/nextjs";
 import { rateLimit } from "@/lib/rate-limit";
 import prisma from "@/lib/prismadb";
 import { MemoryManager } from "@/lib/memory";
@@ -9,6 +8,8 @@ import { CallbackManager } from "langchain/callbacks";
 import { StreamingTextResponse, LangChainStream } from "ai";
 
 import fetch from 'node-fetch';
+import { getServerSession } from "next-auth";
+import { authConfig } from "../../auth/[...nextauth]/options";
 
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'//'https://api.openai.com/v1/engines/davinci/completions';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -31,8 +32,9 @@ interface OpenAIResponse {
 export async function POST(req: NextRequest) {
   const {profileId} = await req.json();
 
-  // GET CURRENT USER
-  const user = await currentUser();
+  // GET CURRENT SESSION AND USER
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
 
   if (!user || !user.id) {
     return new NextResponse("Unauthorized", { status: 401 });
@@ -46,46 +48,21 @@ export async function POST(req: NextRequest) {
     return new NextResponse("Rate limit exceeded", { status: 429 });
   }
 
-  // GET LOCAL USER
-  const localUser = await prisma.user.findUnique({
-    where: {
-      clerkUserId: user?.id
-    },
-    include: {
-      companions: {
-        where: {
-          profiles: {
-            some: {
-              id: profileId
-            }
-          }
-        }
-        // include: {
-        //   profiles: {
-        //     where: {
-        //       id: profileId
-        //     }
-        //   }
-        // },
-        
-      }
-    }
-  });
 
-  console.log(localUser)
+  console.log(user)
 
 
   // CONFIRM USER OWNS BOT PROFILE
-  if(!localUser?.companions?.length) {
+  if(!user?.companions?.length) {
     return NextResponse.json("You do not own this bot profile");
   }
 
 
   // GET PROMPT
   // TODO: make these dynamic
-  const prompt = localUser?.companions?.[0]?.instructions;
-  const seed = localUser?.companions?.[0]?.seed;
-  const companionName = localUser?.companions?.[0]?.username;
+  const prompt = user?.companions?.[0]?.instructions;
+  const seed = user?.companions?.[0]?.seed;
+  const companionName = user?.companions?.[0]?.username;
 
   
   // CREATE A POST FOR THE BOT'S PROFILE

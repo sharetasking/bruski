@@ -60,7 +60,7 @@ const BrowsePageComponent = ({profiles, user}:{profiles:ExtendedProfile[]|null, 
               minHeight:'400px'
             }}
             key={profile.id} className='min-h-60 pb-14 relative bg-secondary hover:bg-primary/5 active:bg-primary/20 rounded-2xl p-8'>
-            <Avatar onClick={handleClick} img={profile.img ?? "/placeholder.svg"} url={profile.url} />
+            <Avatar onClick={handleClick} img={profile.img ?? "/img/placeholder.svg"} url={profile.url} />
             <h2 className="text-xl font-semibold mt-2 truncate">{profile.display_name}</h2>
             <p className="text-primary/60 text-sm truncate">{profile.url}</p>
             <hr className="mt-4"/>

@@ -212,7 +212,7 @@ return (
 {/* <h3>Create a post</h3> */}
     <div className="flex gap-1 py-4">
       
-    <span className={'rounded-full h-12 w-12 grow-0 shrink-0 flex items-center justify-center mt-4 '}><Avatar img={currentUser?.profiles?.[0]?.img ?? ""} /></span>
+    <span className={'rounded-full h-12 w-12 grow-0 shrink-0 flex items-center justify-center mt-4 '}><Avatar img={currentUser?.profiles?.[0]?.img ?? "/img/placeholder.svg"} /></span>
   <div className="p-4 rounded-md flex flex-col max-w-2xl grow">
     {/* {activePostType} */}
     {currentUser && (

@@ -1,14 +1,16 @@
-import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
+import { authConfig } from "@/app/api/auth/[...nextauth]/options"
+import { getServerSession } from "next-auth"
 
 export async function GET() {
   
   try {
  
-    const user = await currentUser();
+    const session = await getServerSession(authConfig);
+    const sessionUser = session?.user;
 
-    if (!user || !user.id) {
+    if (!sessionUser || !sessionUser.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -16,7 +18,7 @@ export async function GET() {
     //find corresponding db user
     const localUser = await prismadb.user.findFirst({
       where: {
-        clerkUserId: user.id
+        email: sessionUser.email
       },
       include: {
         profiles: true // Include the related Profile records

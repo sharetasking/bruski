@@ -4,7 +4,7 @@ import axios from "axios";
 import { ChevronLeft, Edit, MessagesSquare, MoreVertical, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Companion, Message } from "@prisma/client";
-import { useUser } from "@clerk/nextjs";
+import { useSession } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { BotAvatar } from "@/components/bot-avatar";
@@ -29,7 +29,9 @@ export const ChatHeader = ({
   companion,
 }: ChatHeaderProps) => {
   const router = useRouter();
-  const { user } = useUser();
+  const { data: session, status } = useSession();
+  const user = session?.user ?? null;
+  
   const { toast } = useToast();
 
   const onDelete = async () => {

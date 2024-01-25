@@ -1,24 +1,17 @@
 import prismadb from "@/lib/prismadb";
-import { currentUser } from "@clerk/nextjs";
 import { NextResponse, NextRequest } from "next/server";
+import { getServerSession } from "next-auth";
+import { authConfig } from "../../auth/[...nextauth]/options";
 
 
 export async function GET(req: NextRequest) {
 
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
+
+
   try {
     
-    // GET CLERK AND LOCAL USER
-    const clerkUser = await currentUser();
-    const user = await prismadb.user.findFirst({
-      where: {
-        clerkUserId: clerkUser?.id
-      },
-      include:{
-        profiles: true
-      }
-    });
-
-    console.log(user)
 
     // RETURN IF NOT FOUND
     if (!user) {

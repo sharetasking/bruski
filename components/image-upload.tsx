@@ -52,7 +52,7 @@ export const ImageUpload = ({
             <Image
               fill
               alt="Upload"
-              src={value || "/placeholder.svg"}
+              src={value || "/img/placeholder.svg"}
               className="rounded-lg object-cover"
             />
           </div>

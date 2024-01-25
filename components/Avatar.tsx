@@ -20,7 +20,7 @@ interface AvatarProps {
 const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className, onClick }) => {
   const router = useRouter();
 
-  const _img = img+"" ?? '/images/placeholder.png';
+  const _img = img ?? '/img/placeholder.svg';
   return (
     <div
       className={`
@@ -52,7 +52,7 @@ const Avatar: React.FC<AvatarProps> = ({img, url, size, hasBorder, className, on
           // sizes={size ? ''+size+'px' : '96px'}
           alt="Avatar"
           // onClick={onClick}
-          src={_img ?? '/images/placeholder.png'}
+          src={_img ?? '/img/placeholder.svg'}
         />
       {/* </Link> */}
     </div>

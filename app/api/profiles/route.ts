@@ -1,4 +1,3 @@
-import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest } from "next/server";
@@ -8,6 +7,8 @@ import { Profile } from "@prisma/client";
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 import { log, profile } from "console";
+import { authConfig } from "../auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
 
 // export async function POST() {
   
@@ -35,7 +36,7 @@ import { log, profile } from "console";
 //     //find corresponding db user
 //     const localUser = await prismadb.user.findFirst({
 //       where: {
-//         clerkUserId: user.id
+//         email: user.email ?? ""  
 //       },
 //       include: {
 //         profiles: true // Include the related Profile records
@@ -65,21 +66,22 @@ import { log, profile } from "console";
 
 export async function GET(req: NextRequest) {
   
+  const session = await getServerSession(authConfig)
+  const sessionUser = session?.user;
   try {
     
     const profileId = req.nextUrl.searchParams.get("profileId");
     let count = req.nextUrl.searchParams.get("take") ? parseInt(req.nextUrl.searchParams.get("take") ?? "10") : 10;
     
 
-    const clerkUser = await currentUser();
 
-    if(!clerkUser)
+    if(!sessionUser || !sessionUser.email) 
     return new NextResponse("Unauthorized", { status: 401 });
 
 
     const user = await prismadb.user.findFirst({
       where: {
-        clerkUserId: clerkUser.id
+        email: sessionUser.email ?? ""
       },
       include: {
         profiles: true // Include the related Profile records

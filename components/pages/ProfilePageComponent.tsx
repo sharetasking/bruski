@@ -6,7 +6,6 @@ import { Profile } from "@prisma/client";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PostFeed } from "@/components/PostFeed";
-import { useUser } from "@clerk/clerk-react";
 import useProfile from "@/hooks/useProfile";
 import Avatar from "@/components/Avatar"
 import FollowButton from "@/components/FollowButton";

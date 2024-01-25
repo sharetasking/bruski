@@ -1,17 +1,22 @@
 "use client"
 import Image from "next/image";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { useRouter } from "next/router";
 import { Profile } from "@prisma/client";
-import { useClerk } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import mixpanel from "@/utils/mixpanel";
 
-import { SignIn, ClerkLoading, ClerkLoaded, RedirectToUserProfile } from "@clerk/nextjs";
 import Link from "next/link";
+import { Session } from "inspector";
+import { getProviders, signIn, getSession, getCsrfToken } from "next-auth/react";
+import SignIn from "@/components/SignIn";
 
-
-const LandingPageComponent = ({profiles}:{profiles:Profile[]}) => {
+type Provider = {
+  id: string;
+  name: string;
+  type: string;
+  // ... other properties
+};
+const LandingPageComponent = ({profiles, providers}:{profiles:Profile[], providers: Provider[]}) => {
 
   useEffect(() => {
       // SET MIXPANEL USER
@@ -23,14 +28,18 @@ const LandingPageComponent = ({profiles}:{profiles:Profile[]}) => {
     });
   });
 
-  const { signOut } = useClerk();
+  
+  console.log(providers)
 
-  const handleLogout = async () => {
-    await signOut();
-    // Redirect or perform other actions after logout
-  };
 
-  handleLogout();
+  
+
+  // const handleLogout = async () => {
+  //   await signOut();
+  //   // Redirect or perform other actions after logout
+  // };
+
+  // handleLogout();
 
 
 
@@ -41,7 +50,7 @@ if(!profiles)
 {
 
 }
-else
+
   return (
   <div className="bg-primary mt-2 h-full w-screen rounded-2xl justify-center p-2 md:px-12 md:pt-12 md:pb-6 md:flex-row flex gap-4 items-start flex-col">
         <div className="max-w-6xl w-full flex md:flex-row flex-col items-centedr justify-center">
@@ -57,7 +66,7 @@ else
               {profiles.map((profile, index) => (
                 <Image
                   key={index}
-                    src={profile.img ?? "/placeholder.png"}
+                    src={profile.img ?? "/img/placeholder.svg"}
                     alt={"Picture of profile named "+profile.display_name ?? "Profile picture"}
                     width={20}
                     height={20}
@@ -80,9 +89,29 @@ else
 
 
           <div className="flex-1 justify-start pt-20 flex flex-col p-4 relative transition-all duration-200">
-              <div className="fadeInUp delay-1000 opacity-0"><SignIn /></div>
+              {/* <div className="fadeInUp delay-1000 opacity-0"><SignIn /></div> */}
+
+
+
+
+              <div className="fadeInUp delay-1000 opacity-0"><SignIn providers={providers} /></div>
+
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
               <div className="fadeInUp delay-200 opacity-0 z-50">
-                <span className="rounded-full text-sm h-36 w-36 p-8 -mt-12 w-s16  flex items-center justify-center text-white bg-orange-700 font-bold grow-0 shrink-0 text-center gap-2">JOIN HERE<span className="block text-2xl border-l border-white pl-2">FREE</span></span>
+                <span className="rounded-full text-sm h-36 w-36 p-8 w-s16  flex items-center justify-center text-white bg-orange-700 font-bold grow-0 shrink-0 text-center gap-2">JOIN HERE<span className="block text-2xl border-l border-white pl-2">FREE</span></span>
               </div>
           </div>
 

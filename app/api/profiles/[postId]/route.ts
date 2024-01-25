@@ -1,4 +1,3 @@
-import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -7,15 +6,19 @@ import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
 import { log } from "console";
 
+import { authConfig } from "../../auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
+
 export async function POST(req: Request, { params }: { params: { profileId: string } }) {
-  
+  const session = await getServerSession(authConfig)  
+  const sessionUser = session?.user;
+
   try {
     const data = await req.json();
-    const user = await currentUser();
     const { body } = data;
 
 
-    if (!user || !user.id || !user.firstName) {
+    if (!sessionUser || !sessionUser.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -32,7 +35,7 @@ export async function POST(req: Request, { params }: { params: { profileId: stri
     //find corresponding db user
     const localUser = await prismadb.user.findFirst({
       where: {
-        clerkUserId: user.id
+        email: sessionUser.email
       }
     });
 
@@ -138,7 +141,6 @@ export async function POST(req: Request, { params }: { params: { profileId: stri
 
 // import { NextApiRequest, NextApiResponse } from "next";
 
-// import { auth, redirectToSignIn } from "@clerk/nextjs";
 // import prisma from "@/lib/prismadb"; // ensure the path is correct
 
 

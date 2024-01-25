@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { SmilePlus } from 'lucide-react';
 
 
-interface BruskiCompanion extends Companion {
+export interface BruskiCompanion extends Companion {
   profiles: {
     url: string;
     display_name: string;
@@ -20,7 +20,7 @@ interface BruskiCompanion extends Companion {
 
 }
 
-const PixiPageComponent = ({user, companions}: {user:BruskiUser, companions: BruskiCompanion[]}) => {
+const PixiPageComponent = ({user, companions}: {user:BruskiUser|null, companions: BruskiCompanion[]}) => {
 
 
   useEffect(() => {

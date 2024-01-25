@@ -1,9 +1,9 @@
 // pages/api/check-following/[profileId].js
-import { withAuth } from '@clerk/nextjs/api';
-import { currentUser } from "@clerk/nextjs";
 import prismadb from "@/lib/prismadb";
 import { log } from 'console';
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authConfig } from '../../auth/[...nextauth]/options';
 
 // export const config = {
 //   api: {
@@ -15,24 +15,22 @@ import { NextResponse } from 'next/server';
     request: Request,
     { params }: { params: { profileId: string } } )
     {
-  const user = await currentUser();
+      
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
   
   try {
     // Ensure the user is authenticated
     if (!user || !user.id) {
-      new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 })
       
     }
 
     const profileId = params.profileId;
     const userId = user?.id;
 
-    //get profile for this ser
-    const senderProfile = await prismadb.profile.findFirst({
-      where: {
-        id: profileId,
-      },
-    });
+    //get profile for this user
+    const senderProfile = user.profiles?.[0];
 
     const isFollowing = await prismadb.follower.findFirst({
       where: {

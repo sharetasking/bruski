@@ -1,4 +1,3 @@
-const { Companion, Category, Profile } = require('@prisma/client');
 
 const { PrismaClient } = require('@prisma/client');
 
@@ -14,8 +13,9 @@ async function main() {
       data: {
         email: 'ceo@sharetasking.com',
         username: 'Sean',
-        // password: 'R@#ds1_@2^32ej_$#h!s9',
+        password: '$2b$10$uLRs8wMzPEbFc6eQkUCvqON1T98jZQe77qYIrdEWSWpv3xZwF9FX2',
         accountType: 'SAAS_OWNER',
+        loginProvider: 'EMAIL_AND_PASSWORD',
         profiles: {
           create: {
             display_name: 'Hi, I\'m Sean',

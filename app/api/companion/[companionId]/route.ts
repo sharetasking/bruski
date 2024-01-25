@@ -1,31 +1,23 @@
-import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
 import { checkSubscription } from "@/lib/subscription";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/app/api/auth/[...nextauth]/options";
 
 export async function PATCH(
   req: Request,
   { params }: { params: { companionId: string } }
 ) {
 
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
+
   try {
 
     // GET PARAMS
     const body = await req.json();
 
-    // CHECK IF LOGGED IN
-    const clerkUser = await currentUser();
-    if(!clerkUser) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    // GET LOCAL USER
-    const user = await prismadb.user.findUnique({
-      where: {
-        clerkUserId: clerkUser.id
-      }
-    });
 
     // GET INDIVIDUAL FIELDS FROM BODY
     const { img, name, description, instructions, seed, categoryId } = body;
@@ -63,7 +55,7 @@ export async function PATCH(
       },
       data: {
         categoryId,
-        ownerId: user.id,
+        // ownerId: user.id,
         // TODO: Let them select a username
         // username: user.first_name, 
         img,
@@ -145,8 +137,11 @@ export async function DELETE(
   request: Request,
   { params }: { params: { companionId: string } }
 ) {
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
+
   try {
-    const { userId } = auth();
+    const userId = user?.id;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
