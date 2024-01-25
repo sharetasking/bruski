@@ -1,1 +1,58 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="680.764" height="528.354" viewBox="0 0 180.119 139.794"><g transform="translate(-13.59 -66.639)" paint-order="fill markers stroke"><path fill="#d0d0d0" d="M13.591 66.639H193.71v139.794H13.591z"/><path d="m118.507 133.514-34.249 34.249-15.968-15.968-41.938 41.937H178.726z" opacity=".675" fill="#fff"/><circle cx="58.217" cy="108.555" r="11.773" opacity=".675" fill="#fff"/><path fill="none" d="M26.111 77.634h152.614v116.099H26.111z"/></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   width="800px"
+   height="800px"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="placeholder.svg"
+   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.295"
+     inkscape:cx="400"
+     inkscape:cy="408.47458"
+     inkscape:window-width="1309"
+     inkscape:window-height="681"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Layer 1">
+    <rect
+       style="display:inline;fill:#f2f2f2;stroke-width:0.0131688"
+       id="rect344"
+       width="16.338984"
+       height="16.40678"
+       x="-0.13559318"
+       y="-0.13559319" />
+  </g>
+  <path
+     d="m 8.2711863,4.2966101 c -0.828125,0 -1.5,0.671875 -1.5,1.5 0,0.828125 0.671875,1.5 1.5,1.5 0.828125,0 1.4999998,-0.671875 1.4999998,-1.5 0,-0.828125 -0.6718748,-1.5 -1.4999998,-1.5 z m -0.75,3.5 c -1.246094,0 -2.25,1.003906 -2.25,2.2499999 v 0.25 c 0,0.554688 0.4453125,1 1,1 h 3.9999997 c 0.554688,0 1,-0.445312 1,-1 v -0.25 c 0,-1.2460939 -1.003906,-2.2499999 -2.2499997,-2.2499999 z m 0,0"
+     fill="#2e3436"
+     id="path2"
+     style="stroke-width:0.5;fill:#b3b3b3" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer 2" />
+</svg>
