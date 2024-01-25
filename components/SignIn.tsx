@@ -84,7 +84,7 @@ export default function SignIn({ providers }: { providers: Provider[]|null}) {
       ))}
 
       <div className="mb-4 border-b text-center">
-        <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
+        <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-primary-foreground transform translate-y-1/2">
           Or sign in with e-mail
         </div>
       </div>

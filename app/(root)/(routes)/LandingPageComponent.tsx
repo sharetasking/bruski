@@ -37,14 +37,14 @@ const LandingPageComponent = ({profiles, providers}:{profiles:Profile[], provide
   <div className="bg-primary mt-2 h-full w-screen rounded-2xl justify-center p-2 md:px-12 md:pt-12 md:pb-6 md:flex-row flex gap-4 items-start flex-col">
         <div className="max-w-6xl w-full flex md:flex-row flex-col items-centedr justify-center">
 
-          <div className="flex-1 text-primary-foreground lg:-mt-12 py-12 px-4">
+          <div className="flex-1 text-primary-foreground lg:-mt-12 lg:py-12 p-2 px-4">
             {/* <h3 className="font-bold text-2xl">Bruski</h3> */}
             <h1 className="fadeInUp delay-0 mt-6 md:text-7xl text-4xl max-w-md">Where humans and AI connect to inspire</h1>
             <h2 className="fadeInUp delay-100 md:mt-8 mt-4 text-xl text-primary-foreground/80 opacity-0">Grow with us to <span className="block text-accent">1 million subscribers</span></h2>
             <p className="fadeInUp delay-200 text-primary-foreground/60 opacity-0 mt-2 max-w-sm">Connect with the most interesting human and AI influencers across the globe and create your own AI companions as well.</p>
             
             
-            <div className=" ml-4 mt-4 flex flex-wrap w-2/3">
+            <div className=" ml-4 mt-4 lg:flex flex-wrap w-2/3 hidden">
               {profiles.map((profile, index) => (
                 <Image
                   key={index}
@@ -70,7 +70,7 @@ const LandingPageComponent = ({profiles, providers}:{profiles:Profile[], provide
           </div>
 
 
-          <div className="flex-1 justify-start pt-20 flex flex-col p-4 relative transition-all duration-200">
+          <div className="flex-1 justify-start lg:pt-20 flex flex-col lg:p-4 relative transition-all duration-200">
               {/* <div className="fadeInUp delay-1000 opacity-0"><SignIn /></div> */}
 
 
@@ -111,8 +111,8 @@ const LandingPageComponent = ({profiles, providers}:{profiles:Profile[], provide
                   {loginOrSignup=="login" && <SignIn providers={providers} />}
                   {loginOrSignup=="signup" && <SignUpForm providers={providers} switchLoginMode={setLoginOrSignup} /> }
 
-                  {loginOrSignup == "login" && <div className="mt-4">Don&apos;t have an account? <Link href="" className=" font-medium cursor-pointer underline" onClick={()=>setLoginOrSignup('signup')}>Sign Up</Link></div>}
-                  {loginOrSignup == "signup" && <div className="mt-4">Already have an account? <Link href="" className=" font-medium cursor-pointer underline" onClick={()=>setLoginOrSignup('login')}>Login</Link></div>}
+                  {loginOrSignup == "login" && <div className="mt-4">Don&apos;t have an account? <Link href="#" className=" font-medium cursor-pointer underline" onClick={()=>setLoginOrSignup('signup')}>Sign Up</Link></div>}
+                  {loginOrSignup == "signup" && <div className="mt-4">Already have an account? <Link href="#" className=" font-medium cursor-pointer underline" onClick={()=>setLoginOrSignup('login')}>Login</Link></div>}
                 </div>
 
               </div>

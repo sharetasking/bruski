@@ -240,6 +240,7 @@ body,
   }
   
   .fadeInUp {
+    opacity: 0;
     animation: fadeInUp 0.5s ease-out forwards;
   }
   

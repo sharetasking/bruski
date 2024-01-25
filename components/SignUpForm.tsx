@@ -74,7 +74,7 @@ const SignUpForm = ({providers, switchLoginMode}:{providers:Provider[], switchLo
               onClick={() => signIn(provider.id)}
               className=" gap-4 w-full bg-primary/10 hover:bg-primary/5 active:bg-primary/20 font-bold py-8 px-8 rounded inline-flex items-center"
               variant='secondary'>
-            <div className="bg-white p-2 rounded-full">
+            <div className="bg-primary-foreground p-2 rounded-full">
                                 <svg className="w-4" viewBox="0 0 533.5 544.3">
                                     <path
                                         d="M533.5 278.4c0-18.5-1.5-37.1-4.7-55.3H272.1v104.8h147c-6.1 33.8-25.7 63.7-54.4 82.7v68h87.7c51.5-47.4 81.1-117.4 81.1-200.2z"
@@ -138,7 +138,7 @@ const SignUpForm = ({providers, switchLoginMode}:{providers:Provider[], switchLo
                   {/* <div className="fadeInUp delay-1000 opacity-0 mt-4 mx-auto self-center"><SignIn providers={providers} /></div> */}
                     <div className="mb-4 border-b text-center">
                         <div
-                            className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
+                            className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-primary-foreground transform translate-y-1/2">
                             Or sign up with e-mail
                         </div>
                     </div>
