@@ -48,7 +48,41 @@ export async function POST(req: Request) {
 
 
 
+    let username = await generateUniqueUsername(name);
+
+
+
+
+
     
+
+
+
+
+
+    // if successful, create a profile for the companion
+    const profile = await prismadb.profile.create({
+      data: {
+        companionId: companion.id,
+        img,
+        display_name: name,
+        username: username ?? "",
+        bio: description,
+        url: companion.id,
+        categoryId,
+      }
+    });
+
+    return NextResponse.json(companion);
+  } catch (error) {
+    console.log("[COMPANION_POST]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+};
+
+
+export const generateUniqueUsername = async (name:string) => {
+
   // GENERATE USERNAME
   // CHECK IF AVAILABLE
   const initial_username = name?.replace(" ", "");
@@ -79,32 +113,5 @@ export async function POST(req: Request) {
 
     // CHECK IF USERNAME IS UNIQUE
 
-
-
-
-
-    
-
-
-
-
-
-    // if successful, create a profile for the companion
-    const profile = await prismadb.profile.create({
-      data: {
-        companionId: companion.id,
-        img,
-        display_name: name,
-        username: username,
-        bio: description,
-        url: companion.id,
-        categoryId,
-      }
-    });
-
-    return NextResponse.json(companion);
-  } catch (error) {
-    console.log("[COMPANION_POST]", error);
-    return new NextResponse("Internal Error", { status: 500 });
-  }
-};
+    return username;
+}

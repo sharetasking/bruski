@@ -4,13 +4,16 @@ import { useRouter } from "next/router";
 import { Profile } from "@prisma/client";
 import { useEffect } from "react";
 import mixpanel from "@/utils/mixpanel";
+import toast from "react-hot-toast";
 
 import Link from "next/link";
 import { Session } from "inspector";
 import { getProviders, signIn, getSession, getCsrfToken } from "next-auth/react";
 import SignIn from "@/components/SignIn";
+import { useState } from "react";
+import SignUpForm from "@/components/SignUpForm";
 
-type Provider = {
+export type Provider = {
   id: string;
   name: string;
   type: string;
@@ -18,6 +21,7 @@ type Provider = {
 };
 const LandingPageComponent = ({profiles, providers}:{profiles:Profile[], providers: Provider[]}) => {
 
+  const [loginOrSignup, setLoginOrSignup] = useState("signup");
   useEffect(() => {
       // SET MIXPANEL USER
     
@@ -28,28 +32,6 @@ const LandingPageComponent = ({profiles, providers}:{profiles:Profile[], provide
     });
   });
 
-  
-  console.log(providers)
-
-
-  
-
-  // const handleLogout = async () => {
-  //   await signOut();
-  //   // Redirect or perform other actions after logout
-  // };
-
-  // handleLogout();
-
-
-
-
-
-
-if(!profiles)
-{
-
-}
 
   return (
   <div className="bg-primary mt-2 h-full w-screen rounded-2xl justify-center p-2 md:px-12 md:pt-12 md:pb-6 md:flex-row flex gap-4 items-start flex-col">
@@ -106,32 +88,33 @@ if(!profiles)
 
 
 
-              <div className="fadeInUp delay-200 bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+              <div className="fadeInUp delay-200 bg-primary-foreground px-8 rounded-lg shadow-lg lg:max-w-md w-full">
                 <div id="error-message" className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 hidden" role="alert">
                   <strong className="font-bold">Error!</strong>
                   <span className="block sm:inline">Unable to complete action at this time. If the problem persists please contact support.</span>
                 </div>
 
                 <div className="fadeInUp delay-1000 opacity-0 py-12">
-                  <h2 className="text-2xl font-semibold">Sign in to Bruski</h2>
-                  <p className="text-lg font-medium mt-0 opacity-50 mb-4">Join here free</p>
-                  <SignIn providers={providers} />
+                {loginOrSignup == "login" && <h2 className="text-2xl font-semibold mb-4">Sign in to Bruski</h2>
+                
+                }
+                {loginOrSignup == "signup" && 
+                  <>
+                    <h2 className="text-2xl font-semibold">Create an account</h2>
+                    {/* <p className="text-lg font-medium mt-0 opacity-50 mb-4">Join here free</p> */}
+                  </>
+                
+                }
+
+
+
+                  {loginOrSignup=="login" && <SignIn providers={providers} />}
+                  {loginOrSignup=="signup" && <SignUpForm providers={providers} switchLoginMode={setLoginOrSignup} /> }
+
+                  {loginOrSignup == "login" && <div className="mt-4">Don&apos;t have an account? <Link href="" className=" font-medium cursor-pointer underline" onClick={()=>setLoginOrSignup('signup')}>Sign Up</Link></div>}
+                  {loginOrSignup == "signup" && <div className="mt-4">Already have an account? <Link href="" className=" font-medium cursor-pointer underline" onClick={()=>setLoginOrSignup('login')}>Login</Link></div>}
                 </div>
 
-
-                {/* <div className="mb-4">or</div> */}
-                {/* <form id="auth-form">
-                  <div id="signup-fields" className="hidden">
-                    <input type="text" placeholder="First name" className="mb-4 p-2 w-full border rounded">
-                    <input type="text" placeholder="Last name" className="mb-4 p-2 w-full border rounded">
-                  </div>
-                  <input type="email" placeholder="Email address" className="mb-4 p-2 w-full border rounded">
-                  <input type="password" placeholder="Password" className="mb-4 p-2 w-full border rounded">
-                  <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">CONTINUE</button>
-                </form> */}
-                {/* <div className="text-center mt-4">
-                  <a href="#" id="toggle-form" className="text-blue-500 hover:text-blue-700">Sign up</a>
-                </div> */}
               </div>
 
 
@@ -151,7 +134,6 @@ if(!profiles)
 
 
 
-              {/* <div className="fadeInUp delay-1000 opacity-0"><SignIn providers={providers} /></div> */}
 
                     
 
@@ -165,13 +147,7 @@ if(!profiles)
 
 
 
-
-
-              {/* <div className="fadeInUp delay-200 -mt-8 opacity-0 z-50">
-                <span className="rounded-full text-sm h-36 w-36 p-8 w-s16  flex items-center justify-center text-white bg-orange-700 font-bold grow-0 shrink-0 text-center gap-2">JOIN HERE<span className="block text-2xl border-l border-white pl-2">FREE</span></span>
-              </div> */}
           </div>
-
 
           <div className="text-secondary md:hidden p-8 text-xs flex items-center justify-start gap-4 mt-8">
             <Link href="/terms" className="hover:underline">Terms of Service</Link>
