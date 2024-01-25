@@ -21,7 +21,7 @@ export type Provider = {
 };
 const LandingPageComponent = ({profiles, providers}:{profiles:Profile[], providers: Provider[]}) => {
 
-  const [loginOrSignup, setLoginOrSignup] = useState("signup");
+  const [loginOrSignup, setLoginOrSignup] = useState("login");
   useEffect(() => {
       // SET MIXPANEL USER
     
