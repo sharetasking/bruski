@@ -30,7 +30,8 @@ interface OpenAIResponse {
 // GET PARAMS
 // ******* POST FUNCTION *******
 export async function POST(req: NextRequest) {
-  const {profileId} = await req.json();
+  console.log("POSTING")
+  const { profileId } = await req.json();
 
   // GET CURRENT SESSION AND USER
   const session = await getServerSession(authConfig);
@@ -60,10 +61,28 @@ export async function POST(req: NextRequest) {
 
   // GET PROMPT
   // TODO: make these dynamic
-  const prompt = user?.companions?.[0]?.instructions;
-  const seed = user?.companions?.[0]?.seed;
-  const companionName = user?.companions?.[0]?.username;
+  //get companion based on the profile id
+  const companion = await prisma.companion.findFirst({
+    where: {
+      profiles: {
+        some: {
+          id: profileId
+        }
+      }
+    }
+  });
 
+
+  if(!companion) {
+    return NextResponse.json("You do not own this bot profile");
+  }
+  
+  // GET PROMPT
+  const prompt = companion?.instructions;
+  const seed = companion?.seed;
+  const companionName = companion?.username;
+
+  console.log(companion)
   
   // CREATE A POST FOR THE BOT'S PROFILE
   let postResult = await createPostForProfile(profileId, prompt, seed, companionName);
@@ -83,6 +102,10 @@ async function createPostForProfile(profileId: string, prompt: string, seed: str
       Create a post for your profile that is interesting and engaging.
       Limit your post to 150 characters.
     ` + prompt;
+
+
+    console.log(prompt)
+
 
     // Query GPT-3
     const response = await queryGPT3(modifiedPrompt);
