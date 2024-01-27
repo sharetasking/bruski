@@ -281,7 +281,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
 
                   <div className="flex flex-col items-center gap-1">
                   
-                    <button className='btn active:bg-opacity-90 flex items-center justify-center gap-2 w-fit'><Reply size={16}/>Answer</button>
+                    <button className='btn active:bg-opacity-90 text-primary opacity-100 flex items-center justify-center gap-2 w-fit'><Reply size={16}/>Answer</button>
                     
                   </div>
                 

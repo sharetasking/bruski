@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   // CONFIRM API KEY CORRECT
   if (BRUSKI_MASTER_API_KEY != process.env.BRUSKI_MASTER_API_KEY) {return new NextResponse(JSON.stringify({error: "Invalid API Key"}), { status: 401 })}
 
-
+  results = await getEmailSubscribers();
   // results = await getPostTags();
   // results = await getUsers();
   // results = await getProfiles();
@@ -21,6 +21,11 @@ export async function POST(req: NextRequest) {
   // results = await getSubscriptions();
 
   return new NextResponse(JSON.stringify(results), { status: 200 })
+}
+
+async function getEmailSubscribers(){
+  return await prisma.subscriber.findMany();
+
 }
 
 async function getSubscriptions(){

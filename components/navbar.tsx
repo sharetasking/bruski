@@ -64,7 +64,7 @@ export const Navbar = ({
   }
 
   return ( 
-      <div className="fixed inset-x-0 z-50 flex justify-between items-center py-2 px-4 h-16 bg-gradient-to-b from-white dark:from-black via-white/60 dark:via-black/60 to-transparent dark:to-transparent">
+      <div className="fixed inset-x-0 bg-white dark:bg-primary-foreground shadow-sm z-50 flex justify-between items-center py-2 px-4 h-16 bg-graddient-to-b from-white dark:from-black via-white/60 dark:via-black/60 to-transparent dark:to-transparent">
         
         
         {/* <div className="bg-primary"></div> */}
@@ -74,7 +74,7 @@ export const Navbar = ({
           {/* <div className="text-accent w-48 bg-gradient-to-b from-white dark:from-black via-white/70 dark:via-black/70 to-transparent dark:to-transparent hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl"> */}
           <div className="text-accent w-48  hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl">
           
-          <Link href="/home" prefetch className="flex items-center gap-2" aria-label="Home">
+          <Link href={user ? "/home" : "/"} prefetch className="flex items-center gap-2" aria-label="Home">
             
             <h1 className={cn(" md:block text-xl md:text-2xl font-bold tracking-tight text-primary", font.className)}>
               bruski

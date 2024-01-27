@@ -303,6 +303,21 @@ model User {
   // Other relations (if any)
 }
 
+model Subscriber {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  email         String
+  phone         String?
+  first_name    String?
+  last_name     String?
+  event         String?
+  source        String?
+  date          DateTime  @default(now())
+  notes         String?
+
+
+  @@unique([email, event])
+}
+
 
 model Post {
   id                    String    @id @default(auto()) @map("_id") @db.ObjectId

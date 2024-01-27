@@ -21,14 +21,14 @@ import FeaturesComponent from "./components/features";
 // import WantToHelp from "./components/wantToHelp";
 import dynamic from 'next/dynamic';
 
-// export async function generateStaticParams() {
-//   const profiles = await prisma.profile.findMany({
-//     take: 25,
-//     orderBy: { createdAt: 'desc' },
-//   });
+export async function generateStaticParams() {
+  const profiles = await prisma.profile.findMany({
+    take: 25,
+    orderBy: { createdAt: 'desc' },
+  });
 
-//   return { profiles };
-// }
+  return { profiles };
+}
 
 
 
@@ -54,7 +54,7 @@ import dynamic from 'next/dynamic';
 
 
 
-const SignInPage = async () => {
+const SignInPage = async ({ profiles }: {profiles:Profile[]}) => {
   
 
   // GET PROVIDERS FOR USE IN THE LOGIN COMPONENT
@@ -90,12 +90,12 @@ const SignInPage = async () => {
   }
 
     //get profiles
-    const profiles = await prisma.profile.findMany({
-      take: 25,
-      orderBy: {
-        createdAt: 'desc'
-      },
-    });
+    // const profiles = await prisma.profile.findMany({
+    //   take: 25,
+    //   orderBy: {
+    //     createdAt: 'desc'
+    //   },
+    // });
 
   if(!user)
   {
