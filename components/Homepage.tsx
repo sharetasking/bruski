@@ -17,6 +17,7 @@ import { toast } from "react-hot-toast";
 import { usePosts } from "@/hooks/usePosts";
 import { BruskiPost } from "@/hooks/usePost";
 import Following from "./Following";
+import TrendingPixis from "./TrendingPixis";
 
 interface Post{
   body: string;
@@ -48,7 +49,7 @@ export const Homepage = ({user}: {user: any}) => {
 
   // FETCH POSTS
   const { data: newPosts, isLoading: loadingNewPosts, isError: isErrorNewPosts } = usePosts({
-    take: 4,
+    take: 10,
     page: currentPage,
   });
   
@@ -71,76 +72,6 @@ export const Homepage = ({user}: {user: any}) => {
   });
 
 
-
-
-
-  // FUNCTION: ADD COMMENT 
-  const addPost = async (post:string, mediaType:MediaType) => {
-    const tempId = new Date().getTime().toString();
-    
-    let newPostObj = {
-        id: tempId,
-        body: post,
-        mediaType: mediaType,
-        media: [post],
-        poster: user?.profiles?.[0], //TODO: fix this
-        saving: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        comments: [],
-        num_comments: 0,
-        num_likes: 0,
-        num_reposts: 0,
-        num_shares: 0,
-        num_views: 0,
-        liked: false,
-        reposted: false,
-        shared: false,
-        viewed: false,
-        profileId: user?.profiles?.[0]?.id,
-        num_bookmarks: 0,
-
-        
-      };
-    
-    if(newPostObj.poster)
-      newPostObj.poster.isFollowed = false;
-
-
-    setAllPosts(prevPosts => [newPostObj, ...prevPosts]);
-
-      
-    try {
-      // Replace this with your actual API call logic to submit the comment
-      const response = await fetch(`/api/posts?media_type=${mediaType}`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ body: newPostObj, poster: user?.profiles?.[0] }),
-      });
-
-      if (!response.ok) {
-          throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-
-      // Update the state with the permanent ID received from the server
-      setAllPosts(prevPosts => prevPosts.map(post => 
-          post.id === tempId ? { ...post, id: data.id, saving:false } : post
-      ));
-
-      toast.success('Success');
-  } catch (error) {
-      console.log('Failed to submit post:', error);
-      toast.error('Failed to submit post');
-
-      // Optionally remove the temporary comment from the state
-      setAllPosts(prevPosts => prevPosts.filter(post => post.id !== tempId));
-  }
-    
-  };
 
 
 
@@ -191,10 +122,10 @@ const loadMorePosts = () => {
   return (
     <>
 
-    <div className="fadeInUp grid lg:grid-cols-4 grid-cols-1 w-7xl gap-2">
+    <div className="fadeInUp grid lg:grid-cols-4 grid-cols-1 w-7xl gap-2 no-scrollbar">
 
       {/* Left Column */}
-      <div className="hidden flex-1 gap-4 grow sm:flex flex-col w-full inset-0 pr-8 ">
+      <div className="hidden flex-1 gap-4 grow lg:flex flex-col w-full inset-0 pr-8 ">
         <p className="gap-4">
           {/* <h3>Discover Bruski</h3> */}
           {/* <p className="text-primary/70">
@@ -204,7 +135,13 @@ const loadMorePosts = () => {
 
           <div>
           <div className="flex flex-col gap-4 lg:grid lg:grid-cols-1 xl:grid-cols-1 items-start justify-start text-left">
-            <Following take={7} />
+            <h3>Trending Pixis</h3>
+            <div className="h-36">
+              <TrendingPixis take={12}  />
+            </div>
+
+            <Following take={4} />
+
             {/* TODO: Code this */}
             {/* {
               (profiles && profiles.length) && profiles.map((profile: ExtendedProfile, index) => (
@@ -246,7 +183,7 @@ const loadMorePosts = () => {
 
         {/* Center column */}
         <div className="lg:col-span-2 w-full flex flex-col items-center mx-auto grow-0">
-          <PostCreator onPostSubmit={addPost} placeholder="What's going on in your world today?" />
+          {/* <PostCreator onPostSubmit={addPost} placeholder="What's going on in your world today?" /> */}
           
           <PostFeed user={user} _posts={allPosts} onScrollEnd={loadMorePosts} />
         </div>
@@ -259,7 +196,12 @@ const loadMorePosts = () => {
 
 
         {/* Right column */}
-        <div className="flex-1 flex flex-col pb-72 px-4 gap-4 sticky pl-8">
+        <div className="flex-1 flex flex-col pt-12 pb-72 px-4 gap-4 sticky pl-8">
+          <h2>Trending Deals</h2>
+          <div className="text-sm flex flex-col">
+            <span className="font-semibold text-muted-foreground">Want to promote your brand?</span>
+            <span className="">Email us at bruski@sharetasking.com</span>
+          </div>
           {/* FEATURED PROFILES */}
           <h3>Get updates from</h3>
           <div className="flex flex-col lg:grid lg:grid-cols-1 xl:grid-cols-1 items-start justify-start text-left">

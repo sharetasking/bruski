@@ -41,7 +41,7 @@ export default async function RootLayout({
           <meta name="description" content="Where humans and AI come together to create" /> 
           <Trackers />
         </head>
-        <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 relative 2xl:max-w-7xl m-auto")}>
+        <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 relative 2xl:max-w-7xl m-auto no-scrollbar")}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
 
             {/* <Navbar user={user ?? null} isPro={isPro} /> */}

@@ -190,11 +190,11 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
         <div className="flex flex-col flex-1 grow w-full">
           <div className="flex flex-row justify-start grow items-center gap-1">
             <div className="flex gap-2 items-center">
-              <p 
+              <div 
                 onClick={goToUser} 
-                className="user_name">
+                className="user_name py-2">
                   {data.poster?.display_name}
-              </p>
+              </div>
             </div>
 
             
@@ -243,7 +243,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
           {
             data.mediaType != "CHALLENGE"
             &&
-          <div className="text-primary text-[#262f3f] py-4 text-[15px] leading-[21px] mt-1 block grow-0 whitespace-pre-wrap break-words">
+          <div className="text-primary text-[#262f3f] pb-4 text-[15px] leading-[21px] mt-1 block grow-0 whitespace-pre-wrap break-words">
             {data.body}
           </div>
           
@@ -318,7 +318,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
 
 
           {/* BOTTOM BUTTONS */}
-          <div className="flex flex-row justify-between items-center mt-3 gap-10">
+          <div className="flex flex-row justify-between items-center gap-10">
             {/* LEFT BUTTONS (BOTTOM) */}
             <div className="flex items-center gap-1">
 
@@ -335,7 +335,6 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
                   flex 
                   flex-row 
                   items-center 
-                  text-neutral-500 
                   gap-1 
                   cursor-pointer 
                   hover:bg-primary/5
@@ -391,7 +390,6 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
                   flex 
                   flex-row 
                   items-center 
-                  text-neutral-500 
                   cursor-pointer 
                   transition 
                   

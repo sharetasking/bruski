@@ -76,7 +76,7 @@ let post;
       post = await prismadb.post.create({
         data: {
           profileId: profileId,
-          body: body.substring(0, process.env.POST_MAX_CHARACTERS) ?? 350,
+          body: body.substring(0, process.env.POST_MAX_CHARACTERS ?? 350),
           postType: "ORIGINAL",
           mediaType: media_type as MediaType ?? "TEXT" as MediaType 
         }

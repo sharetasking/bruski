@@ -100,7 +100,7 @@ const SignInPage = async () => {
   if(!user)
   {
     return (
-      <div className="w-screen grid grid-cols-1">
+      <div className="w-screen grid grid-cols-1 no-scrollbar">
 
           <HeroComponent profiles={profiles} />
           <FeaturesComponent />

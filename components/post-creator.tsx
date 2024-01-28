@@ -36,8 +36,6 @@ const [showPlaceholder, setShowPlaceholder] = useState<boolean>(true)
 
 
 
-const registerModal = useRegisterModal();
-const loginModal = useLoginModal();
 const { data: currentUser } = useBruskiUser();
 const { mutate: mutatePosts } = usePosts();
 const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -114,19 +112,6 @@ const handlePaste = (event: React.ClipboardEvent) => {
   selection.addRange(range);
 };
 
-
-
-
-
-// const handleInput = async (e: React.FormEvent<HTMLDivElement>) => {
-//   e.preventDefault();
-//   e.stopPropagation();
-//   // Cast the target to the correct type to access innerText
-//   const div = e.target as HTMLDivElement;
-//   const text = div.innerText;
-//   await setBody(text); // Update the body state
-//   setShowPlaceholder(text.trim() === '');
-// };
 
 
 const handleClick = (e: React.MouseEvent) => {
@@ -207,7 +192,7 @@ const onSubmit = useCallback(async (event: FormEvent) => {
 
 
 return (
-  <div className={"lg:-mt-8 w-full mx-2 rounded-3xl px-4 py-1 shadow-sm mb-4 left-auto right-auto max-w-xl bg-secondary transition-all duration-1000  " + (activePostType == 'CHALLENGE' ? 'ring-4 ring-offset-2 ring-secondary ': '')}>
+  <div className={"lg:-mt-8 w-full mx-2 rounded-3xl px-4 py-1 mb-4 left-auto right-auto max-w-xl marker:transition-all duration-1000  " + (activePostType == 'CHALLENGE' ? 'ring-4 ring-offset-2 ring-secondary ': '')}>
     
 {/* <h3>Create a post</h3> */}
     <div className="flex gap-1 py-4">
@@ -228,33 +213,18 @@ return (
             data-placeholder={showPlaceholder ? placeholder : ''} // Add data-placeholder attribute
             role="textbox" // Accessibility role
             aria-multiline="true" // Accessibility attribute
-            className={`bg-transparent placeholder w-full min-h-[100px] text-xl font-medium outline-none border-none py-5 px-2 ${showPlaceholder ? '' : 'not-empty'}`}
+            className={`bg-transparent placeholder w-full min-h-[100px] text-xl font-medium outline-none border-none overflow-y-scroll no-scrollbar max-h-[380px] py-5 px-2 ${showPlaceholder ? '' : 'not-empty'}`}
             
 
           >
-
-      {/* {showPlaceholder ? placeholder : body} */}
-            {/* {showPlaceholder && <span className="placeholder-text text-primary/50">{placeholder}</span>} */}
 
             </div> 
         
         <div className="flex md:flex-row flex-col md:gap-4 gap-2 w-full grow inset-0 md:items-center justify-between items-start">
           <div className='w-fit'><PostTypeToggles onTypeChange={setActivePostType} initial={activePostType} /></div>
-          <button type="submit" disabled={!body.length} className="flex items-center gap-2 justify-center bg-primary self-end w-36 h-12 text-primary-foreground btn text-sm rounded-2xl font-semibold border-transparent hover:border-primary/70 active:bg-primary/80 border-2 hover:text-primary"><Pointer size={16} />Post</button>
+          <button type="submit" disabled={!body.length} className="flex items-center gap-2 justify-center bg-primary self-end w-36 h-12 text-primary-foreground btn text-sm rounded-lg font-semibold border-transparent hover:border-primary/70 active:bg-primary/80 border-2 hover:text-primary"><Pointer size={16} />Post</button>
         </div>
         
-
-        {/* TODO: Delete if not necessary <textarea
-          onChange={(e) => {
-            adjustTextareaHeight(e.target);
-            setBody(e.target.value);
-          }}
-          placeholder="What's happening in your world today?"
-          value={body}
-          maxLength={280}
-          required
-          className="bg-transparent w-full flex flex-1 overflow-visible outline-none border-none p-0"
-        ></textarea> */}
       </form>
     )}
   </div>

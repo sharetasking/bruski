@@ -1,7 +1,9 @@
 import useSWR from 'swr';
+import { Profile } from '@prisma/client'
 
 
 import fetcher from '@/lib/fetcher';
+import { BruskiProfile } from './useProfile';
 
 export interface BruskiUser {
   id: string;
@@ -11,7 +13,7 @@ export interface BruskiUser {
   createdAt: Date;
   updatedAt: Date;
   [key: string]: any;
-  profiles?: any[]
+  profiles?: BruskiProfile[]
 
 }
 const useBruskiUser = () => {

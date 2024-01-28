@@ -2,6 +2,7 @@
 
 import { Navbar } from '@/components/navbar';
 import { ProModal } from '@/components/pro-modal';
+import { PostModal } from '@/components/post-modal';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 import { Toaster } from 'react-hot-toast';
@@ -44,7 +45,9 @@ export default async function RootLayout({
         <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 relative 2xl:max-w-7xl m-auto")}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
 
+          {/* <PostCreator onPostSubmit={addPost} placeholder="What's going on in your world today?" /> */}
             <Navbar user={user ?? null} isPro={isPro} />
+            <PostModal />
             <ProModal />
             <div className="flex grow flex-1 w-full pt-16">
               {children}

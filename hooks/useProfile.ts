@@ -1,6 +1,13 @@
 import useSWR from 'swr';
+import { Profile } from '@prisma/client'
 
 import fetcher from '@/lib/fetcher';
+
+
+export interface BruskiProfile extends Profile {
+  isFollowed?: boolean;
+}
+
 
 const useProfiles = (profileId?: string) => {
   // const { data, error, mutate } = useSWR(profileId ? `/api/profiles/${profileId}` : null, fetcher);

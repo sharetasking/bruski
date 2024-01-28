@@ -1,9 +1,12 @@
 import useSWR from 'swr';
 import fetcher from '@/lib/fetcher';
 
-const useNotifications = (userId?: string) => {
+const useNotifications = ({userId, type, take=4}:{userId?: string, type?:string, take?:number}) => {
 
-  const url = userId ? `/api/notifications/${userId}` : null;
+  let url = userId ? `/api/pixis` : `/api/pixis`;
+
+  url += `?take=${take}`;
+
   const { data, error, mutate } = useSWR(url, fetcher);
 
   const isLoading = !data && !error;

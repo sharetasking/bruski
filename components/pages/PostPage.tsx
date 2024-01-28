@@ -193,7 +193,7 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
           
           <div className="flex flex-row gap-4">
            <div>
-              <Avatar img={user.profiles?.[0]?.img} url={"/"+user.profiles?.[0]?.url ?? ""} size={12} hasBorder={false}/>
+              <Avatar img={user.profiles?.[0]?.img ?? ""} url={"/"+user.profiles?.[0]?.url ?? ""} size={12} hasBorder={false}/>
            </div>
            <div className="w-full">
              <textarea

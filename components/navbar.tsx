@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { MobileSidebar } from "@/components/mobile-sidebar";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
-import { useProModal } from "@/hooks/use-pro-modal";
+import { usePostModal } from "@/hooks/use-post-modal";
 import { PostCreator } from "@/components/post-creator";
 import { SearchInput } from "@/components/search-input";
 import { BruskiUser } from "@/hooks/useBruskiUser";
@@ -34,7 +34,7 @@ export const Navbar = ({
   user,
   isPro
 }: NavbarProps) => {
-  const proModal = useProModal();
+  const postModal = usePostModal();
 
   const [num_notifications, setNumNotifications] = useState(user?.num_notifications || 0);
 
@@ -64,7 +64,7 @@ export const Navbar = ({
   }
 
   return ( 
-      <div className="fixed inset-x-0 bg-white dark:bg-primary-foreground shadow-sm z-50 flex justify-between items-center py-2 px-4 h-16 bg-graddient-to-b from-white dark:from-black via-white/60 dark:via-black/60 to-transparent dark:to-transparent">
+      <div className="fixed inset-x-0 z-50 flex justify-between items-center py-2 px-4 h-16 bg-gradient-to-b from-white dark:from-black via-white/60 dark:via-black/60 to-transparent dark:to-transparent">
         
         
         {/* <div className="bg-primary"></div> */}
@@ -91,12 +91,12 @@ export const Navbar = ({
         {/* <SearchInput /> */}
 
         {/* {(!user || !user.isSignedIn) && user.isLoaded && <Link href="/register" className="text-sm text-red-500">Create an account / login</Link>} */}
-  {/*         
-        <Button onClick={proModal.onOpen} size="lg">
-              + Create Post
-            </Button> */}
+          
 
         <div className="flex items-center gap-x-3 ">
+            <Button onClick={postModal.onOpen} size="lg">
+              + Create Post
+            </Button>
             {user?.id && <Link href="/notifications" onClick={()=>{return countTo(0)}} className="clickable mx-4 relative">
               <Bell height={24} width={24} />
               {

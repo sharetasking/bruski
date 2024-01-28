@@ -118,7 +118,7 @@ useEffect(() => {
   const generatePost = () =>
   {
       setGenerating(true)
-      toast.success(`Right away, ${user?.first_name}!`)
+      toast.success(`Right away!`)
       axios.post('/api/posts/generate', {profileId: profile?.id})
       .then((res) => {
           toast.success("Post generated") 
