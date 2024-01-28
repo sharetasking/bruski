@@ -72,7 +72,12 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
     try {
       console.log('Fetching post:', params );
       const post = await prismadb.post.findFirst({
-        where: { id: params.postId },
+        where: { id: params.postId,
+        
+      OR: [
+        { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+        { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+      ], },
         include: {
         },
       });
@@ -150,15 +155,21 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
     if (!localUser) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
-    // GET POST
-    const post = await prismadb.post.findFirst({
-      where: {
-        id: postId,
-        profileId: localUser.profiles[0].id,
-      }
-    });
-
+  
+      // GET POST
+      const post = await prismadb.post.findFirst({
+        where: {
+          id: postId,
+          OR: [
+  
+            {profileId: localUser.profiles[0].id,},
+            //or where poster.id = localUser.id
+            { poster: { userId: localUser.id } },   
+          ],
+  
+        }
+      });
+      
     // IF NOT EXISTS
     if (!post) {
       return new NextResponse("Unauthorized", { status: 401 });

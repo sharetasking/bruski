@@ -29,7 +29,8 @@ export const ModeToggle = () => {
 
 
   return (
-    <DropdownMenu>
+    <>
+    {/* // <DropdownMenu> */}
       {/* <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none">
 <path d="M15 5.00018L12 2.00018L9 5.00018H5V9.00018L2 12.0002L5 15.0002V19.0002H9L12 22.0002L15 19.0002H19V15.0002L22 12.0002L19 9.00018V5.00018H15Z" stroke="#000000" stroke-width="2" stroke-linejoin="round"/>
 <path d="M7 12.0001C7 14.7615 9.23858 17.0001 12 17.0001V7.0001C9.23858 7.0001 7 9.23867 7 12.0001Z" stroke="#000000" stroke-width="2" stroke-linejoin="round"/>
@@ -73,6 +74,8 @@ export const ModeToggle = () => {
           System
         </DropdownMenuItem>
       </DropdownMenuContent> */}
-    </DropdownMenu>
+    {/* // </DropdownMenu> */}
+
+    </>
   )
 }

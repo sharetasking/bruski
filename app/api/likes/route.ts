@@ -104,6 +104,10 @@ export async function POST( req: NextRequest, { params }: { params: { postId: st
     post = await prismadb.post.findUnique({
       where: {
         id: postId,
+        OR: [
+          { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+          { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+        ],
       },
       include: {
         poster: true

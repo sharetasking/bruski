@@ -46,11 +46,21 @@ try {
     originalPost: {
       include: {
         poster: true,
+      },
+      where: {
+        OR: [
+          { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+          { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+        ],
       }
     },
   },
   where: {
     id: params.postId,
+    OR: [
+      { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+      { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+    ],
 }});
 
 } catch (error) {
@@ -58,6 +68,11 @@ try {
   return (<div className="flex items-center justify-center h-full w-full grow inset-0 flex-1 text-xl text-primary/50 p-40">
     Post not found
   </div>);
+}
+
+if(!post) {
+  console.log('post not found')
+  return <div className="p-12">Post not found</div>
 }
 
 // mark isliked as true if the user has liked the post

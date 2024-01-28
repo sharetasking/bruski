@@ -37,6 +37,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import MoreOptionsPosts from "../MoreOptionsPosts";
 
 
 export interface PostPageProps {
@@ -162,43 +163,7 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
 
 
               {/* PopUp Menu */}
-              <Popover>
-                <PopoverTrigger className="top-0 right-0 absolute z-40">
-                  <MoreHorizontal />
-                </PopoverTrigger>
-
-                <PopoverContent className="top-0 right-0 absolute z-50">
-                  
-                  _
-                  {/* TODO: Delete post */}
-                  {
-                  //   post.poster?.id == user?.profiles?.[0]?.id &&
-                  // <AlertDialog>
-                  //   <AlertDialogTrigger><button className="btn bg-destructive hover:opacity-80 hover:bg-destructive">Delete Post</button></AlertDialogTrigger>
-                  //   <AlertDialogContent>
-                  //     <AlertDialogHeader>
-                  //       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  //       <AlertDialogDescription>
-                  //         This action cannot be undone. This will permanently delete your post.
-                  //       </AlertDialogDescription>
-                  //     </AlertDialogHeader>
-                  //     <AlertDialogFooter>
-                  //       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  //       <AlertDialogAction onClick={handleDeletePost} className=" bg-destructive hover:opacity-80 hover:bg-destructive">Yes, delete post</AlertDialogAction>
-                  //     </AlertDialogFooter>
-                  //   </AlertDialogContent>
-                  // </AlertDialog>
-
-                }
-                  {/* End delete post */}
-
-
-
-
-
-                </PopoverContent>
-              </Popover>
-
+              <MoreOptionsPosts post={post} user={user} />
 
   { post.mediaType == "CHALLENGE" && <div className="flex flex-col subpixel-antialiased bg-primary/90 text-primary-foreground rounded-lg min-h-90 p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
             {post.body}

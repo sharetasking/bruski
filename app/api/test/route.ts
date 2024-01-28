@@ -13,11 +13,11 @@ export async function POST(req: NextRequest) {
   // CONFIRM API KEY CORRECT
   if (BRUSKI_MASTER_API_KEY != process.env.BRUSKI_MASTER_API_KEY) {return new NextResponse(JSON.stringify({error: "Invalid API Key"}), { status: 401 })}
 
-  results = await getEmailSubscribers();
+  // results = await getEmailSubscribers();
   // results = await getPostTags();
   // results = await getUsers();
   // results = await getProfiles();
-  // results = await getPosts();
+  results = await getPosts();
   // results = await getSubscriptions();
 
   return new NextResponse(JSON.stringify(results), { status: 200 })
@@ -69,13 +69,10 @@ async function getPosts(){
       
     },
     where: {
-      NOT: [
-        {
-        
-          date_deleted: null
-        
-        },
-      ]
+      OR: [
+        { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+        { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+      ],
     },
     take: 30,
   });
@@ -92,9 +89,10 @@ async function getPosts(){
       
     },
     where: {
-      NOT: {
-        date_deleted: null
-      }
+      OR: [
+        { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+        { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+      ],
     },
     take: 30,
   });

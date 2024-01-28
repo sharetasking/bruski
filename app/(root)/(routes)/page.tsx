@@ -111,7 +111,7 @@ const SignInPage = async () => {
           <FollowOurJourney />
           <WantToHelp />
 
-          <div className="flex text-sm">
+          <div className="flex text-sm gap-2">
             <span>Copyright &copy; 2024 Bruski.com</span>
             <span className="block">All rights reserved.</span>
           </div>          

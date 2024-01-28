@@ -16,6 +16,7 @@ import { cn, timeAgo } from '@/lib/utils';
 import { BruskiPost } from '@/hooks/usePost';
 import FollowButtonPlus from '../FollowButtonPlus';
 import LikeButton from '../LikeButton';
+import MoreOptionsPosts from "../MoreOptionsPosts";
 
 interface PostItemProps {
   data: BruskiPost & {saving?: false};
@@ -162,6 +163,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
 
             </div>
         </div>
+
         {/* {(data.poster.id != signedInUserProfileId) && <button 
              onClick={onFollow}
                 className={cn(`
@@ -220,8 +222,9 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
 
 
 
-
-
+{ (data.poster?.id == signedInUserProfileId || data.poster?.userId == user?.id) && 
+            <span className="ml-4"><MoreOptionsPosts post={data} user={user} /></span>
+          }
           </div>
           
           {/* {data.originalPostId && <span className="text-xs py-1 font-medium rounded-full w-fit px-4 bg-primary/10">Comment</span>} */}
@@ -258,7 +261,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
               <div className="flex flex-wrap items-center justify-between gap-4 mt-4 ">
 
 
-
+{data.originalPost && 
               <div className="flex flex-wrap gap-2 items-center ">
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className=''>
 
@@ -273,7 +276,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
                 </div>
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className='hover:underline text-base font-medium '>{data.originalPost?.poster?.display_name} </div>
               </div>
-
+            }
 
 
                 
@@ -281,7 +284,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
 
                   <div className="flex flex-col items-center gap-1">
                   
-                    <button className='btn active:bg-opacity-90 text-primary opacity-100 flex items-center justify-center gap-2 w-fit'><Reply size={16}/>Answer</button>
+                    <button className='btn active:bg-opacity-90 text-primary-foreground opacity-100 flex items-center justify-center gap-2 w-fit'><Reply size={16}/>Answer</button>
                     
                   </div>
                 
@@ -296,6 +299,8 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
           {data.originalPost?.mediaType != "CHALLENGE" && data.originalPostId && <span className="text-sm py-4 font-medium px-4 rounded-2xl hover:bg-primary/5 active:bg-primary/10 active:border-primary/10 hover:border-primary/5 border border-primary/10">
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               {/* {JSON.stringify(data.originalPost)} */}
+
+              
               <div className="flex gap-2 items-center ">
                 <div onClick={(ev) => goToLink(ev, "/"+data.originalPost?.poster?.url)} className=''>
                   <Avatar size={6} img={data.originalPost?.poster?.img ?? "/img/placeholder.svg"} url={"/"+data.originalPost?.poster?.url ?? ""} hasBorder={false} />

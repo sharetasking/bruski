@@ -85,7 +85,13 @@ console.log("postId", postId)
         // originalPost: {
         //   connect: {
         //     id: postId ?? ""
-        //   }
+        //   },
+      // where: {
+      //   OR: [
+      //     { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+      //     { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+      //   ],
+      // }
         // }
           
       }
@@ -99,6 +105,10 @@ console.log("postId", postId)
     const post = await prismadb.post.findFirst({
       where: {
         id: _post.id,
+        OR: [
+          { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+          { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+        ],
       },
       include: {
         poster: true,

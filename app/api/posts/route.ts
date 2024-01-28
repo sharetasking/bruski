@@ -140,6 +140,10 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
       posts = await prismadb.post.findMany({
         where: {
           profileId: followee,
+          OR: [
+            { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+            { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+          ],
         },
         include: {
           poster: true,
@@ -147,6 +151,12 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
           originalPost: {
             include: {
               poster: true,
+            },
+            where: {
+              OR: [
+                { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+                { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+              ],
             }
           },
         },
@@ -164,6 +174,12 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
       posts = await prismadb.post.findMany({
         skip: offset,
         take: size,
+        where: {
+      OR: [
+        { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+        { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+      ],
+        },
         include: {
           // include the poster and their followers
           poster: true,
@@ -196,6 +212,14 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
       posts = await prismadb.post.findMany({
         skip: offset,
         take: size,
+        where: {
+
+          profileId: followee,
+          OR: [
+            { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+            { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+          ],
+        },
         include: {
           poster: {
             // include both the followers and following for the poster
@@ -213,12 +237,15 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
           originalPost: {
             include: {
               poster: true,
+            },
+            where: {
+              OR: [
+                { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+                { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+              ],
             }
           },
           likeList: true
-        },
-        where: {
-          profileId: followee
         },
         orderBy: {
           createdAt: 'desc'
@@ -239,6 +266,13 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
       posts = await prismadb.post.findMany({
         skip: offset,
         take: size,
+        where: {
+
+      OR: [
+        { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+        { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+      ],
+        },
         include: {
           poster: {
             // include both the followers and following for the poster
@@ -257,6 +291,12 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
           originalPost: {
             include: {
               poster: true,
+            },
+            where: {
+              OR: [
+                { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+                { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+              ],
             }
           },
         },

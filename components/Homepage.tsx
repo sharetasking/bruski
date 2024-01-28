@@ -16,6 +16,7 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { usePosts } from "@/hooks/usePosts";
 import { BruskiPost } from "@/hooks/usePost";
+import Following from "./Following";
 
 interface Post{
   body: string;
@@ -195,15 +196,15 @@ const loadMorePosts = () => {
       {/* Left Column */}
       <div className="hidden flex-1 gap-4 grow sm:flex flex-col w-full inset-0 pr-8 ">
         <p className="gap-4">
-          <h3>Discover Bruski</h3>
-          <p className="text-primary/70">
+          {/* <h3>Discover Bruski</h3> */}
+          {/* <p className="text-primary/70">
             Connect, share, and engage with the latest topics.
-            {/* Your space to voice, your stage to influence. */}
-            {/* Join the conversation that&apos;s shaping the world, one post at a time. */}
-          </p>
+
+          </p> */}
 
           <div>
           <div className="flex flex-col gap-4 lg:grid lg:grid-cols-1 xl:grid-cols-1 items-start justify-start text-left">
+            <Following take={7} />
             {/* TODO: Code this */}
             {/* {
               (profiles && profiles.length) && profiles.map((profile: ExtendedProfile, index) => (
@@ -261,13 +262,13 @@ const loadMorePosts = () => {
         <div className="flex-1 flex flex-col pb-72 px-4 gap-4 sticky pl-8">
           {/* FEATURED PROFILES */}
           <h3>Get updates from</h3>
-          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-1 xl:grid-cols-1 items-start justify-start text-left">
+          <div className="flex flex-col lg:grid lg:grid-cols-1 xl:grid-cols-1 items-start justify-start text-left">
             {
               (profiles && profiles.length) && profiles.map((profile: ExtendedProfile, index) => (
                 
                   <>
                 { index < 3 &&
-                <div key={profile.id} className={cn("text-sm p-4 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " bordder-b bordder-primary/5": "")}>
+                <div key={profile.id} className={cn("text-sm px-4 py-2 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " bordder-b bordder-primary/5": "")}>
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <Avatar url={profile?.url} img={profile.img ?? "/img/placeholder.svg"} size={8} hasBorder={true} />

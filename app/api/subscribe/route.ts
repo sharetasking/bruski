@@ -9,9 +9,6 @@ export async function POST(req: NextRequest) {
         return new Response('Email is required', { status: 400 })
     }
 
-    console.log(email)
-    
-
 
     const result = await prismadb.subscriber.create({
         data: {

@@ -65,7 +65,11 @@ export async function POST(req: Request, { params }: { params: { profileId: stri
   export async function GET(request: Request, { params }: { params: { postId: string } }) {
     try {
       const post = await prismadb.post.findFirst({
-        where: { id: params.postId },
+        where: { id: params.postId,
+          OR: [
+            { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+            { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+          ], },
         include: {
           poster: true,
           // comments: true

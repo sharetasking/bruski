@@ -76,7 +76,11 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
     // REFETCH THE TARGET POST
     const targetPost = await prismadb.post.findFirst({
       where: {
-        id: submittedTargetPostId
+        id: submittedTargetPostId,
+        OR: [
+          { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+          { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+        ],
       },
       include: {
         poster: {
@@ -172,7 +176,12 @@ export async function GET(request: NextRequest, { params }: { params: { postId: 
     const post = await prismadb.post.findMany({
       where: {
         originalPostId: postId,
-        postType: "COMMENT"}
+        postType: "COMMENT",
+        OR: [
+          { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+          { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+        ],
+      }
       ,
       include: {
         poster: {
@@ -187,6 +196,12 @@ export async function GET(request: NextRequest, { params }: { params: { postId: 
                 user: true
               }
             }
+          },
+          where: {
+            OR: [
+              { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+              { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+            ],
           }
 
         },
@@ -214,7 +229,11 @@ export async function GET(request: NextRequest, { params }: { params: { postId: 
 //   export async function GET(request: Request, { params }: { params: { postId: string } }) {
 //     try {
 //       const post = await prismadb.post.findFirst({
-//         where: { id: params.postId },
+//         where: { id: params.postId,
+      // OR: [
+      //   { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+      //   { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+      // ], },
 //         include: {
 //           profile: true,
 //           comments: true
@@ -245,7 +264,11 @@ export async function GET(request: NextRequest, { params }: { params: { postId: 
 // //             // if (userId && typeof userId === 'string') {
 // //             //   posts = await prismadb.post.findMany({
 // //             //     where: {
-// //             //       userId
+// //             //       userId,
+      // OR: [
+      //   { date_deleted: { equals: null } }, // Checks if date_deleted is explicitly set to null
+      //   { date_deleted: { isSet: false } }  // Checks if date_deleted is not set at all
+      // ],
 // //             //     },
 // //             //     include: {
 // //             //       user: true,
