@@ -53,7 +53,7 @@ export default async function RootLayout({
               {children}
             </div>
             <Toaster />
-            {user?.id && <BottomBar user={user} />}
+            {user?.id && <BottomBar user={user} className="hidden lg:flex" />}
             
 
           </ThemeProvider>

@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export const ModeToggle = () => {
+export const ModeToggle = ({className}:{className?:string}) => {
   const { setTheme, theme } = useTheme()
 
   const themes = [ "system", "light", "dark",];
@@ -38,7 +38,7 @@ export const ModeToggle = () => {
 
 
 
-<button onClick={toggleTheme} aria-label="toggle light and dark mode" className={cn("h-[1.2rem] w-[1.24rem] grow-0 shrink-0 ")}>
+<button onClick={toggleTheme} aria-label="toggle light and dark mode" className={"h-[2.2rem] w-[2.24rem] grow-0 shrink-0  items-center justify-center rounded-full bg-transparent "+(className?? "flex")}>
   <Sun className={cn("clickable h-[1.24rem] w-[1.24rem] transition-all light:text-black dark:text-white block ", theme == "light" ? "block" : "hidden")} />
   <Moon className={cn("clickable h-[1.2rem] w-[1.2rem] transition-all text-primary light:text-black dark:text-white block ", theme == "dark" ? "block" : "hidden")} />
   <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" className={cn("clickable h-[1.2rem] w-[1.2rem] light:text-black dark:text-white block ",  (theme == "system" || !theme) ? "block" : "hidden")}>

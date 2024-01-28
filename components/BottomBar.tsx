@@ -12,13 +12,15 @@ import { menu_items } from "@/components/menu-items";
 import Button from "@/components/Button";
 import Avatar from "./Avatar";
 import { LogOut } from "lucide-react";
+import { BruskiUser } from "@/hooks/useBruskiUser";
 
 interface BottomBarProps {
-  user: any
+  user: BruskiUser
   alert?: boolean
+  className?: string
 }
 
-const BottomBar: React.FC<BottomBarProps> = ({alert, user}) => {
+const BottomBar: React.FC<BottomBarProps> = ({alert, user, className}) => {
 
 
   const proModal = useProModal();
@@ -43,9 +45,9 @@ const BottomBar: React.FC<BottomBarProps> = ({alert, user}) => {
 
 
   return (
-    <div className="fixed z-[500] justify-around bg-gradient-to-t from-white
+    <div className={`fixed z-[500] justify-around bg-gradient-to-t from-white
       dark:from-primary-foreground via-white/80 dark:via-primary-foreground/80 to-white/5
-      dark:to-primary-foreground/5 inset-x-0 p-8 bottom-0 h-24 items-center flex ">
+      dark:to-primary-foreground/5 inset-x-0 p-8 bottom-0 h-24 items-center `+className ?? "flex"}>
         
       <div className=" bg-white dark:bg-primary-foreground rounded-[50px]
         mb-8 dark:shadow-sm dark:shadow-white/40 dark:bg-[#131313] flex items-center

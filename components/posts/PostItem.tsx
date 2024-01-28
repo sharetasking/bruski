@@ -131,18 +131,18 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
   return (
     <div 
       onClick={goToPost}
-      className={cn(`
-        p-5 
+      className={cn(`p-1
         cursor-pointer 
         transition
         border-b
+        mb-4
         border-primary/5
         duration-200
         wrap-words
         grow
         flex
       `, data?.saving ? "border-2 border-dashed opacity-80": "")}>
-      <div className="flex sm:flex-row flex-col items-start gap-3 flex-1">
+      <div className="flex sm:flex-row items-start gap-3 flex-1">
         {/* <Avatar profileId={data.poster?.id} /> */}
           <div className="flex flex-col gap-1 items-center rounded-full">
 
@@ -192,7 +192,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
             <div className="flex gap-2 items-center">
               <div 
                 onClick={goToUser} 
-                className="user_name py-2">
+                className="user_name">
                   {data.poster?.display_name}
               </div>
             </div>
@@ -223,7 +223,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
 
 
 { (data.poster?.id == signedInUserProfileId || data.poster?.userId == user?.id) && 
-            <span className="ml-4"><MoreOptionsPosts post={data} user={user} /></span>
+            <span className="ml-4 text-sm text-primary/40"><MoreOptionsPosts post={data} user={user} /></span>
           }
           </div>
           
@@ -252,7 +252,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
           
           {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId &&
           
-          <span className="flex flex-col bg-secondary hover:bg-primary/10 active:bg-primary/20 text-primary rounded-3xl min-h-[60px] w-4/5 p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
+          <span className="flex flex-col bg-secondary hover:bg-primary/10 active:bg-primary/20 text-primary rounded-3xl min-h-[60px] lg:w-4/5 p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               
               

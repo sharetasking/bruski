@@ -24,14 +24,15 @@ const RootLayout =  async ({
   
   return ( 
     <ClientProviders session={session}>
-      <div className="h-full">
+      <div className="h-full w-full">
         
         {/* {process.env.ADMIN_EMAIL == user?.emailAddresses?.[0].emailAddress && <div className="text-primary-foreground/60 p-2 bg-primary font-semibold text-xs text-center">ADMIN MODE (Log into another account to test user mode)</div>} */}
         
         {/* <Sidebar isPro={isPro} /> */}
-        <main className="flex lg:px-8 grow justify-center">
-          {children}
-        </main>
+
+        <div className="padding">{children}</div>
+        {/* <main className="flex lg:px-8 grow justify-center">
+        </main> */}
   
               {/* <CoinsWidget /> */}
               {/* <PixiWidget/> */}

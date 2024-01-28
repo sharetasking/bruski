@@ -10,10 +10,10 @@ export const MobileSidebar = ({
 }) => {
   return (
     <Sheet>
-      <SheetTrigger className="md:hidden pr-4" aria-label="Mobile Menu Toggle">
+      <SheetTrigger className="md:hidden p-2" aria-label="Mobile Menu Toggle">
         <Menu />
       </SheetTrigger>
-      <SheetContent side="left" className="p-0 bg-secondary pt-10 w-32">
+      <SheetContent side="left" className="p-0 bg-primary-foreground pt-10 w-32 shadow-none">
         <Sidebar isPro={isPro} />
       </SheetContent>
     </Sheet>

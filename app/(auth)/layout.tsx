@@ -9,7 +9,6 @@ import { SessionProvider } from 'next-auth/react';
 
 
 import Trackers from '@/analytics/trackers';
-import BottomBar from "@/components/BottomBar";
 
 import prismadb from '@/lib/prismadb';
 import '../globals.css';

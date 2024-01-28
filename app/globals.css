@@ -322,6 +322,8 @@ body,
   scrollbar-width: none !important;  /* Firefox */
   scrollbar-gutter: stable both-edges !important;
 }
+
+.padding { @apply px-4 py-4 }
   
   
 }

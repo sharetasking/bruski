@@ -64,13 +64,13 @@ export const Navbar = ({
   }
 
   return ( 
-      <div className="fixed inset-x-0 z-50 flex justify-between items-center py-2 px-4 h-16 bg-gradient-to-b from-white dark:from-black via-white/60 dark:via-black/60 to-transparent dark:to-transparent">
+      <div className="fixed inset-x-0 z-50 padding flex justify-between items-center h-16 bg-gradient-to-b from-white dark:from-black via-white dark:via-black to-transparent dark:to-transparent">
         
         
         {/* <div className="bg-primary"></div> */}
         <div className="flex items-center justify-between relative">
           {/* <Image src="/pixi.png" width={40} height={40} alt="Pixi" /> */}
-          {/* <MobileSidebar isPro={isPro} /> */}
+          <MobileSidebar isPro={isPro} />
           {/* <div className="text-accent w-48 bg-gradient-to-b from-white dark:from-black via-white/70 dark:via-black/70 to-transparent dark:to-transparent hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl"> */}
           <div className="text-accent  hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl">
           
@@ -93,11 +93,11 @@ export const Navbar = ({
         {/* {(!user || !user.isSignedIn) && user.isLoaded && <Link href="/register" className="text-sm text-red-500">Create an account / login</Link>} */}
           
 
-        <div className="flex items-center gap-x-3 ">
-            <button onClick={postModal.onOpen} className="btn w-fit flex line-clamp-1 whitespace-nowrap ">
+        <div className="flex items-center  ">
+            {user?.id && <button onClick={postModal.onOpen} className="btn w-fit flex mr-4 line-clamp-1 whitespace-nowrap ">
               + Post
-            </button>
-            {user?.id && <Link href="/notifications" onClick={()=>{return countTo(0)}} className="clickable mx-4 relative">
+            </button> }
+            {user?.id && <Link href="/notifications" onClick={()=>{return countTo(0)}} className="clickable relative flex items-center justify-center h-[2.2rem] w-[2.24rem] mr-2">
               <Bell height={24} width={24} />
               {
               parseInt(num_notifications) > 0 && <span className="bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs absolute -top-2 -right-1 z-10">
@@ -114,7 +114,7 @@ export const Navbar = ({
               <Sparkles className="h-4 w-4 fill-white text-white ml-2" />
             </Button>
           )} */}
-          <ModeToggle />
+          <ModeToggle className="hidden lg:block" />
           {/* <div className="h-8 w-8 rounded-full flex items-center justify-center bg-primary/10">
             <UserButton afterSignOutUrl="/home" />
           </div> */}
