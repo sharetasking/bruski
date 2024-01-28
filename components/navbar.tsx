@@ -68,15 +68,15 @@ export const Navbar = ({
         
         
         {/* <div className="bg-primary"></div> */}
-        <div className="flex items-center relative">
+        <div className="flex items-center justify-between relative">
           {/* <Image src="/pixi.png" width={40} height={40} alt="Pixi" /> */}
           {/* <MobileSidebar isPro={isPro} /> */}
           {/* <div className="text-accent w-48 bg-gradient-to-b from-white dark:from-black via-white/70 dark:via-black/70 to-transparent dark:to-transparent hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl"> */}
-          <div className="text-accent w-48  hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl">
+          <div className="text-accent  hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl">
           
           <Link href={user ? "/home" : "/"} prefetch className="flex items-center gap-2" aria-label="Home">
             
-            <h1 className={cn(" md:block text-xl md:text-2xl font-bold tracking-tight text-primary", font.className)}>
+            <h1 className={cn(" md:block text-xl md:text-2xl font-bold tracking-tight text-primary shrink", font.className)}>
               bruski
             </h1>
             {/* <span className="text-primary/50">/ˈbrooːski/</span> */}
@@ -94,9 +94,9 @@ export const Navbar = ({
           
 
         <div className="flex items-center gap-x-3 ">
-            <Button onClick={postModal.onOpen} size="lg">
-              + Create Post
-            </Button>
+            <button onClick={postModal.onOpen} className="btn w-fit flex line-clamp-1 whitespace-nowrap ">
+              + Post
+            </button>
             {user?.id && <Link href="/notifications" onClick={()=>{return countTo(0)}} className="clickable mx-4 relative">
               <Bell height={24} width={24} />
               {
