@@ -29,7 +29,7 @@ const NotificationsFeed = () => {
 
   else
     return ( 
-      <div className="flex flex-col max-w-xl grow p-4 inset-0 w-xl subpixel-antialiased">
+      <div className="flex flex-col lg:max-w-2xl grow p-4 inset-0 w-2xl">
         {fetchedNotifications.map((notification: Record<string, any>) => (
           <div key={notification.id} className="flex flex-row items-center p-6 gap-4 border-b-[1px] border-secondary">
             <Bell className="text-primary" size={32} />

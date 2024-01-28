@@ -18,6 +18,7 @@ import { usePosts } from "@/hooks/usePosts";
 import { BruskiPost } from "@/hooks/usePost";
 import Following from "./Following";
 import TrendingPixis from "./TrendingPixis";
+import { Bell } from "lucide-react";
 
 interface Post{
   body: string;
@@ -42,6 +43,7 @@ export const Homepage = ({user}: {user: any}) => {
 
 
 
+  const [num_notifications, setNumNotifications] = useState(user?.num_notifications || 0);
   // ALL POSTS STATE
   const [allPosts, setAllPosts] = useState<BruskiPost[]>([]);
 
@@ -75,6 +77,16 @@ export const Homepage = ({user}: {user: any}) => {
 
 
 
+
+
+  function countTo(to: number) {
+    let i = num_notifications;
+    const interval = setInterval(() => {
+      i--;
+      setNumNotifications(i);
+      if (i === to) clearInterval(interval);
+    }, 100);
+  }
 
 
 
@@ -219,7 +231,7 @@ const loadMorePosts = () => {
                     </div>
                     
                     
-                    <Link className="line-clamp-1 text-medium text-sm text-left " href={"/"+profile.url}>{profile?.display_name}</Link>
+                    <Link className="line-clamp-1 text-medium text-sm text-left hover:underline" href={"/"+profile.url}>{profile?.display_name}</Link>
                   </div>
                   
                   <div className="font-normal text-sm text-primary/50 line-clamp-3 text-left">{profile.bio}</div>
@@ -271,6 +283,23 @@ const loadMorePosts = () => {
 
       
               </div> */}
+
+                <div className="fixed" style={{position:"fixed"}}>
+
+            {user?.id && <Link href="/notifications" onClick={()=>{return countTo(0)}} className="clickable  text-white bg-gradient-to-br from-red-500 via-pink-600 to-orange-700 rounded-full  left-10 bottom-10 z-[4000] flex items-center justify-center h-[3.24rem] w-[3.24rem] mr-2">
+              
+              <Bell height={24} width={24} />
+              {
+              parseInt(num_notifications) > 0 && <span className="bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs absolute -top-2 -right-1 z-10">
+                    {num_notifications || 0}
+                </span>
+
+              }
+            </Link> }
+
+
+
+            </div>
 
         </div>
       </div>

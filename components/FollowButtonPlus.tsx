@@ -62,7 +62,7 @@ const FollowButtonPlus = ({settings}: {settings: FollowButtonType}) => {
 
     
     {/* <Button className={cn("h-8 mt-2 mr-auto py-1 hover:text-primary-foreground/80 active:ring-2 active:scale-95 ring-offset-0 border-0", !isFollowing ? "btn-follow text-primary-foreground" : " border bg-transparent text-primary")} variant="outline">{isFollowing ? "Unfollow": "Follow"}</Button> */}
-    <button onClick={handleFollow} className={cn("absolute -right-2 -top-1 inline-flex items-center justify-center w-6 h-6 bg-gray-100 text-gray-600 rounded-full hover:bg-secondary active:bg-primary-foreground active:scale-95 border-2 border-solid border-secondary text-primary", !isFollowing ? "bg-gradient-to-br from-orange-400 via-pink-400 to-sky-400 hover:from-orange-500 hover:via-pink-500 hover:to-sky-500 active:from-orange-400 active:via-pink-400 active:to-sky-400 text-secondary" : "bg-secondary text-primary hidden")}>{isFollowing ? "-": "+"}</button>
+    <button onClick={handleFollow} className={cn("absolute -right-2 -top-1 inline-flex items-center justify-center w-6 h-6 text-gray-600 rounded-full hover:bg-secondary active:bg-primary-foreground active:scale-95 border-2 border-solid border-secondary text-primary", !isFollowing ? "bg-gradient-to-br from-orange-400 via-pink-400 to-sky-400 hover:from-orange-500 hover:via-pink-500 hover:to-sky-500 active:from-red-500 active:via-pink-500 active:to-orange-700 text-secondary" : "bg-secondary text-primary hidden")}>{isFollowing ? "-": "+"}</button>
     
   </div> );
 }

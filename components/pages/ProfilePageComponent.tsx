@@ -135,8 +135,8 @@ useEffect(() => {
   
 
 
-<div className="fadeInUp">
-    <div className="container mx-auto py-8">
+<div className="fadeInUp padding">
+    <div className="py-8">
         <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
             <div className="col-span-4 sm:col-span-3">
                 <div className="fadeInUp delay-300 bg-secondary rounded-2xl p-6">

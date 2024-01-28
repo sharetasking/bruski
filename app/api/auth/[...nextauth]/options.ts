@@ -244,6 +244,10 @@ export const authConfig: NextAuthOptions = {
                         },
                       });
                   }
+
+
+                  //redirect to profile page
+                  
             }
             catch (error) {
               console.log("Error: ", error)
@@ -315,6 +319,23 @@ export const authConfig: NextAuthOptions = {
       }
       return session;
     },
+
+    // Optional: if you want to perform any redirections after sign in or sign out
+    async redirect({ url, baseUrl }) {
+      // Redirect to the 'home' page after successful sign-in
+      if (url.startsWith(baseUrl)) return `${baseUrl}/home`;
+      return baseUrl;
+    },
+
+
+
+    async signIn({ user, account, profile, email, credentials }) {
+      // You can implement any custom logic here to decide whether to allow the sign-in
+      // For example, you can return false if the user is not allowed to sign in
+      return true; // For now, we'll allow all sign-ins
+    },
+    
+
   },
   pages: { signIn: "/login"}
 

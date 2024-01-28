@@ -55,7 +55,7 @@ const MoreOptionsPosts = ({post, user}: {post: BruskiPost, user: BruskiUser | nu
    
 
               <Popover>
-                <PopoverTrigger onClick={stopPropagation} className="top-0 right-0 absolute z-40">
+                <PopoverTrigger onClick={stopPropagation} className="p-1 rounded-2xl">
                   <MoreHorizontal />
                 </PopoverTrigger>
 

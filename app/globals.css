@@ -224,7 +224,7 @@ body,
 
 .btn-beautified
   {
-    @apply bg-gradient-to-br from-orange-500 via-pink-500 to-sky-500 font-medium text-sm text-white/95 active:text-primary-foreground/70 rounded-md px-4 py-2 hover:bg-primary/80 active:bg-primary/90 ;
+    @apply bg-gradient-to-br from-red-500 via-pink-500 to-orange-600 font-medium text-sm text-white/95 active:text-primary-foreground/70 rounded-md px-4 py-2 hover:bg-primary/80 active:bg-primary/90 ;
   }
 
   .user_name
@@ -293,10 +293,10 @@ body,
       opacity: 0;
       transform: translateY(120px);
     }
-    60% {
+    20% {
       transform: translateY(-10px);
     }
-    80% {
+    40% {
       opacity: 1;
       transform: translateY(5px);
     }
@@ -323,7 +323,7 @@ body,
   scrollbar-gutter: stable both-edges !important;
 }
 
-.padding { @apply px-4 py-4 }
+.padding { @apply px-3 py-3 }
   
   
 }

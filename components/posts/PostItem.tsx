@@ -131,7 +131,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
   return (
     <div 
       onClick={goToPost}
-      className={cn(`p-1
+      className={cn(`
         cursor-pointer 
         transition
         border-b
@@ -142,18 +142,18 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
         grow
         flex
       `, data?.saving ? "border-2 border-dashed opacity-80": "")}>
-      <div className="flex sm:flex-row items-start gap-3 flex-1">
+      <div className="flex sm:flex-row items-start gap-2 flex-1">
         {/* <Avatar profileId={data.poster?.id} /> */}
-          <div className="flex flex-col gap-1 items-center rounded-full">
+          <div className="flex flex-col gap-1 items-center rounded-full mt-2">
 
 
             <div className="flex flex-col items-center gap-1">
-        <div className='w-10 h-10 flex-0 shrink-0 grow-0 flex relative rounded-full'>
+        <div className='w-8 h-8 flex-0 shrink-0 grow-0 flex relative rounded-full'>
 
         {/* AVATAR IMAGE */}
         {/* <Avatar img={data.poster?.img ?? "/img/placeholder.svg"} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} /> */}
         <div className="relative">
-          <Avatar img={data.poster?.img ?? "/img/placeholder.svg"} url={"/"+data.poster?.url ?? ""} size={10} hasBorder={false} />
+          <Avatar img={data.poster?.img ?? "/img/placeholder.svg"} url={"/"+data.poster?.url ?? ""} size={8} hasBorder={false} />
           
           {/* FOLLOW BUTTON */}
           {(data.poster?.id != signedInUserProfileId) && 
@@ -236,7 +236,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
           <div className="flex flex-col bg-secondary text-primary rounded-3xl w-full min-h-[260px] p-4 lg:p-8 text-lg leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div className=" min-h-[200px] items-center text-center justify-center flex whitespace-pre-wrap break-words">{data.body}</div>
             <div className="text-xs mt-2 border border-primary/20 text-primary  py-1 px-3 w-fit rounded-2xl"><span className="font-medium">{data.num_comments ?? 0}</span> <span className="opacity-70">{plurify("response", data.num_comments)}</span></div>
-            <button className='mt-4 btn active:bg-opacity-90 flex items-center gap-2 justify-center'><Reply size={16}/>Answer</button>
+            <button className='mt-4 btn bg-transparent hover:bg-transparent active:text-primary hover:scale-[1.2]  border hover:border-transparent active:border-transparent  border-muted-foreground/90 text-primary active:bg-opacity-90 flex items-center gap-2 justify-center'><Reply size={16}/>Answer</button>
           </div>
           }
 
@@ -252,7 +252,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
           
           {data.originalPost?.mediaType == "CHALLENGE" && data.originalPostId &&
           
-          <span className="flex flex-col bg-secondary hover:bg-primary/10 active:bg-primary/20 text-primary rounded-3xl min-h-[60px] lg:w-4/5 p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
+          <span className="flex flex-col bg-secondary hover:bg-primary/10 active:bg-primary/20 text-primary rounded-3xl min-h-[60px] lg:w-4/5 px-4 py-6 lg:p-8 leading-[21px] mt-1 grow-0 whitespace-pre-line">
             <div onClick={(ev) => goToLink(ev, "/post/"+data.originalPost?.id)} >
               
               
@@ -284,7 +284,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
 
                   <div className="flex flex-col items-center gap-1">
                   
-                    <button className='btn active:bg-opacity-90 text-primary-foreground opacity-100 flex items-center justify-center gap-2 w-fit'><Reply size={16}/>Answer</button>
+                    <button className='btn bg-transparent hover:bg-transparent active:text-primary hover:scale-[1.2]  border hover:border-transparent active:border-transparent border-muted-foreground/90 text-primary active:bg-opacity-90 opacity-100 flex items-center justify-center gap-2 w-fit'><Reply size={16}/>Answer</button>
                     
                   </div>
                 

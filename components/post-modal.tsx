@@ -131,7 +131,7 @@ export const PostModal = () => {
 
   if(postModal.isOpen)
     return (
-    <div className="bounceInUp nUpFast fixed inset-0 z-[60000] flex flex-col justify-center items-center bg-white">
+    <div className="bounceInUp fixed inset-0 z-[60000] flex flex-col justify-start lg:justify-center lg:pt-0 pt-6 items-center bg-white">
       <PostCreator onPostSubmit={addPost}  placeholder="What's going on in your world today?" />
       <button onClick={postModal.onClose} className="text-sm font-medium text-muted-foreground">&larr; Click to return to feed</button>
     </div>)

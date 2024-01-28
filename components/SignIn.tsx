@@ -88,20 +88,20 @@ export default function SignIn({ providers }: { providers: Provider[]|null}) {
           Or sign in with e-mail
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 my-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 my-4 text-primary">
       <div className="mx-auto w-full">
         <div className="flex flex-col gap-4 my-4">
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+            className="w-full px-8 py-4 rounded-lg text-primary-foreground font-medium bg-primary border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
             type="email"
             placeholder="Email"
           />
           <input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+            className="w-full px-8 py-4 rounded-lg text-primary-foreground font-medium bg-primary border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
             type="password"
             placeholder="Password"
           />

@@ -36,7 +36,6 @@ export const Navbar = ({
 }: NavbarProps) => {
   const postModal = usePostModal();
 
-  const [num_notifications, setNumNotifications] = useState(user?.num_notifications || 0);
 
 
   // const { data: session, status } = useSession();
@@ -53,16 +52,6 @@ export const Navbar = ({
   //   // ...other user properties
   // }
   
-
-  function countTo(to: number) {
-    let i = num_notifications;
-    const interval = setInterval(() => {
-      i--;
-      setNumNotifications(i);
-      if (i === to) clearInterval(interval);
-    }, 100);
-  }
-
   return ( 
       <div className="fixed inset-x-0 z-50 padding flex justify-between items-center h-16 bg-gradient-to-b from-white dark:from-black via-white dark:via-black to-transparent dark:to-transparent">
         
@@ -70,14 +59,15 @@ export const Navbar = ({
         {/* <div className="bg-primary"></div> */}
         <div className="flex items-center justify-between relative">
           {/* <Image src="/pixi.png" width={40} height={40} alt="Pixi" /> */}
-          <MobileSidebar isPro={isPro} />
+          
           {/* <div className="text-accent w-48 bg-gradient-to-b from-white dark:from-black via-white/70 dark:via-black/70 to-transparent dark:to-transparent hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl"> */}
-          <div className="text-accent  hover:text-orange-500 active:text-orange-600 p-4 rounded-2xl">
+          <div className="text-accent  hover:text-orange-500 active:text-orange-600 py-4 lg:px-4 rounded-2xl">
           
           <Link href={user ? "/home" : "/"} prefetch className="flex items-center gap-2" aria-label="Home">
             
-            <h1 className={cn(" md:block text-xl md:text-2xl font-bold tracking-tight text-primary shrink", font.className)}>
-              bruski
+            <h1 className={cn(" text-xl md:text-2xl font-bold tracking-tight text-primary shrink flex items-center", font.className)}>
+              <span>bruski</span>
+              <span className="text-red-400 bg-gradiednt-to-br from-red-500 via-pink-500 to-orange-600 text-wkhite text-sm rounded-full ml-2">beta</span>
             </h1>
             {/* <span className="text-primary/50">/ˈbrooːski/</span> */}
           </Link>
@@ -94,18 +84,9 @@ export const Navbar = ({
           
 
         <div className="flex items-center  ">
-            {user?.id && <button onClick={postModal.onOpen} className="btn w-fit flex mr-4 line-clamp-1 whitespace-nowrap ">
+            {user?.id && <button onClick={postModal.onOpen} className="btn w-fit my-1 h-8 items-center justify-center  flex mr-4 line-clamp-1 whitespace-nowrap ">
               + Post
             </button> }
-            {user?.id && <Link href="/notifications" onClick={()=>{return countTo(0)}} className="clickable relative flex items-center justify-center h-[2.2rem] w-[2.24rem] mr-2">
-              <Bell height={24} width={24} />
-              {
-              parseInt(num_notifications) > 0 && <span className="bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs absolute -top-2 -right-1 z-10">
-                    {num_notifications || 0}
-                </span>
-
-              }
-            </Link> }
           
           {/* TODO: {!isPro && ( */}
             {/* {(
@@ -118,6 +99,8 @@ export const Navbar = ({
           {/* <div className="h-8 w-8 rounded-full flex items-center justify-center bg-primary/10">
             <UserButton afterSignOutUrl="/home" />
           </div> */}
+
+          <MobileSidebar isPro={isPro} />
         </div>
       </div>
   );

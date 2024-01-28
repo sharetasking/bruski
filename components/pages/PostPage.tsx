@@ -140,15 +140,17 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
 
 
   return (
-  <div className="lg:max-w-lg w-full m-auto pb-48 relative">
-    <div className="flex flex-col md:flex-row gap-4 md:-ml-40 md:p-8 p-4">
+  <div className="lg:max-w-lg w-full padding m-auto pb-48 relative">
+    <div className="flex flex-col gap-4 md:-ml-40">
 
-<div>
+<div className="flex flex-row gap-2 items-center">
         {/* AVATAR IMAGE */}
         <Avatar img={post.poster?.img ?? "/img/placeholder.svg"} url={"/"+post.poster.url ?? ""} size={12} hasBorder={false}/>
        
       <h2 className="user_name text-base" onClick={goToUser}>{post.poster?.display_name}</h2>
   
+              {/* PopUp Menu */}
+              <MoreOptionsPosts post={post} user={user} />
 
 </div>
 
@@ -162,15 +164,16 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
   <div className="grow flex flex-col rounded-lg">
 
 
-              {/* PopUp Menu */}
-              <MoreOptionsPosts post={post} user={user} />
-
-  { post.mediaType == "CHALLENGE" && <div className="flex flex-col subpixel-antialiased bg-primary/90 text-primary-foreground rounded-lg min-h-90 p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line">
+  { post.mediaType == "CHALLENGE" && <div className="flex flex-col subpixel-antialiased bg-primary/90 text-primary-foreground rounded-lg min-h-90 p-4 lg:p-8 text-xl leading-[21px] mt-1 grow-0 whitespace-pre-line ml-6">
             {post.body}
           </div>
 }
-  { post.mediaType != "CHALLENGE" && <div className="p-8 subpixel-antialiased whitespace-pre-line">{post?.body}</div> }
-  <div className="flex items-center gap-4 justify-start text-sm text-primary/50 my-4">
+
+
+
+
+  { post.mediaType != "CHALLENGE" && <div className="px-8 subpixel-antialiased whitespace-pre-line ml-6">{post?.body}</div> }
+  <div className="flex items-center gap-4 justify-start text-sm text-primary/50 my-4 ml-11">
     {/* <div className="w-fit flex items-center font-medium text-primary gap-1"><AiFillHeart color={true ? 'red' : ''} size={20} /><span className="font-medium text-primary">{post?.num_likes ?? 0}</span></div> */}
     <LikeButton post={post} user={user} />
     <div><span className="w-fit flex items-center font-medium text-primary gap-1"> <AiOutlineMessage size={18} /> {post?.num_comments ?? 0}</span></div>
@@ -186,14 +189,14 @@ const PostPage = ({user, post}:{user:BruskiUser|null, post:BruskiPost|null}) => 
 
   {/* COMMENT CREATOR */}
 
-  <div className="border-b-[1px] border-neutral-800/10 px-5 pt-2 pb-8">
+  <div className="border-b-[1px] border-neutral-800/10 pt-2 pb-8 mb-8">
     {
       (user && user.id)
         ? (<form><div>
           
           <div className="flex flex-row gap-4">
            <div>
-              <Avatar img={user.profiles?.[0]?.img ?? ""} url={"/"+user.profiles?.[0]?.url ?? ""} size={12} hasBorder={false}/>
+              <Avatar img={user.profiles?.[0]?.img ?? ""} url={"/"+user.profiles?.[0]?.url ?? ""} size={8} hasBorder={false}/>
            </div>
            <div className="w-full">
              <textarea
