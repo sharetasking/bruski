@@ -184,7 +184,7 @@ useEffect(() => {
                 
                 {/* {JSON.stringify(user)}
                 {JSON.stringify(profileId)} */}
-                <PostFeed profileId={profile?.id} _posts={allPosts} user={user} onScrollEnd={loadMorePosts} />
+                <PostFeed profileId={profile?.id} _posts={allPosts} user={user} onScrollEnd={loadMorePosts} loading={loadingNewPosts} />
 
                 
             </div>
