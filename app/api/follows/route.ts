@@ -59,14 +59,12 @@ export async function POST( request: NextRequest)
   // IF ALREADY FOLLOWING
   if(existingFollow)
   {
-    console.log("already following")
     return NextResponse.json({following: true, increment: false})
   }
 
   // IF NOT FOLLOWING - Create a new follow relationship
   else
   {
-    console.log(localUser.profiles?.[0]?.id,profileId )
     // if either profile id doesn't exist, return
     if(!localUser.profiles?.[0]?.id || !profileId)
       return NextResponse.json({following: false, increment: false})
@@ -78,8 +76,6 @@ export async function POST( request: NextRequest)
         
       }
     });
-    console.log(follow)
-
     //UPDATE FOLLOWER AND FOLLOWING COUNTS ON DATABASE
     //Followers
     await prismadb.profile.update({
@@ -93,7 +89,6 @@ export async function POST( request: NextRequest)
       }
     });
 
-    console.log("updated follower count")
     //Following
     await prismadb.profile.update({
       where: {
@@ -107,7 +102,6 @@ export async function POST( request: NextRequest)
     });
     
 
-    console.log("updated following count")
     // CREATE NOTIFICATION
 
     try {
@@ -129,7 +123,6 @@ export async function POST( request: NextRequest)
             }
           });
 
-          console.log("notification", notification)
 
           // GET TARGET PROFILE WITH CORRESPONDING USER
           let targetProfile = await prismadb.profile.findUnique({
@@ -154,7 +147,6 @@ export async function POST( request: NextRequest)
             }
           });
 
-          console.log("updatedUser", updatedUser)
         // }
     } catch (error) {
           console.log(error)
@@ -237,7 +229,6 @@ export async function DELETE( request: NextRequest ) {
   const profileId = await request.nextUrl?.searchParams.get("profileId");
 
   
-  console.log(profileId)
   
 
   if (!profileId || typeof profileId !== 'string') {
@@ -246,7 +237,6 @@ export async function DELETE( request: NextRequest ) {
   }
 
   
-  console.log(profileId)
   const localUser = await prismadb.user.findUnique({
     where: {
       email: sessionUser.email
@@ -257,7 +247,6 @@ export async function DELETE( request: NextRequest ) {
   });
 
   
-  console.log(profileId)
   if (!localUser) {
     // throw new Error('Invalid ID');
     return NextResponse.json({following: true, decrement: false});
@@ -286,7 +275,6 @@ export async function DELETE( request: NextRequest ) {
   }
 
   try{
-    console.log(profileId)
     // Delete the follow relationship
     await prismadb.follower.delete({
       where: {
@@ -294,7 +282,6 @@ export async function DELETE( request: NextRequest ) {
       }
     });
 
-    console.log(profileId)
     //update follower and following counts on database
 
     try {

@@ -22,14 +22,13 @@ export async function PATCH(
     // GET INDIVIDUAL FIELDS FROM BODY
     const { img, name, description, instructions, seed, categoryId } = body;
 
-    // CHECK IF REQUIRED FIELDS ARE PRESENT`
+    // CHECK IF REQUIRED FIELDS ARE PRESENT
     // Companion Id
     if (!params.companionId) {
       return new NextResponse("Companion ID required", { status: 400 });
     }
-
     // User
-    if (!user || !user.id || !user.first_name) {
+    if (!user || !user.id || !user.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -124,7 +123,6 @@ export async function PATCH(
       }
     });
 
-    console.log(companion)
 
     return NextResponse.json(companion);
   } catch (error) {

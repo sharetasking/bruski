@@ -91,7 +91,6 @@ export async function GET(req: NextRequest) {
     const follower = user?.profiles[0].id;
 
 
-    console.log("count: " + count);
     let profiles;
 
     //if looking for profiles for a specific profileId then pull just those
@@ -115,7 +114,6 @@ export async function GET(req: NextRequest) {
     // //otherwise pull all profiles
     // else
     // {
-      console.log("getting all profiles");
       profiles = await prismadb.profile.findMany({
         include: {
           listOfProfilesFollowingViewedProfile: {
@@ -130,7 +128,6 @@ export async function GET(req: NextRequest) {
         take: count
       });
 
-      console.log(profiles?.length);
 
 
       // mark if is following
@@ -148,7 +145,6 @@ export async function GET(req: NextRequest) {
         return _profile;
       });
 
-      console.log(_profiles);
     
 
 

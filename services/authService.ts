@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken';
 const prisma = new PrismaClient();
 
 async function authenticate(email: string, password: string): Promise<{ user: User; token: string } | null> {
-  console.log(email, password)
   // Find the user by email
   // const user = await prisma.user.findUnique({
   //   where: {
@@ -24,15 +23,12 @@ async function authenticate(email: string, password: string): Promise<{ user: Us
         email: email,
       },
     });
-  console.log(user)
   } catch (error) {
     console.log(error)
   }
 
-  console.log("User: ", user)
   // If user is found and the password is correct
   if (user && await bcrypt.compare(password, user.password ?? "")) {
-    console.log("User found and password correct")
 
     if(!process.env.JWT_SECRET) throw new Error("JWT_SECRET not set in environment variables")
 

@@ -30,7 +30,6 @@ const SignUpForm = ({providers, switchLoginMode}:{providers:Provider[], switchLo
         }),
       });
       
-      console.log(response)
 
       if (!response.ok) {
         // if 422 error, show toast
@@ -40,7 +39,6 @@ const SignUpForm = ({providers, switchLoginMode}:{providers:Provider[], switchLo
           return;
         }
         
-        console.log(response)
         throw new Error('Error in registration');
       }
 

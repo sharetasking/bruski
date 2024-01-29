@@ -47,14 +47,11 @@ export const authConfig: NextAuthOptions = {
           if (typeof credentials !== "undefined") {
             const res = await authenticate(credentials.email, credentials.password)
             if (typeof res !== "undefined" && res !== null) {
-              console.log("Res: ", res)
               return { ...res.user, apiToken: res.token }
             } else {
-              console.log("Res: ", res)
               return null
             }
           } else {
-            console.log("Credentials: ", credentials) 
             return null
           }
         } catch (error) {
@@ -68,7 +65,6 @@ export const authConfig: NextAuthOptions = {
 
     GoogleProvider({
       profile(profile) {
-        console.log("Profile Google: ", profile);
         let userRole = "Google User";
 
         if(profile?.email == "ceo@sharetasking.com") 
@@ -121,7 +117,6 @@ export const authConfig: NextAuthOptions = {
 
       try {
         
-      console.log("JWT: ", token, user, account)
       // When signing in for the first time, the user object is not empty
       if (user) {
         token.id = user.id;
@@ -160,7 +155,6 @@ export const authConfig: NextAuthOptions = {
           token.name?.includes(" ")
             nameArray = token.name?.split(" ") ?? [];
 
-            console.log("Name Array: ", nameArray)
 
 
 
@@ -273,7 +267,6 @@ export const authConfig: NextAuthOptions = {
 
 
   
-      console.log(token)
       return token;
 
     } catch (error) {
@@ -283,7 +276,6 @@ export const authConfig: NextAuthOptions = {
   },
   // Modify the session callback
   session: async ({ session, token }) => {
-      console.log("Session: ", session, token)
       if (session?.user) {
         // The session callback is invoked whenever the session is checked.
         // Here you should return the session object that will be available on the client side.

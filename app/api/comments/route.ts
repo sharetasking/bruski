@@ -90,9 +90,6 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
         }
       },
     });
-
-    console.log(targetPost)
-    
       
 
     //UPDATE THE TARGET POST COMMENT COUNT
@@ -121,7 +118,6 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
             // GET THE TARGET PROFILE USER ID
             const targetPostOwnerUserId = targetPost?.poster?.user?.id;
 
-            console.log("targetPostOwnerUserId", targetPostOwnerUserId)
 
             // CREATE NOTIFICATION ENTRY
             let notification = await prismadb.notification.create({
@@ -149,7 +145,6 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
               }
             });
 
-            console.log("updatedUser", updatedUser)
           }
       } catch (error) {
             console.log(error)
@@ -157,7 +152,6 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
 
 
 
-    console.log(targetPost)
 
     return NextResponse.json(targetPost);
   } catch (error) {

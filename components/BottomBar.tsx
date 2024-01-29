@@ -13,6 +13,8 @@ import Button from "@/components/Button";
 import Avatar from "./Avatar";
 import { LogOut } from "lucide-react";
 import { BruskiUser } from "@/hooks/useBruskiUser";
+import { Bell } from "lucide-react";
+import { useState } from "react";
 
 interface BottomBarProps {
   user: BruskiUser
@@ -23,9 +25,25 @@ interface BottomBarProps {
 const BottomBar: React.FC<BottomBarProps> = ({alert, user, className}) => {
 
 
+  const [num_notifications, setNumNotifications] = useState(user?.num_notifications || 0);
   const proModal = useProModal();
   const router = useRouter();
   const pathname = usePathname();
+
+
+
+
+  function countTo(to: number) {
+    let i = num_notifications;
+    const interval = setInterval(() => {
+      i--;
+      setNumNotifications(i);
+      if (i === to) clearInterval(interval);
+    }, 100);
+  }
+
+
+
 
   const checkIfPro = (url: string, pro: boolean) => {
     if (pro) {
@@ -48,6 +66,24 @@ const BottomBar: React.FC<BottomBarProps> = ({alert, user, className}) => {
     <div className={`fixed z-[500] justify-around bg-gradient-to-t from-white
       dark:from-primary-foreground via-white/80 dark:via-primary-foreground/80 to-white/5
       dark:to-primary-foreground/5 inset-x-0 p-8 bottom-0 h-24 items-center `+className ?? "flex"}>
+
+{(user?.id && !!num_notifications) && <div className="relative">
+
+<Link href="/notifications" onClick={()=>{return countTo(0)}} className="clickable text-gray-800 bg-gradient-to-br from-gray-200 via-grday-300 to-gray-100 rounded-full  left-10 bottom-10 z-[4000] flex items-center justify-center h-[3.24rem] w-[3.24rem] mr-2">
+  
+  <Bell height={24} width={24} className="z-0"/>
+  {
+  parseInt(num_notifications) > 0 && <span className="bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs absolute -top-2 right-2 z-10">
+        {num_notifications || 0}
+    </span>
+
+  }
+</Link>
+
+
+
+</div> }
+
         
       <div className=" bg-white dark:bg-primary-foreground rounded-[50px]
         mb-8 dark:shadow-sm dark:shadow-white/40 dark:bg-[#131313] flex items-center

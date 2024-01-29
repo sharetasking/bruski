@@ -2,7 +2,6 @@ import prismadb from "@/lib/prismadb"
 import { NextRequest } from "next/server"
 
 export async function POST(req: NextRequest) {
-    console.log('POST /api/subscribe')
     const { email } = await req.json();
 
     if (!email) {

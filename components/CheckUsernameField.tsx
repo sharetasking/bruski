@@ -6,7 +6,7 @@
 // import { debounce } from "lodash";
 // import { useEffect } from "react";
 
-// const CreateUsernameField = async () => {
+// const CreateUsernameField = () => {
   
 //   const [username, setUsername] = useState('');
 

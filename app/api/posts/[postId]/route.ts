@@ -10,13 +10,11 @@ import { getServerSession } from "next-auth"
 export async function POST(request: NextRequest, { params }: { params: { postId: string, body:string } }) {
   
   try {
-    console.log("POSTING")
     const body = params.body;
 
     const session = await getServerSession(authConfig)
     const user = session?.user;
     
-    console.log(body, user, "body, user")
 
     if (!user || !user.email) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -68,9 +66,7 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
     const session = await getServerSession(authConfig)
     const user = session?.user;
     let _post;
-    console.log(params,"paramsyyyyyyyyyy")
     try {
-      console.log('Fetching post:', params );
       const post = await prismadb.post.findFirst({
         where: { id: params.postId,
         
@@ -81,13 +77,10 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
         include: {
         },
       });
-      console.log(post,"sdfsdf")
   
       if (!post) {
-        console.log('No post found with ID:', params.postId);
         return new NextResponse('Not Found', { status: 404 });
       }
-      console.log(1)
       // mark isliked as true if the user has liked the post
       if (user && user.email) {
         const localUser = await prismadb.user.findFirst({
@@ -106,12 +99,9 @@ export async function POST(request: NextRequest, { params }: { params: { postId:
             }
           });
 
-          console.log(like,"likeeeeeeeeee")
           if (like) {
              _post = {...post,isLiked: true};
           }
-
-          console.log("post",post )
         }
       }
 

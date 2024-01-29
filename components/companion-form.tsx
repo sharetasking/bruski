@@ -83,6 +83,7 @@ export const CompanionForm = ({
       toast.success("Submitting.")
 
       if (initialData) {
+        console.log(initialData.id, values)
         // edit
         await axios.patch(`/api/companion/${initialData.id}`, values);
       } else {

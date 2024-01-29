@@ -55,7 +55,6 @@ export async function POST( req: NextRequest, { params }: { params: { profileId:
         profiles: true // Include the related Profile records
       }
     });
-    console.log(localUser, "localUser")
     // if not found
     if (!localUser) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -67,7 +66,6 @@ export async function POST( req: NextRequest, { params }: { params: { profileId:
     }
 
 
-    console.log(localUser.profiles[0].id, "localUser.profiles[0].id")
 const profileId = localUser.profiles[0].id;
 let post;
 
@@ -259,7 +257,6 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
     else
     {
     
-      console.log(followee, follower)
 
       try{
         
@@ -311,7 +308,6 @@ export async function GET( req: NextRequest, { params }: { params: { page?: numb
       console.log(error)
     }
       
-      console.log("df",posts,"sfasfasfs")
     }
 
 

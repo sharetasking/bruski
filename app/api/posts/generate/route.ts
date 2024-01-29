@@ -30,7 +30,6 @@ interface OpenAIResponse {
 // GET PARAMS
 // ******* POST FUNCTION *******
 export async function POST(req: NextRequest) {
-  console.log("POSTING")
   const { profileId } = await req.json();
 
   // GET CURRENT SESSION AND USER
@@ -50,7 +49,6 @@ export async function POST(req: NextRequest) {
   }
 
 
-  console.log(user)
 
 
   // CONFIRM USER OWNS BOT PROFILE
@@ -82,7 +80,6 @@ export async function POST(req: NextRequest) {
   const seed = companion?.seed;
   const companionName = companion?.username;
 
-  console.log(companion)
   
   // CREATE A POST FOR THE BOT'S PROFILE
   let postResult = await createPostForProfile(profileId, prompt, seed, companionName);
@@ -104,7 +101,6 @@ async function createPostForProfile(profileId: string, prompt: string, seed: str
     ` + prompt;
 
 
-    console.log(prompt)
 
 
     // Query GPT-3

@@ -23,7 +23,6 @@ import { useEffect } from "react";
 
 const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
 
-  console.log(user)
 
 
 
@@ -53,7 +52,6 @@ const InitializeComponentPage = ({ user }: { user: BruskiUser | null }) => {
   function selectCategory(id: string)
   {
      filteredProfiles = profiles?.filter((item) => item.id === id);
-    console.log(filteredProfiles, id);
     
   }
 
