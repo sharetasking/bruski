@@ -6,7 +6,7 @@ export function usePosts (params?:{profileId?: string, take?: number, skip?: num
   
 
   const profileId = params?.profileId ?? null;
-  const take = params?.take ?? null;
+  const take = params?.take ?? 10;
   const page = params?.page ?? 1;
   const skip = params?.skip ?? null;
   
@@ -43,7 +43,7 @@ export function usePosts (params?:{profileId?: string, take?: number, skip?: num
     queries.push(`fresh=${params?.fresh}`);
 
   let url = base_url+'?'+queries.join('&');
-
+  console.log(url)
 
   const { data, error, mutate } = useSWR<BruskiPost[]>(url, fetcher)
   

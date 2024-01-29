@@ -2,5 +2,5 @@ import { HashLoader } from "react-spinners"
 
 export default function Loading()
 {
-  return (<HashLoader color="#63636366" />)
+  return (<div className="w-full h-full items-center justify-center flex"><HashLoader color="#63636366" /></div>)
 }

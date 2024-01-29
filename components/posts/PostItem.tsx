@@ -5,6 +5,7 @@ import { Reply } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from 'react-icons/ai';
+import { MessageCircle } from 'lucide-react';
 
 
 import useBruskiUser, { BruskiUser } from '@/hooks/useBruskiUser';
@@ -143,7 +144,6 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
         flex
       `, data?.saving ? "border-2 border-dashed opacity-80": "")}>
       <div className="flex sm:flex-row items-start gap-2 flex-1">
-        {/* <Avatar profileId={data.poster?.id} /> */}
           <div className="flex flex-col gap-1 items-center rounded-full mt-2">
 
 
@@ -151,7 +151,6 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
         <div className='w-8 h-8 flex-0 shrink-0 grow-0 flex relative rounded-full'>
 
         {/* AVATAR IMAGE */}
-        {/* <Avatar img={data.poster?.img ?? "/img/placeholder.svg"} url={"/"+data.poster.id ?? ""} size={10} hasBorder={false} /> */}
         <div className="relative">
           <Avatar img={data.poster?.img ?? "/img/placeholder.svg"} url={"/"+data.poster?.url ?? ""} size={8} hasBorder={false} />
           
@@ -347,6 +346,7 @@ const PostItem: React.FC<PostItemProps> = ({ data, user, isComment =false }) => 
                   text-xs
               ">
                 <AiOutlineMessage size={20} />
+                
                 <p>
                   {data.num_comments || 0}
                 </p>

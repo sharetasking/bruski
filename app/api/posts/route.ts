@@ -95,12 +95,12 @@ let post;
 
 
 // FETCH ALL POSTS (For everyone or for one profile)
-export async function GET( req: NextRequest, { params }: { params: { page?: number, size?: number } }) {
+export async function GET( req: NextRequest, { params }: { params: { page?: number, take?: number } }) {
 
   try {
     // CURRENT PAGE AND NUM POSTS TO PULL
     const page = parseInt(req.nextUrl.searchParams.get("page") ?? "1") ?? 1;
-    const size = parseInt(req.nextUrl.searchParams.get("size") ?? "3") ?? 3;
+    const size = parseInt(req.nextUrl.searchParams.get("take") ?? "3") ?? 3;
 
     const profileId = req.nextUrl.searchParams.get("profileId");
 

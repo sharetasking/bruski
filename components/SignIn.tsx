@@ -94,14 +94,14 @@ export default function SignIn({ providers }: { providers: Provider[]|null}) {
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-8 py-4 rounded-lg text-primary-foreground font-medium bg-primary border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+            className="w-full px-8 py-4 rounded-lg text-black/80 font-medium bg-white/9 e border border-gray-200 placeholder-gray-500 text-base focus:outline-none focus:border-gray-400 focus:bg-white"
             type="email"
             placeholder="Email"
           />
           <input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-8 py-4 rounded-lg text-primary-foreground font-medium bg-primary border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+            className="w-full px-8 py-4 rounded-lg text-black/80 font-medium bg-white/9 e border border-gray-200 placeholder-gray-500 text-base focus:outline-none focus:border-gray-400 focus:bg-white"
             type="password"
             placeholder="Password"
           />

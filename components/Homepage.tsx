@@ -48,6 +48,7 @@ export const Homepage = ({user}: {user: any}) => {
   const [allPosts, setAllPosts] = useState<BruskiPost[]>([]);
 
 
+  const [postsLoading, setPostsLoading] = useState(true)
 
   // FETCH POSTS
   const { data: newPosts, isLoading: loadingNewPosts, isError: isErrorNewPosts } = usePosts({
@@ -109,6 +110,8 @@ useEffect(() => {
       setAllPosts((currentPosts) => [...currentPosts, ...newUniquePosts]);
     }
   }
+
+  setPostsLoading(loadingNewPosts)
 }, [newPosts, allPosts, loadingNewPosts, isErrorNewPosts]);
 
 
@@ -119,17 +122,8 @@ const loadMorePosts = () => {
 };
 
 
-// RESET STATE WHEN PROFILE CHANGES
-// useEffect(() => {
-//   setAllPosts([]);
-//   setCurrentPage(1);
-// }, []);
 
 // ************************END INFINITE SCROLL************************
-
-
-
-
 
   return (
     <>
@@ -138,7 +132,7 @@ const loadMorePosts = () => {
 
       {/* Left Column */}
       <div className="hidden flex-1 gap-4 grow lg:flex flex-col w-full inset-0 pr-8 ">
-        <p className="gap-4">
+        <div className="gap-4">
           {/* <h3>Discover Bruski</h3> */}
           {/* <p className="text-primary/70">
             Connect, share, and engage with the latest topics.
@@ -174,7 +168,7 @@ const loadMorePosts = () => {
           </div>
           </div>
           {/* <p className="">👉 Post Now</p> */}
-        </p>
+        </div>
         {/* TODO: 
         <h2 className="font-semibold tracking-tight text-left text-lg mb-2">Even more to explore</h2>
         <Categories /> */}
@@ -196,8 +190,7 @@ const loadMorePosts = () => {
         {/* Center column */}
         <div className="lg:col-span-2 w-full flex flex-col items-center mx-auto grow-0">
           {/* <PostCreator onPostSubmit={addPost} placeholder="What's going on in your world today?" /> */}
-          
-          <PostFeed user={user} _posts={allPosts} onScrollEnd={loadMorePosts} />
+          <PostFeed user={user} _posts={allPosts} onScrollEnd={loadMorePosts} loading={postsLoading} />
         </div>
 
 
@@ -222,7 +215,7 @@ const loadMorePosts = () => {
                 
                   <>
                 { index < 3 &&
-                <div key={profile.id} className={cn("text-sm px-4 py-2 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " bordder-b bordder-primary/5": "")}>
+                <div key={index} className={cn("text-sm px-4 py-2 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " bordder-b bordder-primary/5": "")}>
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <Avatar url={profile?.url} img={profile.img ?? "/img/placeholder.svg"} size={8} hasBorder={true} />
@@ -241,6 +234,14 @@ const loadMorePosts = () => {
                 </div>}
                 </>
 
+              ))
+
+            }
+            {
+              !profiles && Array.from(Array(3).keys()).map((i) => (
+                <div key={i} className="bg-primary/5 relative shrink-0 rounded-lg mb-4 h-8 flex items-end justify-center ml-8 grow">
+                  
+                </div>
               ))
             }
           </div>

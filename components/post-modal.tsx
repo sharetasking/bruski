@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Minimize } from "lucide-react";
 import axios from "axios";
 
 import {
@@ -132,6 +133,7 @@ export const PostModal = () => {
   if(postModal.isOpen)
     return (
     <div className="bounceInUp fixed inset-0 z-[60000] flex flex-col justify-start lg:justify-center lg:pt-0 pt-6 items-center bg-white">
+      <button onClick={postModal.onClose} className="w-12 h-12 bg-secondary rounded-full items-center justify-center flex mr-2 z-50 text-lg lg:top-5 lg:right-5 top-4 right-1 fixed text-muted-foreground hover:bg-transparent hover:scale-125 active:text-primary active:scale-95"><Minimize sizes={12} /></button>
       <PostCreator onPostSubmit={addPost}  placeholder="What's going on in your world today?" />
       <button onClick={postModal.onClose} className="text-sm font-medium text-muted-foreground">&larr; Click to return to feed</button>
     </div>)
