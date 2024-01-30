@@ -17,6 +17,7 @@ import '../globals.css';
 import ClientProviders from '@/components/ClientProviders';
 import { authConfig } from '@/app/api/auth/[...nextauth]/options';
 import { getServerSession } from 'next-auth'
+import Script from 'next/script';
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -43,6 +44,8 @@ export default async function RootLayout({
           <Trackers />
         </head>
         <body className={cn("bg-secondary/10 overflow-y-scroll h-full gap-8 relative 2xl:max-w-7xl m-auto")}>
+        <Script async src="https://cdn.promotekit.com/promotekit.js" data-promotekit="6da74517-fad2-47fc-a0fe-7fa7daa0be76"></Script>
+
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
 
           {/* <PostCreator onPostSubmit={addPost} placeholder="What's going on in your world today?" /> */}

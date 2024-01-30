@@ -5,13 +5,21 @@ import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
 import { authConfig } from "../auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
+import { NextRequest } from "next/server";
 
 const settingsUrl = absoluteUrl("/settings");
 
-export async function GET() {
+export async function POST(req: NextRequest) {
+  console.log("[STRIPE] POST");
+  console.log("[STRIPE] req", req);
+  
   const session = await getServerSession(authConfig)
   const sesionUser = session?.user;
-  console.log("[STRIPE] GET");
+
+  //get promotekit_referral
+  const params = await req.json();
+  const {promotekit_referral} = params ?? "";
+  console.log(promotekit_referral);
   try {
 
     // CONFIRM USER IS LOGGED IN
@@ -81,6 +89,7 @@ console.log("[STRIPE] stripeSession", stripeSession);
       ],
       metadata: {
         userId,
+        promotekit_referral
       },
     })
 

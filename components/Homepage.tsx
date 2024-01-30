@@ -202,7 +202,7 @@ const loadMorePosts = () => {
                 
                   <>
                 { index < 3 &&
-                <div key={index} className={cn("text-sm px-4 py-2 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " bordder-b bordder-primary/5": "")}>
+                <div key={index} className={cn("text-sm px-4 py-2 font-semibold min-h-[40px] flex flex-col items-start", index < profiles.length - 2 ? " ": "")}>
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <Avatar url={profile?.url} img={profile.img ?? "/img/placeholder.svg"} size={8} hasBorder={true} />

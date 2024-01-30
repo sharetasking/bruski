@@ -20,7 +20,9 @@ export const SubscriptionButton = ({
     try {
       setLoading(true);
 
-      const response = await axios.get("/api/stripe");
+      const response = await axios.post("/api/stripe",
+        { promotekit_referral: window.promotekit_referral},
+      );
 
       window.location.href = response.data.url;
     } catch (error) {

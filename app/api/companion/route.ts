@@ -64,6 +64,7 @@ export async function POST(req: Request) {
     const profile = await prismadb.profile.create({
       data: {
         companionId: companion.id,
+        userId: user?.id,
         img,
         display_name: name,
         username: username ?? "",

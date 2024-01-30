@@ -5,6 +5,7 @@ import { ProModal } from '@/components/pro-modal';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from 'react-hot-toast';
 import { SessionProvider } from 'next-auth/react';
+import Script from 'next/script';
 
 
 import Trackers from '@/analytics/trackers';
@@ -40,6 +41,7 @@ export default async function RootLayout({
           <Trackers />
         </head>
         <body className="bg-secondary/10 overflow-y-scroll h-full gap-8 relative 2xl:max-w-7xl m-auto no-scrollbar">
+          <Script async src="https://cdn.promotekit.com/promotekit.js" data-promotekit="6da74517-fad2-47fc-a0fe-7fa7daa0be76"></Script>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
 
             {/* <Navbar user={user ?? null} isPro={isPro} /> */}

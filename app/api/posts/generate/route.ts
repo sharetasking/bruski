@@ -11,7 +11,7 @@ import fetch from 'node-fetch';
 import { getServerSession } from "next-auth";
 import { authConfig } from "../../auth/[...nextauth]/options";
 
-const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'//'https://api.openai.com/v1/engines/davinci/completions';
+const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 
@@ -49,12 +49,40 @@ export async function POST(req: NextRequest) {
   }
 
 
-
+console.log(profileId)
 
   // CONFIRM USER OWNS BOT PROFILE
-  if(!user?.companions?.length) {
+  const profile = await prisma.profile.findFirst({
+    where: {
+      id: profileId,
+      userId: user.id
+    }
+  });
+
+
+  console.log(profileId)
+  if(!profile)
+  {
     return NextResponse.json("You do not own this bot profile");
   }
+
+  console.log(profileId)
+
+  //get the last 12 posts from this bot (just the body and id for now)
+  const prev_posts = await prisma.post.findMany({
+    select: {
+      body: true
+    }
+    ,
+    where: {
+      profileId: profileId
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    take: 12
+  });
+
 
 
   // GET PROMPT
@@ -82,7 +110,7 @@ export async function POST(req: NextRequest) {
 
   
   // CREATE A POST FOR THE BOT'S PROFILE
-  let postResult = await createPostForProfile(profileId, prompt, seed, companionName);
+  let postResult = await createPostForProfile(profileId, prompt, seed, companionName, prev_posts);
   
   return NextResponse.json({ message: "Post Created", postId: postResult?.id });
 }
@@ -90,17 +118,26 @@ export async function POST(req: NextRequest) {
 
 
 // Function to create a post for the bot's profile
-async function createPostForProfile(profileId: string, prompt: string, seed: string, companionName: string) {
+async function createPostForProfile(profileId: string, prompt: string, seed: string, companionName: string, prev_posts: Array<{}>) {
   try {
     // Add prefix to prompt
     const modifiedPrompt = `
-      You are a social media account creating a post almost in a Twitter or Instagram style.
+      You are a social media account creating a post in a Twitter or Instagram style.
       IMPORTANT: Do NOT mention Twitter or Instagram in your post.
       Create a post for your profile that is interesting and engaging.
-      Limit your post to 150 characters.
+      Limit your post to 150 characters. Do not repeat your posts.
+      Change the content of your posts to keep them fresh and interesting.
+
+      Here are your previous posts in JSON format, use them to ensure you don't repeat yourself: ${JSON.stringify(prev_posts)},
+
+      Here is your seed: ${seed},
+      
+      Based on the previous information, here is your prompt:
     ` + prompt;
 
 
+
+    console.log(modifiedPrompt)
 
 
     // Query GPT-3
@@ -147,7 +184,7 @@ async function queryGPT3(prompt:string) {
           { "role": "user", "content": "" }
         ],
         max_tokens: 150,
-        temperature: 0.7,
+        temperature: 0.1,
       }),
     });
 
@@ -157,7 +194,7 @@ const data = (await response.json()) as OpenAIResponse;
 
     return data?.choices?.[0]?.message?.content?.trim() ?? null;
   } catch (error) {
-    console.error('Error querying GPT-3:', error);
+    console.error('Error querying GPT:', error);
     return null;
   }
 }
